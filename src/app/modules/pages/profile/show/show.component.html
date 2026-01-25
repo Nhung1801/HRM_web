@@ -94,6 +94,7 @@
                         </div>
                         <div class="flex flex-column">
                             <button
+                                type="button"
                                 pButton
                                 pRipple
                                 label="Lọc"
@@ -106,9 +107,11 @@
                                 [outlined]="true"
                                 severity="secondary"
                                 icon="pi pi-cloud-download"
+                                (click)="exportToExcel()"
+                                [title]="'Xuất Excel'"
                             ></p-button>
                         </div>
-                        <div class="flex flex-column">
+                        <!-- <div class="flex flex-column">
                             <p-overlayPanel #op>
                                 <ng-template pTemplate="content">
                                     <div class="setting-list">
@@ -277,7 +280,7 @@
                                 [outlined]="true"
                                 severity="secondary"
                             ></p-button>
-                        </div>
+                        </div> -->
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">

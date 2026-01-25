@@ -3,7 +3,7 @@ import {
     DEFAULT_PAGE_INDEX,
     DEFAULT_PAGE_SIZE,
 } from './../../../../core/configs/paging.config';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import pagingConfig, {
     DEFAULT_PAGE_SIZE_OPTIONS,
@@ -21,6 +21,8 @@ import profileConstant from 'src/app/core/constants/profile.constant';
 import { ObjectService } from 'src/app/core/services/object.service';
 import { M } from '@fullcalendar/core/internal-common';
 import { HasPermissionHelper } from 'src/app/core/helpers/has-permission.helper';
+import * as ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: 'app-show',
@@ -28,7 +30,7 @@ import { HasPermissionHelper } from 'src/app/core/helpers/has-permission.helper'
     styleUrls: ['./show.component.css'],
     providers: [ConfirmationService],
 })
-export class ShowComponent implements OnInit {
+export class ShowComponent implements OnInit, OnDestroy {
     imgUrl: string = environment.baseApiImageUrl;
     items: any;
     staffPositionVisible: boolean = false;
@@ -90,6 +92,8 @@ export class ShowComponent implements OnInit {
 
     ngOnInit() {
         this.loadOrganization();
+        // Load danh sách employees ban đầu (không có keyword)
+        this.loadEmployeesForAutocomplete();
         const documentStyle = getComputedStyle(document.documentElement);
         const textColor = documentStyle.getPropertyValue('--text-color');
         this.classifyOptions = [
@@ -358,27 +362,45 @@ export class ShowComponent implements OnInit {
     }
 
     public handleSearchProfile() {
-        this.route.queryParams.subscribe((params) => {
-            const request = {
-                ...params,
-                workingStatus: this.queryParameters.workingStatus
-                    ? this.queryParameters.workingStatus
-                    : null,
-                keyWord: this.queryParameters.keyWord
-                    ? this.queryParameters.keyWord
-                    : null,
-                employeeId: this.queryParameters.employeeObject
-                    ? (this.queryParameters.employeeObject as any)?.id
-                    : null,
-                organizationId: this.queryParameters.organizationObject
-                    ? (this.queryParameters.organizationObject as any)?.data
-                    : null,
-            };
-            this.router.navigate([], {
-                relativeTo: this.route,
-                queryParams: request,
-                queryParamsHandling: 'merge',
-            });
+        // Reset về trang đầu tiên khi search
+        // Ưu tiên lấy keyword từ text đang gõ trong autocomplete (nếu có)
+        let resolvedKeyWord: string | null = this.queryParameters.keyWord
+            ? this.queryParameters.keyWord
+            : null;
+
+        // Nếu employeeObject đang là string (chỉ gõ, chưa chọn) thì dùng luôn làm keyWord
+        if (typeof this.queryParameters.employeeObject === 'string') {
+            const typed = this.queryParameters.employeeObject.trim();
+            resolvedKeyWord = typed.length > 0 ? typed : null;
+        }
+
+        const request = {
+            pageIndex: this.config.paging.pageIndex,
+            pageSize: this.config.paging.pageSize,
+            workingStatus: this.queryParameters.workingStatus
+                ? this.queryParameters.workingStatus
+                : null,
+            keyWord: resolvedKeyWord,
+            employeeId: this.queryParameters.employeeObject
+                ? (typeof this.queryParameters.employeeObject === 'object'
+                      ? (this.queryParameters.employeeObject as any)?.id
+                      : null)
+                : null,
+            organizationId: this.queryParameters.organizationObject
+                ? (this.queryParameters.organizationObject as any)?.data
+                : null,
+        };
+        
+        console.log('Search request:', request);
+        
+        // Navigate với queryParams mới
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: request,
+            queryParamsHandling: 'merge',
+        }).then(() => {
+            // Gọi API trực tiếp sau khi navigate
+            this.getProfile(request);
         });
     }
 
@@ -519,17 +541,268 @@ export class ShowComponent implements OnInit {
         };
     }
 
-    filterEmployeeSuggestions(event: any): void {
-        const query = event.query.toLowerCase();
-        this.objectService.getAllEmployee({ name: query }).subscribe((res) => {
-            this.employees = res.items.map((employee) => ({
-                ...employee,
-                name: `${employee?.lastName} ${employee?.firstName} `,
-            }));
+    // Load danh sách employees để hiển thị trong autocomplete (chỉ load một lần với giới hạn)
+    loadEmployeesForAutocomplete(): void {
+        // Giới hạn số lượng để tránh load quá nhiều dữ liệu
+        this.objectService.getAllEmployee({ pageSize: 100, pageIndex: 1 }).subscribe({
+            next: (res: any) => {
+                console.log('API Response for employees:', res);
+                // Kiểm tra cấu trúc response - PagingResult có items property
+                if (res && res.items && Array.isArray(res.items)) {
+                    this.employees = res.items.map((employee: any) => ({
+                        ...employee,
+                        name: `${employee?.lastName || ''} ${employee?.firstName || ''}`.trim(),
+                    }));
+                    console.log('Employees assigned:', this.employees.length, 'items');
+                } else if (res && Array.isArray(res)) {
+                    // Nếu response là mảng trực tiếp
+                    this.employees = res.map((employee: any) => ({
+                        ...employee,
+                        name: `${employee?.lastName || ''} ${employee?.firstName || ''}`.trim(),
+                    }));
+                    console.log('Employees assigned (array):', this.employees.length, 'items');
+                } else {
+                    console.warn('Unexpected response structure:', res);
+                    this.employees = [];
+                }
+            },
+            error: (error) => {
+                console.error('Error fetching employees:', error);
+                this.employees = [];
+            }
         });
     }
 
-    onEmployeeSelected(event: any) {
-        this.queryParameters.employeeId = event.id; // Gán lại đối tượng người dùng đầy đủ
+    filterEmployeeSuggestions(event: any): void {
+        // Không gọi API khi gõ, chỉ filter từ danh sách đã có
+        // PrimeNG AutoComplete sẽ tự động filter từ mảng employees dựa trên field="name"
+        // Nếu chưa có dữ liệu, load một lần
+        if (this.employees.length === 0) {
+            this.loadEmployeesForAutocomplete();
+        }
+    }
+
+    ngOnDestroy(): void {
+        // Cleanup nếu cần
+    }
+
+    onEmployeeSelected(value: any) {
+        // p-autoComplete:
+        // - Khi GÕ: value là string
+        // - Khi CHỌN: value là object (hoặc { item: object } tùy version)
+
+        if (value === null || value === undefined || value === '') {
+            this.queryParameters.employeeId = null;
+            this.queryParameters.employeeObject = null;
+            this.queryParameters.keyWord = '';
+            return;
+        }
+
+        // Trường hợp gõ text nhưng không chọn item
+        if (typeof value === 'string') {
+            const keyword = value.trim();
+            this.queryParameters.employeeId = null;
+            // giữ nguyên text trong input
+            this.queryParameters.employeeObject = value;
+            this.queryParameters.keyWord = keyword;
+            return;
+        }
+
+        // Trường hợp chọn item
+        const selected = (value && value.item) ? value.item : value;
+        this.queryParameters.employeeObject = selected;
+        this.queryParameters.employeeId = selected?.id ?? null;
+
+        const keyword =
+            (selected?.name ? selected.name.trim() : '') ||
+            (`${selected?.lastName ?? ''} ${selected?.firstName ?? ''}`.trim()) ||
+            (selected?.phoneNumber ?? '') ||
+            (selected?.employeeCode ?? '');
+
+        this.queryParameters.keyWord = keyword;
+    }
+
+    exportToExcel() {
+        // Tạo request với điều kiện giống như paging nhưng không có pageIndex và pageSize
+        // Sử dụng giá trị hiện tại từ queryParameters và paging, không subscribe vào queryParams
+        const request: any = {
+            workingStatus: this.queryParameters.workingStatus
+                ? this.queryParameters.workingStatus
+                : null,
+            keyWord: this.queryParameters.keyWord
+                ? this.queryParameters.keyWord
+                : null,
+            employeeId: this.queryParameters.employeeObject
+                ? (this.queryParameters.employeeObject as any)?.id
+                : this.queryParameters.employeeId
+                ? this.queryParameters.employeeId
+                : null,
+            organizationId: this.queryParameters.organizationObject
+                ? (this.queryParameters.organizationObject as any)?.data
+                : this.queryParameters.organizationId
+                ? this.queryParameters.organizationId
+                : null,
+        };
+
+        // Thêm orderBy và sortBy nếu có
+        if (this.paging.orderBy) {
+            request.orderBy = this.paging.orderBy;
+        }
+
+        if (this.paging.sortBy) {
+            request.sortBy = this.paging.sortBy;
+        }
+
+        // Gọi API để lấy tất cả profiles
+        this.profileService.getAllProfiles(request).subscribe({
+            next: (result: any) => {
+                const profiles = result.items || result || [];
+                
+                // Tạo workbook và worksheet
+                const workbook = new ExcelJS.Workbook();
+                const worksheet = workbook.addWorksheet('Danh sách hồ sơ');
+
+                // Định nghĩa header
+                const headers = [
+                    'STT',
+                    'Mã nhân viên',
+                    'Họ và tên',
+                    'Giới tính',
+                    'Ngày sinh',
+                    'Số điện thoại',
+                    'Email công việc',
+                    'Cấp bậc',
+                    'Vị trí công việc',
+                    'Đơn vị',
+                ];
+
+                // Thêm header row
+                const headerRow = worksheet.addRow(headers);
+                headerRow.font = { bold: true, size: 12 };
+                headerRow.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: 'FFE0E0E0' },
+                };
+                headerRow.alignment = {
+                    vertical: 'middle',
+                    horizontal: 'center',
+                };
+
+                // Hàm helper để map giới tính
+                const getGenderLabel = (sex: any): string => {
+                    if (sex === null || sex === undefined || sex === '') {
+                        return 'Không rõ';
+                    }
+                    const sexValue = sex?.toString();
+                    if (sexValue === '1') {
+                        return 'Nam';
+                    } else if (sexValue === '2') {
+                        return 'Nữ';
+                    }
+                    return 'Không rõ';
+                };
+
+                // Hàm helper để lấy tên đơn vị
+                const getOrganizationName = (profile: any): string => {
+                    // Ưu tiên lấy từ Organization
+                    if (profile?.organization?.organizationName) {
+                        return profile.organization.organizationName;
+                    }
+                    // Nếu không có, lấy từ OrganizationLeaders (đơn vị đầu tiên)
+                    if (profile?.organizationLeaders && profile.organizationLeaders.length > 0) {
+                        return profile.organizationLeaders[0]?.organizationName || '';
+                    }
+                    return '';
+                };
+
+                // Thêm dữ liệu
+                profiles.forEach((profile: any, index: number) => {
+                    const row = worksheet.addRow([
+                        index + 1,
+                        profile?.employeeCode || '',
+                        `${profile?.lastName || ''} ${profile?.firstName || ''}`.trim(),
+                        getGenderLabel(profile?.sex),
+                        profile?.dateOfBirth
+                            ? new Date(profile.dateOfBirth).toLocaleDateString('vi-VN')
+                            : '',
+                        profile?.phoneNumber || '',
+                        profile?.companyEmail || '',
+                        profile?.staffTitle?.staffTitleName || '',
+                        profile?.staffPosition?.positionName || '',
+                        getOrganizationName(profile),
+                    ]);
+
+                    row.alignment = { vertical: 'middle', horizontal: 'left' };
+                });
+
+                // Định dạng cột
+                worksheet.columns.forEach((column, index) => {
+                    if (index === 0) {
+                        // STT
+                        column.width = 8;
+                    } else if (index === 1) {
+                        // Mã nhân viên
+                        column.width = 15;
+                    } else if (index === 2) {
+                        // Họ và tên
+                        column.width = 25;
+                    } else if (index === 3) {
+                        // Giới tính
+                        column.width = 12;
+                    } else if (index === 4) {
+                        // Ngày sinh
+                        column.width = 15;
+                    } else if (index === 5) {
+                        // Số điện thoại
+                        column.width = 15;
+                    } else if (index === 6) {
+                        // Email công việc
+                        column.width = 25;
+                    } else if (index === 7) {
+                        // Cấp bậc
+                        column.width = 20;
+                    } else if (index === 8) {
+                        // Vị trí công việc
+                        column.width = 20;
+                    } else if (index === 9) {
+                        // Đơn vị
+                        column.width = 25;
+                    }
+                });
+
+                // Thêm viền cho tất cả các ô
+                worksheet.eachRow((row, rowNumber) => {
+                    row.eachCell((cell) => {
+                        cell.border = {
+                            top: { style: 'thin' },
+                            left: { style: 'thin' },
+                            bottom: { style: 'thin' },
+                            right: { style: 'thin' },
+                        };
+                    });
+                });
+
+                // Lưu file
+                workbook.xlsx.writeBuffer().then((data) => {
+                    const blob = new Blob([data], {
+                        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    });
+                    const fileName = `Danh_sach_ho_so_${new Date().getTime()}.xlsx`;
+                    saveAs(blob, fileName);
+                    this.toastService.showSuccess(
+                        'Thành công',
+                        'Xuất file Excel thành công!'
+                    );
+                });
+            },
+            error: (error) => {
+                console.error('Error exporting Excel:', error);
+                this.toastService.showError(
+                    'Lỗi',
+                    'Có lỗi xảy ra khi xuất file Excel!'
+                );
+            },
+        });
     }
 }

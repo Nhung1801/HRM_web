@@ -207,7 +207,21 @@
                                     <div class="ggmap">
                                         <h4>Trực quan trên bản đồ</h4>
                                         <span>
-                                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d421.48754063818683!2d106.05123233775117!3d20.902007250285298!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135a5002ea279c7%3A0xb06f455da198a20b!2sSMO%20MEDIA!5e1!3m2!1sen!2s!4v1734942417614!5m2!1sen!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                            <iframe
+                                                *ngIf="mapUrl; else noMap"
+                                                [src]="mapUrl"
+                                                width="600"
+                                                height="450"
+                                                style="border: 0"
+                                                allowfullscreen=""
+                                                loading="lazy"
+                                                referrerpolicy="no-referrer-when-downgrade"
+                                            ></iframe>
+                                            <ng-template #noMap>
+                                                <div class="text-muted">
+                                                    Nhập vĩ độ/kinh độ hợp lệ để xem vị trí trên bản đồ.
+                                                </div>
+                                            </ng-template>
                                         </span>
                                     </div>
                                 </div>

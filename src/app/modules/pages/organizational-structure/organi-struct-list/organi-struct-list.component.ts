@@ -78,7 +78,7 @@ export class OrganiStructListComponent implements OnInit {
       organizationName: unit.organizationName,
       abbreviation: unit.abbreviation,
       employees: unit.organizationChildren.length,
-      organizational: unit.organizationType.organizationTypeName,
+      organizational: unit.organizationType?.organizationTypeName || '',
       employeeId: unit.organizationLeaders[0]?.employee.id,
       totalEmployees: unit.totalEmployees || 0,
       unithead: unit.organizationLeaders

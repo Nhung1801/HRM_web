@@ -29,6 +29,10 @@ export class ProfileService {
         return this.http.get('profile/paging', request);
     }
 
+    getAllProfiles(request: any = null): Observable<any> {
+        return this.http.get('profile/all', request);
+    }
+
     getById(request: any = null): Observable<any> {
         return this.http.get('staff-position/get-by-id', request);
     }
