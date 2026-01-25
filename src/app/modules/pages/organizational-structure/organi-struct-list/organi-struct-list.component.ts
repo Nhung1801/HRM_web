@@ -64,6 +64,7 @@ export class OrganiStructListComponent implements OnInit {
       if (response.status) {
         const rootUnits = response.data.items.map((unit: any) => this.mapToOrganizationUnit(unit, 1));
         this.organizationUnits = rootUnits;
+        console.log(this.organizationUnits);
         this.totalRecords = response.data.totalRecords;
         this.updateCurrentPageReport();
       }
@@ -79,6 +80,7 @@ export class OrganiStructListComponent implements OnInit {
       employees: unit.organizationChildren.length,
       organizational: unit.organizationType.organizationTypeName,
       employeeId: unit.organizationLeaders[0]?.employee.id,
+      totalEmployees: unit.totalEmployees || 0,
       unithead: unit.organizationLeaders
         .filter((leader: any) => leader.organizationLeaderType === 0)
         .map((leader: any) => `${leader.employee.lastName || ''} ${leader.employee.firstName || ''}`)

@@ -125,6 +125,7 @@ export class ShowComponent {
             organizationName: unit.organizationName,
             abbreviation: unit.abbreviation,
             employees: unit.organizationChildren.length,
+            totalEmployees: unit.totalEmployees || 0,
             organizational: unit.organizationType.organizationTypeName,
             unithead: unit.organizationLeaders
                 .map(

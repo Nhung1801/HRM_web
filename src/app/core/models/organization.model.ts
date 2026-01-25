@@ -4,6 +4,7 @@ export interface OrganizationUnit {
   organizationName: string;
   abbreviation: string;
   employees: number;
+  totalEmployees: number;
   employeeId?: number;
   organizational: string;
   unithead: string;
