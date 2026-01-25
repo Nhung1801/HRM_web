@@ -1,0 +1,128 @@
+.title-col{
+    font-size: 18px;
+    cursor: pointer;
+    background-color: #ccc;
+    text-align: center;
+    padding: 5px 0px;
+    z-index: 100;
+    position: sticky;
+    top: 0;
+   border-top-left-radius: 5px;
+   border-top-right-radius: 5px;
+}
+.bg-col{
+  position: relative;
+    background-color: white;
+    margin: 0 5px;
+    padding: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    height:560px;
+}
+.icon-creatework{
+    margin-top: 10px;
+    font-size: 18px;
+    color: #666464;
+    text-align: center;
+    cursor: pointer;
+}
+.bg-col {
+    transition: transform 0.3s ease; 
+}
+
+
+.list-work-group {
+    display: flex;
+    flex-wrap: nowrap; 
+    gap: 10px;
+    max-width: 1250px;
+  }
+  .content-work{
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 0 5px;
+    
+    
+  }
+  .list-work-group {
+    flex-wrap: nowrap;
+  }
+  .bg-col {
+    display: inline-block; 
+    min-width: 250px; 
+  }
+  .img-item-work{
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+  }
+  .list-work-item{
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin: 10px ;
+    padding: 5px;
+  }
+  .icon-succ{
+    color: rgb(104, 170, 5);
+  }
+  .icon-footer{
+    margin-right: 3px;
+  }
+  .icon-color{
+    position: relative;
+
+  }
+  .list-icon{
+    content: '';
+    position: absolute;
+    top:0;
+    z-index: 100;
+  }
+  .list-work-main{
+    max-height:500px;
+    min-height:500px;
+    overflow-y: auto;
+  }
+  .list-work-main::-webkit-scrollbar, .content-work::-webkit-scrollbar {
+    width: 5px ;
+    height: 5px;
+}
+
+.list-work-main::-webkit-scrollbar-track,.content-work::-webkit-scrollbar-track {
+    background: #f1f1f1 ;
+    border-radius: 10px ;
+}
+
+.list-work-main::-webkit-scrollbar-thumb, .content-work::-webkit-scrollbar-thumb {
+    background: #888 ;
+    border-radius: 10px ;
+}
+
+.list-work-main::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+.list-color{
+  position: absolute;
+  z-index: 100;
+  top: 40px;
+  left: 80px;
+}
+
+.input-work-group::placeholder {
+  color: white ;
+  opacity: 1; 
+}
+.tag-work{
+  padding: 5px;
+  border-radius: 5px;
+  margin-right: 5px;
+  color: white;
+}
+.list-tagwork{
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0px;
+  margin-top: 10px;
+}

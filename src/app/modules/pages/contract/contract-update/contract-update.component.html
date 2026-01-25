@@ -1,0 +1,1446 @@
+<form [formGroup]="contractUpdateForm" enctype="multipart/form-data">
+    <div class="grid">
+        <div class="col-12">
+            <p-toolbar styleClass="mb-2">
+                <div class>
+                    <strong class="font-size-16">Chỉnh sửa hợp đồng</strong>
+                    <p-breadcrumb [model]="items"> </p-breadcrumb>
+                </div>
+                <div class="toast-container">
+                    <p-messages
+                        [(value)]="messages"
+                        [enableService]="false"
+                        [closable]="false"
+                    ></p-messages>
+                </div>
+            </p-toolbar>
+            <div class="grid p-fluid">
+                <div class="col-12 md:col-12">
+                    <div class="box">
+                        <div class="border-manager">
+                            <span>Thông tin chung</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="col-lg-2">
+                                        <label class="labelip"
+                                            >Họ và tên NLD<span
+                                                class="red-asterisk"
+                                                >*</span
+                                            ></label
+                                        >
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <p-dropdown
+                                            formControlName="employeeId"
+                                            [options]="employees"
+                                            [style]="{
+                                                height: '40px',
+                                                width: '100%'
+                                            }"
+                                            optionValue="id"
+                                            optionLabel="name"
+                                            [filter]="true"
+                                            [filterBy]="'name'"
+                                            [showClear]="true"
+                                            placeholder="Chọn thông tin"
+                                            (onChange)="
+                                                onEmployeeChange($event)
+                                            "
+                                        ></p-dropdown>
+                                        <div
+                                            *ngIf="
+                                                (contractUpdateForm.get(
+                                                    'employeeId'
+                                                )?.invalid &&
+                                                    (contractUpdateForm.get(
+                                                        'employeeId'
+                                                    )?.dirty ||
+                                                        contractUpdateForm.get(
+                                                            'employeeId'
+                                                        )?.touched)) ||
+                                                showErrorEmployees
+                                            "
+                                        >
+                                            <small
+                                                *ngIf="contractUpdateForm.get('employeeId')?.errors?.['required']"
+                                                class="error-message"
+                                            >
+                                                Vui lòng nhập đủ thông tin
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label class="labelip"
+                                            >Mã nhân viên<span
+                                                class="red-asterisk"
+                                                >*</span
+                                            ></label
+                                        >
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            pInputText
+                                            [style]="{
+                                                height: '40px',
+                                                width: '100%'
+                                            }"
+                                            formControlName="codeEmployee"
+                                            placeholder=""
+                                            maxlength="100"
+                                            [disabled]="isDisabled"
+                                        />
+                                        <div
+                                            *ngIf="
+                                                (contractUpdateForm.get(
+                                                    'codeEmployee'
+                                                )?.invalid &&
+                                                    (contractUpdateForm.get(
+                                                        'codeEmployee'
+                                                    )?.dirty ||
+                                                        contractUpdateForm.get(
+                                                            'codeEmployee'
+                                                        )?.touched)) ||
+                                                showErrorCodeEmployees
+                                            "
+                                        >
+                                            <div
+                                                *ngIf="contractUpdateForm.get('codeEmployee')?.errors?.['required']"
+                                                class="error-message"
+                                            >
+                                                Vui lòng nhập đủ thông tin
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row line-height">
+                                    <div class="col-lg-2">
+                                        <label class="labelip"
+                                            >Đơn vị ký hợp đồng<span
+                                                class="red-asterisk"
+                                                >*</span
+                                            ></label
+                                        >
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <p-dropdown
+                                            formControlName="unitId"
+                                            [options]="units"
+                                            [style]="{
+                                                height: '40px',
+                                                width: '100%'
+                                            }"
+                                            optionValue="id"
+                                            optionLabel="name"
+                                            [filter]="true"
+                                            [filterBy]="'name'"
+                                            [showClear]="true"
+                                            placeholder=""
+                                            [disabled]="isDisabled"
+                                        ></p-dropdown>
+                                        <div
+                                            *ngIf="
+                                                (contractUpdateForm.get(
+                                                    'unitId'
+                                                )?.invalid &&
+                                                    (contractUpdateForm.get(
+                                                        'unitId'
+                                                    )?.dirty ||
+                                                        contractUpdateForm.get(
+                                                            'unitId'
+                                                        )?.touched)) ||
+                                                showErrorUnit
+                                            "
+                                        >
+                                            <div
+                                                *ngIf="contractUpdateForm.get('unitId')?.errors?.['required']"
+                                                class="error-message"
+                                            >
+                                                Vui lòng nhập đủ thông tin
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label class="labelip"
+                                            >Vị trí công việc</label
+                                        >
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            pInputText
+                                            [style]="{
+                                                height: '40px',
+                                                width: '100%'
+                                            }"
+                                            formControlName="position"
+                                            placeholder=""
+                                            maxlength="100"
+                                            [disabled]="isDisabled"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="row line-height">
+                                    <div class="col-lg-2">
+                                        <label class="labelip"
+                                            >Số hợp đồng<span
+                                                class="red-asterisk"
+                                                >*</span
+                                            ></label
+                                        >
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            pInputText
+                                            [style]="{
+                                                height: '40px',
+                                                width: '100%'
+                                            }"
+                                            formControlName="code"
+                                            placeholder=""
+                                            maxlength="100"
+                                        />
+                                        <!-- <div *ngIf="contractUpdateForm.get('code')?.invalid && (contractUpdateForm.get('code')?.dirty || contractUpdateForm.get('code')?.touched) || showErrorCode">
+                                        <div *ngIf="contractUpdateForm.get('code')?.errors?.['required']" class="error-message">
+                                          Số hợp đồng không được để trống
+                                        </div>
+                                      </div> -->
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label class="labelip"
+                                            >Ngày ký<span class="red-asterisk"
+                                                >*</span
+                                            ></label
+                                        >
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <p-calendar
+                                            formControlName="signingDate"
+                                            [showIcon]="true"
+                                            [icon]="calendarIcon"
+                                            dateFormat="dd/mm/yy"
+                                            placeholder="Chọn ngày"
+                                            [style]="{
+                                                height: '40px',
+                                                width: '100%'
+                                            }"
+                                            [readonlyInput]="true"
+                                            (onSelect)="
+                                                onDateSelectSigningDate()
+                                            "
+                                        ></p-calendar>
+                                        <div
+                                            *ngIf="
+                                                (contractUpdateForm
+                                                    .get('signingDate')
+                                                    ?.hasError('required') &&
+                                                    contractUpdateForm.get(
+                                                        'signingDate'
+                                                    )?.touched) ||
+                                                showErrorSigningDate
+                                            "
+                                        >
+                                            <small class="error-message"
+                                                >Vui lòng nhập đủ thông
+                                                tin</small
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row line-height">
+                                    <div class="col-lg-2">
+                                        <label class="labelip"
+                                            >Tên hợp đồng</label
+                                        >
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            pInputText
+                                            [style]="{
+                                                height: '40px',
+                                                width: '100%'
+                                            }"
+                                            formControlName="contractName"
+                                            placeholder="Nhập thông tin"
+                                            maxlength="100"
+                                        />
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label class="labelip"
+                                            >Loại hợp đồng<span
+                                                class="red-asterisk"
+                                                >*</span
+                                            ></label
+                                        >
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <p-dropdown
+                                            formControlName="contractTypeId"
+                                            [options]="contractType"
+                                            [style]="{
+                                                height: '40px',
+                                                width: '120%'
+                                            }"
+                                            optionValue="id"
+                                            optionLabel="name"
+                                            [filter]="true"
+                                            [filterBy]="'name'"
+                                            [showClear]="true"
+                                            placeholder="Chọn thông tin"
+                                            (onChange)="
+                                                onContractTypeChange(
+                                                    $event.value
+                                                )
+                                            "
+                                        ></p-dropdown>
+                                        <div
+                                            *ngIf="
+                                                (contractUpdateForm.get(
+                                                    'contractTypeId'
+                                                )?.invalid &&
+                                                    (contractUpdateForm.get(
+                                                        'contractTypeId'
+                                                    )?.dirty ||
+                                                        contractUpdateForm.get(
+                                                            'contractTypeId'
+                                                        )?.touched)) ||
+                                                showErrorContractType
+                                            "
+                                        >
+                                            <div
+                                                *ngIf="contractUpdateForm.get('contractTypeId')?.errors?.['required']"
+                                                class="error-message"
+                                            >
+                                                Vui lòng nhập đủ thông tin
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <div
+                                            class="icon-container"
+                                            (click)="openDialogContractType()"
+                                        >
+                                            <i class="pi pi-plus"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row line-height">
+                                    <div class="col-lg-2">
+                                        <label class="labelip"
+                                            >Thời hạn hợp đồng</label
+                                        >
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <p-dropdown
+                                            formControlName="contractDurationId"
+                                            [options]="contractDuration"
+                                            [style]="{
+                                                height: '40px',
+                                                width: '120%'
+                                            }"
+                                            optionValue="id"
+                                            optionLabel="name"
+                                            [filter]="true"
+                                            [filterBy]="'name'"
+                                            [showClear]="true"
+                                            placeholder="Chọn thông tin"
+                                            [disabled]="
+                                                isContractDurationDisabled
+                                            "
+                                            (onChange)="
+                                                onContractDurationChange();
+                                                calculateExpiryDate()
+                                            "
+                                        ></p-dropdown>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <div
+                                            class="icon-container"
+                                            (click)="
+                                                openDialogContractDuration()
+                                            "
+                                            [ngClass]="{
+                                                disabled:
+                                                    isContractDurationDisabled
+                                            }"
+                                            [style.pointer-events]="
+                                                isContractDurationDisabled
+                                                    ? 'none'
+                                                    : 'auto'
+                                            "
+                                            [style.opacity]="
+                                                isContractDurationDisabled
+                                                    ? '0.5'
+                                                    : '1'
+                                            "
+                                        >
+                                            <i class="pi pi-plus"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label class="labelip"
+                                            >Hình thức làm việc</label
+                                        >
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <p-dropdown
+                                            formControlName="workingFormId"
+                                            [options]="workingform"
+                                            [style]="{
+                                                height: '40px',
+                                                width: '120%'
+                                            }"
+                                            optionValue="id"
+                                            optionLabel="name"
+                                            [filter]="true"
+                                            [filterBy]="'name'"
+                                            [showClear]="true"
+                                            placeholder="Chọn thông tin"
+                                        ></p-dropdown>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <div
+                                            class="icon-container"
+                                            (click)="openDialogWorkingForm()"
+                                        >
+                                            <i class="pi pi-plus"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row line-height">
+                                    <div class="col-lg-2">
+                                        <label class="labelip"
+                                            >Ngày có hiệu lực<span
+                                                class="red-asterisk"
+                                                >*</span
+                                            ></label
+                                        >
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <p-calendar
+                                            formControlName="effectiveDate"
+                                            [showIcon]="true"
+                                            [icon]="calendarIcon"
+                                            dateFormat="dd/mm/yy"
+                                            placeholder="Chọn ngày"
+                                            [style]="{
+                                                height: '40px',
+                                                width: '100%'
+                                            }"
+                                            [readonlyInput]="true"
+                                            (onSelect)="
+                                                onEffectiveDateChange();
+                                                calculateExpiryDate();
+                                                onDateSelectEffectiveDate()
+                                            "
+                                        ></p-calendar>
+                                        <div
+                                            *ngIf="
+                                                (contractUpdateForm
+                                                    .get('effectiveDate')
+                                                    ?.hasError('required') &&
+                                                    contractUpdateForm.get(
+                                                        'effectiveDate'
+                                                    )?.touched) ||
+                                                showErrorEffectiveDate
+                                            "
+                                        >
+                                            <small class="error-message"
+                                                >Vui lòng nhập đủ thông
+                                                tin</small
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label class="labelip"
+                                            >Ngày hết hạn<span
+                                                class="red-asterisk"
+                                                >*</span
+                                            ></label
+                                        >
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <p-calendar
+                                            formControlName="expiryDate"
+                                            [showIcon]="true"
+                                            [icon]="calendarIcon"
+                                            dateFormat="dd/mm/yy"
+                                            placeholder="Chọn ngày"
+                                            [style]="{
+                                                height: '40px',
+                                                width: '100%'
+                                            }"
+                                            [readonlyInput]="true"
+                                            [disabled]="isExpiryDateDisabled"
+                                            (onSelect)="
+                                                onDateSelectExpiryDate()
+                                            "
+                                        ></p-calendar>
+                                        <div
+                                            *ngIf="
+                                                (contractUpdateForm
+                                                    .get('expiryDate')
+                                                    ?.hasError('required') &&
+                                                    contractUpdateForm.get(
+                                                        'expiryDate'
+                                                    )?.touched) ||
+                                                showErrorExpiryDate
+                                            "
+                                        >
+                                            <small class="error-message"
+                                                >Vui lòng nhập đủ thông
+                                                tin</small
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row line-height">
+                                    <div class="col-lg-2">
+                                        <label class="labelip"
+                                            >Lương cơ bản</label
+                                        >
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            pInputText
+                                            [style]="{
+                                                height: '40px',
+                                                width: '100%'
+                                            }"
+                                            formControlName="salaryAmount"
+                                            placeholder="Nhập thông tin"
+                                            maxlength="100"
+                                        />
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label class="labelip"
+                                            >Lương đóng bảo hiểm</label
+                                        >
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            pInputText
+                                            [style]="{
+                                                height: '40px',
+                                                width: '100%'
+                                            }"
+                                            formControlName="salaryInsurance"
+                                            placeholder="Nhập thông tin"
+                                            maxlength="100"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="row line-height">
+                                    <div class="col-lg-2">
+                                        <label class="labelip"
+                                            >Tỉ lệ hưởng lương</label
+                                        >
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            pInputText
+                                            [style]="{
+                                                height: '40px',
+                                                width: '100%'
+                                            }"
+                                            formControlName="salaryRate"
+                                            placeholder="Nhập thông tin"
+                                            maxlength="100"
+                                        />
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label class="labelip">Lương KPI</label>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            pInputText
+                                            [style]="{
+                                                height: '40px',
+                                                width: '100%'
+                                            }"
+                                            formControlName="kpiSalary"
+                                            placeholder="Nhập thông tin"
+                                            maxlength="100"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="row line-height">
+                                    <div class="col-lg-2">
+                                        <label class="labelip">Công đoàn</label>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            pInputText
+                                            [style]="{
+                                                height: '40px',
+                                                width: '100%'
+                                            }"
+                                            formControlName="unionFee"
+                                            placeholder="Nhập thông tin"
+                                            maxlength="100"
+                                        />
+                                    </div>
+
+                                    <div class="col-lg-2">
+                                        <label class="labelip"
+                                            >Người đại diện công ty ký</label
+                                        >
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <p-dropdown
+                                            formControlName="companyRepresentativeSigningId"
+                                            [options]="represenSigning"
+                                            [style]="{
+                                                height: '40px',
+                                                width: '100%'
+                                            }"
+                                            optionValue="id"
+                                            optionLabel="name"
+                                            [filter]="true"
+                                            [filterBy]="'name'"
+                                            [showClear]="true"
+                                            placeholder="Chọn thông tin"
+                                            (onChange)="
+                                                onCompanyRepresentativeSigningChange(
+                                                    $event.value
+                                                )
+                                            "
+                                        ></p-dropdown>
+                                    </div>
+                                </div>
+                                <div class="row line-height">
+                                    <div class="col-lg-2">
+                                        <label class="labelip"
+                                            >Tệp đính kèm</label
+                                        >
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div
+                                            *ngIf="!selectedFile && !Url"
+                                            class="file-upload-container"
+                                        >
+                                            <label
+                                                for="file-upload"
+                                                class="file-upload-label"
+                                            >
+                                                <span class="file-label-text"
+                                                    >Tệp đính kèm</span
+                                                >
+                                                <input
+                                                    type="file"
+                                                    id="file-upload"
+                                                    class="file-upload-input"
+                                                    (change)="
+                                                        onFileSelect($event)
+                                                    "
+                                                    accept=".xls,.xlsx,.ppt,.pptx,.pdf,image/*"
+                                                    multiple
+                                                />
+                                                <span class="upload-icon">
+                                                    <i class="pi pi-upload"></i>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <span
+                                            class="file-name"
+                                            *ngIf="selectedFile"
+                                        >
+                                            {{ selectedFile.name }}
+
+                                            <i
+                                                class="pi pi-times clear-icon"
+                                                (click)="clearFile()"
+                                            ></i>
+                                        </span>
+                                        <span class="file-name" *ngIf="Url">
+                                            {{ this.Url.split("_").pop() }}
+                                            <div class="">
+                                                <i
+                                                    style="
+                                                        margin: 0 10px;
+                                                        cursor: pointer;
+                                                    "
+                                                    class="pi pi-eye"
+                                                    (click)="openDialogFile()"
+                                                ></i>
+                                                <i
+                                                    class="pi pi-times clear-icon"
+                                                    (click)="removeFile()"
+                                                ></i>
+                                            </div>
+                                        </span>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label class="labelip"
+                                            >Trạng thái ký</label
+                                        >
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <p-dropdown
+                                            formControlName="signStatus"
+                                            [options]="signStatuOptions"
+                                            [style]="{
+                                                height: '40px',
+                                                width: '100%'
+                                            }"
+                                            optionValue="id"
+                                            optionLabel="name"
+                                            [showClear]="true"
+                                            placeholder="Chọn thông tin"
+                                        ></p-dropdown>
+                                    </div>
+                                </div>
+                                <div class="row line-height">
+                                    <div class="col-lg-2">
+                                        <label class="labelip">Ghi chú</label>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <textarea
+                                            class="form-control"
+                                            style="height: 80px; width: 100%"
+                                            id="note"
+                                            name="note"
+                                            formControlName="note"
+                                            required
+                                        ></textarea>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label class="labelip"
+                                            >Chức danh người đại diện</label
+                                        >
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            pInputText
+                                            [style]="{
+                                                height: '40px',
+                                                width: '100%'
+                                            }"
+                                            formControlName="representative"
+                                            placeholder="Nhập thông tin"
+                                            maxlength="100"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="allowances">
+                                <p style="font-size: 20px; font-weight: 600">
+                                    Các khoản phụ cấp
+                                </p>
+                                <button
+                                    pButton
+                                    pRipple
+                                    type="button"
+                                    label="Thêm mới"
+                                    class="button-allowances"
+                                    (click)="showDialogAllowance()"
+                                ></button>
+                            </div>
+                            <div class="table-allowances">
+                                <div class="allowances">
+                                    <p-table
+                                        [value]="allowanceList"
+                                        [paginator]="false"
+                                        [rows]="4"
+                                    >
+                                        <ng-template pTemplate="header">
+                                            <tr>
+                                                <th style="width: 20%">
+                                                    Tên khoản
+                                                </th>
+                                                <th style="width: 20%">
+                                                    Định mức
+                                                </th>
+                                                <th style="width: 20%">
+                                                    Giá trị
+                                                </th>
+                                                <th style="width: 20%">
+                                                    Ghi chú
+                                                </th>
+                                                <th style="width: 8%">
+                                                    Hành động
+                                                </th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template
+                                            pTemplate="body"
+                                            let-allowance
+                                        >
+                                            <tr
+                                                [style.background]="
+                                                    allowance.isNew
+                                                        ? '#e0f7fa'
+                                                        : 'transparent'
+                                                "
+                                            >
+                                                <td>
+                                                    {{
+                                                        allowance.isNew
+                                                            ? getAllowanceNameById(
+                                                                  allowance.allowNameId
+                                                              )
+                                                            : allowance.allowanceName
+                                                    }}
+                                                </td>
+                                                <td>
+                                                    {{
+                                                        allowance.standardValue
+                                                            | currency : "VND"
+                                                    }}
+                                                </td>
+                                                <td>
+                                                    {{
+                                                        allowance.value
+                                                            | currency : "VND"
+                                                    }}
+                                                </td>
+                                                <td>{{ allowance.note }}</td>
+                                                <td>
+                                                    <a
+                                                        (click)="
+                                                            openEditAllowance(
+                                                                allowance
+                                                            )
+                                                        "
+                                                    >
+                                                        <i
+                                                            style="
+                                                                margin-right: 20px;
+                                                            "
+                                                            class="pi pi-pencil"
+                                                        ></i>
+                                                    </a>
+                                                    <i
+                                                        class="pi pi-trash"
+                                                        (click)="
+                                                            deleteAllowance(
+                                                                allowance
+                                                            )
+                                                        "
+                                                    ></i>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                    <p-table
+                                        [value]="allowanceListNew"
+                                        [paginator]="false"
+                                        [rows]="4"
+                                    >
+                                        <ng-template
+                                            pTemplate="body"
+                                            let-allowance
+                                        >
+                                            <tr
+                                                [style.background]="
+                                                    allowance.isNew
+                                                        ? '#e0f7fa'
+                                                        : 'transparent'
+                                                "
+                                            >
+                                                <td style="width: 20%">
+                                                    {{
+                                                        allowance.isNew
+                                                            ? getAllowanceNameById(
+                                                                  allowance.allowNameId
+                                                              )
+                                                            : allowance.allowanceName
+                                                    }}
+                                                </td>
+                                                <td style="width: 20%">
+                                                    {{
+                                                        allowance.standardValue
+                                                            | currency : "VND"
+                                                    }}
+                                                </td>
+                                                <td style="width: 20%">
+                                                    {{
+                                                        allowance.value
+                                                            | currency : "VND"
+                                                    }}
+                                                </td>
+                                                <td style="width: 20%">
+                                                    {{ allowance.note }}
+                                                </td>
+                                                <td style="width: 8%">
+                                                    <a
+                                                        (click)="
+                                                            openEditAllowance(
+                                                                allowance
+                                                            )
+                                                        "
+                                                    >
+                                                        <i
+                                                            style="
+                                                                margin-right: 20px;
+                                                            "
+                                                            class="pi pi-pencil"
+                                                        ></i>
+                                                    </a>
+                                                    <i
+                                                        class="pi pi-trash"
+                                                        (click)="
+                                                            deleteAllowanceNew(
+                                                                allowance
+                                                            )
+                                                        "
+                                                    ></i>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="footer">
+                                            <tr>
+                                                <td style="width: 20%">
+                                                    <b>Tổng cộng:</b>
+                                                </td>
+                                                <td
+                                                    style="width: 20%"
+                                                    colspan="1"
+                                                ></td>
+                                                <td
+                                                    style="width: 20%"
+                                                    colspan="1"
+                                                >
+                                                    {{
+                                                        totalAmount
+                                                            | currency : "VND"
+                                                    }}
+                                                </td>
+                                                <td
+                                                    style="width: 20%"
+                                                    colspan="1"
+                                                ></td>
+                                                <td
+                                                    style="width: 8%"
+                                                    colspan="1"
+                                                ></td>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 flex justify-content-end gap-3">
+            <button
+                pButton
+                pRipple
+                type="button"
+                label="Hủy"
+                class="p-button-outlined"
+                (click)="openDialog3()"
+            ></button>
+            <button
+                type="submit"
+                pButton
+                label="Lưu"
+                class="p-button-primary"
+                (click)="onUpdateContract()"
+            ></button>
+        </div>
+
+        <p-dialog
+            header="Xác nhận"
+            [(visible)]="showDialog3"
+            [modal]="true"
+            [style]="{ width: '450px' }"
+            [closable]="false"
+            [dismissableMask]="true"
+        >
+            <div class="card-body">
+                <!-- Nội dung thông báo -->
+                <div class="row mb-12">
+                    <label>
+                        Dữ liệu sẽ không được lưu lại, bạn có chắc muốn thoát?
+                    </label>
+                </div>
+
+                <!-- Các nút hành động -->
+                <div class="row mb-12 mt-5">
+                    <div
+                        class="col-sm-12 buttonsl d-flex justify-content-end gap-2"
+                    >
+                        <button
+                            pButton
+                            pRipple
+                            label="Hủy"
+                            class="p-button-success buttoncloses"
+                            type="button"
+                            (click)="closeDialog3()"
+                        ></button>
+                        <button
+                            pButton
+                            pRipple
+                            label="Đồng ý"
+                            class="p-button-success buttondelete"
+                            type="button"
+                            [routerLink]="['/contract/show']"
+                        ></button>
+                    </div>
+                </div>
+            </div>
+        </p-dialog>
+    </div>
+</form>
+
+<div class="contract-dialog">
+    <p-dialog
+        [(visible)]="isDialogVisibleContractType"
+        header="Thiết lập giá trị"
+        [modal]="true"
+        [style]="{ width: '500px' }"
+        [closable]="true"
+    >
+        <!-- Input tìm kiếm -->
+        <input
+            type="text"
+            placeholder="Tìm kiếm"
+            class="search-input"
+            [(ngModel)]="searchTerm"
+            (input)="filterOptionsContractType()"
+        />
+
+        <!-- Danh sách các dòng -->
+        <ul>
+            <li *ngFor="let option of filterContractType; let i = index">
+                <input
+                    type="checkbox"
+                    [(ngModel)]="option.selected"
+                    [disabled]="option.isNew"
+                    (change)="onCheckboxChangeContractType(option)"
+                />
+                <span *ngIf="!option.isEditing">{{ option.name }}</span>
+                <input
+                    *ngIf="option.isEditing"
+                    type="text"
+                    [(ngModel)]="option.name"
+                    (blur)="finishEditingContractType(option)"
+                    (keyup.enter)="finishEditingContractType(option)"
+                    class="edit-input"
+                />
+
+                <i
+                    class="pi pi-pencil"
+                    *ngIf="!option.isEditing"
+                    (click)="editRowContractType(option)"
+                    title="Chỉnh sửa"
+                ></i>
+                <i
+                    class="pi pi-trash"
+                    (click)="deleteRowContractType(i)"
+                    title="Xóa"
+                    style="color: red; cursor: pointer; margin-left: 10px"
+                ></i>
+            </li>
+        </ul>
+
+        <button type="button" class="btn-add" (click)="addRowContractType()">
+            + Thêm dòng
+        </button>
+
+        <div style="border-bottom: 1px solid #ccc; margin-top: 10px"></div>
+
+        <!-- Nút Hủy và Lưu -->
+        <div class="dialog-actions">
+            <button type="button" (click)="closeDialogContractType()">
+                Hủy
+            </button>
+            <button type="button" (click)="contractTypeCreateAndUpdate()">
+                Lưu
+            </button>
+        </div>
+    </p-dialog>
+
+    <p-dialog
+        [(visible)]="isDialogVisibleContractDuration"
+        header="Thiết lập giá trị"
+        [modal]="true"
+        [style]="{ width: '500px' }"
+        [closable]="true"
+    >
+        <!-- Input tìm kiếm -->
+        <input
+            type="text"
+            placeholder="Tìm kiếm"
+            class="search-input"
+            [(ngModel)]="searchTerm"
+            (input)="filterOptionsContractDuration()"
+        />
+
+        <!-- Danh sách các dòng -->
+        <ul>
+            <li *ngFor="let option of filterContractDuration; let i = index">
+                <input
+                    type="checkbox"
+                    [(ngModel)]="option.selected"
+                    [disabled]="option.isNew"
+                    (change)="onCheckboxChangeContractDuration(option)"
+                />
+                <span *ngIf="!option.isEditing">{{ option.duration }}</span>
+                <input
+                    *ngIf="option.isEditing"
+                    type="text"
+                    [(ngModel)]="option.duration"
+                    (blur)="finishEditingContractDuration(option)"
+                    (keyup.enter)="finishEditingContractDuration(option)"
+                    class="edit-input"
+                />
+
+                <i
+                    class="pi pi-pencil"
+                    *ngIf="!option.isEditing"
+                    (click)="editRowContractDuration(option)"
+                    title="Chỉnh sửa"
+                ></i>
+                <i
+                    class="pi pi-trash"
+                    (click)="deleteRowContractDuration(i)"
+                    title="Xóa"
+                    style="color: red; cursor: pointer; margin-left: 10px"
+                ></i>
+            </li>
+        </ul>
+
+        <button
+            type="button"
+            class="btn-add"
+            (click)="addRowContractDuration()"
+        >
+            + Thêm dòng
+        </button>
+
+        <div style="border-bottom: 1px solid #ccc; margin-top: 10px"></div>
+
+        <!-- Nút Hủy và Lưu -->
+        <div class="dialog-actions">
+            <button type="button" (click)="closeDialogContractDuration()">
+                Hủy
+            </button>
+            <button type="button" (click)="contractDurationCreateAndUpdate()">
+                Lưu
+            </button>
+        </div>
+    </p-dialog>
+
+    <p-dialog
+        [(visible)]="isDialogVisibleWorkingform"
+        header="Thiết lập giá trị"
+        [modal]="true"
+        [style]="{ width: '500px' }"
+        [closable]="true"
+    >
+        <!-- Input tìm kiếm -->
+        <input
+            type="text"
+            placeholder="Tìm kiếm"
+            class="search-input"
+            [(ngModel)]="searchTerm"
+            (input)="filterOptionsWorkingForm()"
+        />
+
+        <!-- Danh sách các dòng -->
+        <ul>
+            <li *ngFor="let option of filterWorkingForm; let i = index">
+                <input
+                    type="checkbox"
+                    [(ngModel)]="option.selected"
+                    [disabled]="option.isNew"
+                    (change)="onCheckboxChangeWorkingForm(option)"
+                />
+                <span *ngIf="!option.isEditing">{{ option.form }}</span>
+                <input
+                    *ngIf="option.isEditing"
+                    type="text"
+                    [(ngModel)]="option.form"
+                    (blur)="finishEditingWorkingForm(option)"
+                    (keyup.enter)="finishEditingWorkingForm(option)"
+                    class="edit-input"
+                />
+
+                <i
+                    class="pi pi-pencil"
+                    *ngIf="!option.isEditing"
+                    (click)="editRowWorkingForm(option)"
+                    title="Chỉnh sửa"
+                ></i>
+                <i
+                    class="pi pi-trash"
+                    (click)="deleteRowWorkingForm(i)"
+                    title="Xóa"
+                    style="color: red; cursor: pointer; margin-left: 10px"
+                ></i>
+            </li>
+        </ul>
+
+        <button type="button" class="btn-add" (click)="addRowWorkingForm()">
+            + Thêm dòng
+        </button>
+
+        <div style="border-bottom: 1px solid #ccc; margin-top: 10px"></div>
+
+        <!-- Nút Hủy và Lưu -->
+        <div class="dialog-actions">
+            <button type="button" (click)="closeDialogWorkingForm()">
+                Hủy
+            </button>
+            <button type="button" (click)="workingFormCreateAndUpdate()">
+                Lưu
+            </button>
+        </div>
+    </p-dialog>
+
+    <p-dialog
+        [(visible)]="displayDialog"
+        header="Các khoản phụ cấp"
+        [modal]="true"
+        [style]="{ width: '600px' }"
+        [closable]="true"
+    >
+        <form [formGroup]="allowanceUpdateForm">
+            <div class="p-fluid">
+                <!-- Tên khoản -->
+                <div class="p-field">
+                    <label class="labelip" for="account"
+                        >Tên khoản <span class="red-asterisk">*</span></label
+                    >
+                    <p-dropdown
+                        [options]="allowanceNameOptions"
+                        formControlName="allowNameId"
+                        placeholder="Chọn tên khoản"
+                        [style]="{ width: '100%' }"
+                    >
+                    </p-dropdown>
+                    <div
+                        *ngIf="
+                            (allowanceUpdateForm.get('allowNameId')?.invalid &&
+                                (allowanceUpdateForm.get('allowNameId')
+                                    ?.dirty ||
+                                    allowanceUpdateForm.get('allowNameId')
+                                        ?.touched)) ||
+                            showErrorAllowanceName
+                        "
+                    >
+                        <small
+                            *ngIf="allowanceUpdateForm.get('allowNameId')?.errors?.['required']"
+                            class="error-message"
+                        >
+                            Vui lòng nhập đủ thông tin
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Định mức -->
+                <div class="p-field mt-3">
+                    <label class="labelip" for="standard">Định mức</label>
+                    <div class="p-inputgroup">
+                        <p-dropdown
+                            [options]="allowanceRateOptions"
+                            formControlName="standardTypeId"
+                            [style]="{ width: '90%' }"
+                            placeholder="Chọn định mức"
+                        >
+                        </p-dropdown>
+                        <input
+                            pInputText
+                            type="text"
+                            formControlName="standardValue"
+                            placeholder="Nhập số tiền"
+                        />
+                    </div>
+                </div>
+
+                <!-- Giá trị -->
+                <div class="p-field mt-3">
+                    <label class="labelip" for="value">Giá trị</label>
+                    <div class="p-inputgroup">
+                        <p-dropdown
+                            [options]="valueOptions"
+                            formControlName="typeValueId"
+                            [style]="{ width: '90%' }"
+                            placeholder="Chọn giá trị"
+                        >
+                        </p-dropdown>
+                        <input
+                            pInputText
+                            type="text"
+                            formControlName="value"
+                            placeholder="Nhập số tiền"
+                        />
+                    </div>
+                </div>
+
+                <!-- Ghi chú -->
+                <div class="p-field mt-3">
+                    <label class="labelip" for="note">Ghi chú</label>
+                    <textarea
+                        pInputTextarea
+                        id="note"
+                        formControlName="note"
+                        placeholder="Nhập ghi chú"
+                    >
+                    </textarea>
+                </div>
+            </div>
+        </form>
+
+        <p-footer>
+            <button
+                pButton
+                label="Hủy"
+                class="p-button-secondary"
+                (click)="closeDialogAllowance()"
+            ></button>
+
+            <button
+                style="margin-left: 10px"
+                pButton
+                label="Lưu"
+                class="p-button-primary"
+                (click)="saveAllowance()"
+            ></button>
+
+            <button
+                style="margin-left: 10px"
+                pButton
+                label="Lưu và Thêm"
+                class="p-button-primary"
+                (click)="saveAndResetAllowance()"
+            ></button>
+        </p-footer>
+    </p-dialog>
+
+    <p-dialog
+        [(visible)]="displayDialogEidt"
+        header="Chỉnh sửa khoản phụ cấp"
+        [modal]="true"
+        [style]="{ width: '600px' }"
+        [closable]="true"
+    >
+        <form [formGroup]="allowanceUpdateForm">
+            <div class="p-fluid">
+                <!-- Tên khoản -->
+                <div class="p-field">
+                    <label class="labelip" for="account"
+                        >Tên khoản <span class="red-asterisk">*</span></label
+                    >
+                    <p-dropdown
+                        [options]="allowanceNameOptions"
+                        formControlName="allowNameId"
+                        placeholder="Chọn tên khoản"
+                        [style]="{ width: '100%' }"
+                    >
+                    </p-dropdown>
+                    <div
+                        *ngIf="
+                            (allowanceUpdateForm.get('allowNameId')?.invalid &&
+                                (allowanceUpdateForm.get('allowNameId')
+                                    ?.dirty ||
+                                    allowanceUpdateForm.get('allowNameId')
+                                        ?.touched)) ||
+                            showErrorAllowanceName
+                        "
+                    >
+                        <small
+                            *ngIf="allowanceUpdateForm.get('allowNameId')?.errors?.['required']"
+                            class="error-message"
+                        >
+                            Vui lòng nhập đủ thông tin
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Định mức -->
+                <div class="p-field mt-3">
+                    <label class="labelip" for="standard">Định mức</label>
+                    <div class="p-inputgroup">
+                        <p-dropdown
+                            [options]="allowanceRateOptions"
+                            formControlName="standardTypeId"
+                            [style]="{ width: '90%' }"
+                            placeholder="Chọn định mức"
+                        >
+                        </p-dropdown>
+                        <input
+                            pInputText
+                            type="text"
+                            formControlName="standardValue"
+                            placeholder="Nhập số tiền"
+                        />
+                    </div>
+                </div>
+
+                <!-- Giá trị -->
+                <div class="p-field mt-3">
+                    <label class="labelip" for="value">Giá trị</label>
+                    <div class="p-inputgroup">
+                        <p-dropdown
+                            [options]="valueOptions"
+                            formControlName="typeValueId"
+                            [style]="{ width: '90%' }"
+                            placeholder="Chọn giá trị"
+                        >
+                        </p-dropdown>
+                        <input
+                            pInputText
+                            type="text"
+                            formControlName="value"
+                            placeholder="Nhập số tiền"
+                        />
+                    </div>
+                </div>
+
+                <!-- Ghi chú -->
+                <div class="p-field mt-3">
+                    <label class="labelip" for="note">Ghi chú</label>
+                    <textarea
+                        pInputTextarea
+                        id="note"
+                        formControlName="note"
+                        placeholder="Nhập ghi chú"
+                    >
+                    </textarea>
+                </div>
+            </div>
+        </form>
+
+        <p-footer>
+            <button
+                pButton
+                label="Lưu"
+                class="p-button-primary"
+                (click)="updateAllowanceSave()"
+            ></button>
+            <button
+                style="margin-left: 10px"
+                pButton
+                label="Hủy"
+                class="p-button-secondary"
+                (click)="closeDialogEdit()"
+            ></button>
+        </p-footer>
+    </p-dialog>
+</div>

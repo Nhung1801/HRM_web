@@ -1,0 +1,864 @@
+<div class="avatar">
+    <div class="frame-image">
+        <span *ngIf="imageUrl != null">
+            <img [src]="imageUrl + employees.avatarUrl" alt="" />
+        </span>
+    </div>
+    <label>Ảnh đại diện</label>
+</div>
+
+<form [formGroup]="generalInfoCreateForm" (ngSubmit)="onSubmit()">
+    <div class="general__info">
+        <h5 class="title__heading">THÔNG TIN CHUNG</h5>
+        <div class="grid p-fluid p-3">
+            <!-- Mã thành viên -->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="phoneNumber"
+                            >Mã thành viên<span class="red-asterisk"
+                                >*</span
+                            ></label
+                        >
+                    </div>
+                    <div class="col-12 mb-2 md:col-8 md:mb-0">
+                        <input
+                            pInputText
+                            id="phoneNumber"
+                            formControlName="code"
+                            type="text"
+                            spellcheck="false"
+                            placeholder="Nhập mã nhân viên"
+                        />
+                        <div
+                            *ngIf="
+                                generalInfoCreateForm.get('code')?.invalid &&
+                                (generalInfoCreateForm.get('code')?.dirty ||
+                                    generalInfoCreateForm.get('code')?.touched)
+                            "
+                        >
+                            <div
+                                *ngIf="generalInfoCreateForm.get('code')?.errors?.['required']"
+                                class="error-message"
+                            >
+                                Vui lòng nhập mã thành viên
+                            </div>
+                            <div
+                                *ngIf="!generalInfoCreateForm.get('code')?.errors?.['required'] &&
+                                        generalInfoCreateForm.get('code')?.errors?.['whitespace']"
+                                class="error-message"
+                            >
+                                Tên không được chứa khoảng trắng
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Nguyên quán -->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="phoneNumber"
+                            >Nguyên quán</label
+                        >
+                    </div>
+                    <div class="col-12 mb-2 md:col-8 md:mb-0">
+                        <input
+                            pInputText
+                            id="phoneNumber"
+                            formControlName="placeOfOrigin"
+                            type="text"
+                            spellcheck="false"
+                            placeholder="Nhập nguyên quán"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Họ và tên đệm -->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="phoneNumber"
+                            >Họ và đệm<span class="red-asterisk">*</span></label
+                        >
+                    </div>
+                    <div class="col-12 mb-2 md:col-8 md:mb-0">
+                        <input
+                            pInputText
+                            id="phoneNumber"
+                            type="text"
+                            formControlName="firstAndMiddleName"
+                            spellcheck="false"
+                            placeholder="Nhập họ và tên đệm"
+                        />
+                        <div
+                            *ngIf="
+                                generalInfoCreateForm.get('firstAndMiddleName')
+                                    ?.invalid &&
+                                (generalInfoCreateForm.get('firstAndMiddleName')
+                                    ?.dirty ||
+                                    generalInfoCreateForm.get(
+                                        'firstAndMiddleName'
+                                    )?.touched)
+                            "
+                        >
+                            <div
+                                *ngIf="generalInfoCreateForm.get('firstAndMiddleName')?.errors?.['required']"
+                                class="error-message"
+                            >
+                                Vui lòng nhập họ và tên đệm
+                            </div>
+                            <div
+                                *ngIf="!generalInfoCreateForm.get('firstAndMiddleName')?.errors?.['required'] &&
+                                        generalInfoCreateForm.get('firstAndMiddleName')?.errors?.['whitespace']"
+                                class="error-message"
+                            >
+                                Tên không được chứa khoảng trắng
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Tình trạng hôn nhân  -->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="name1"
+                            >Tình trạng hôn nhân</label
+                        >
+                    </div>
+                    <div
+                        class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                        style="justify-content: space-between; gap: 7px"
+                    >
+                        <input
+                            pInputText
+                            id="name1"
+                            formControlName="maritalStatus"
+                            type="text"
+                            spellcheck="false"
+                            placeholder="Nhập tình trạng hôn nhân"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="phoneNumber"
+                            >Tên<span class="red-asterisk">*</span></label
+                        >
+                    </div>
+                    <div class="col-12 mb-2 md:col-8 md:mb-0">
+                        <input
+                            pInputText
+                            id="phoneNumber"
+                            formControlName="name"
+                            type="text"
+                            spellcheck="false"
+                            placeholder="Nhập tên "
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="phoneNumber"
+                            >Mã số thuế cá nhân</label
+                        >
+                    </div>
+                    <div class="col-12 mb-2 md:col-8 md:mb-0">
+                        <input
+                            pInputText
+                            id="phoneNumber"
+                            formControlName="personalTax"
+                            type="text"
+                            spellcheck="false"
+                            placeholder="Nhập mã số thuế cá nhân"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="phoneNumber"
+                            >Họ và tên</label
+                        >
+                    </div>
+                    <div class="col-12 mb-2 md:col-8 md:mb-0">
+                        <input
+                            pInputText
+                            id="phoneNumber"
+                            type="text"
+                            formControlName="fullName"
+                            spellcheck="false"
+                            placeholder="Nhập họ và tên"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="name1"
+                            >TP gia đình</label
+                        >
+                    </div>
+                    <div
+                        class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                        style="justify-content: space-between; gap: 7px"
+                    >
+                        <input
+                            pInputText
+                            id="name1"
+                            type="text"
+                            spellcheck="false"
+                            formControlName="familyComposition"
+                            placeholder="Nhập thành phần gia đình"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="phoneNumber"
+                            >Tên gọi khác</label
+                        >
+                    </div>
+                    <div class="col-12 mb-2 md:col-8 md:mb-0">
+                        <input
+                            pInputText
+                            id="phoneNumber"
+                            type="text"
+                            spellcheck="false"
+                            formControlName="otherName"
+                            placeholder="Nhập tên gọi khác"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="name1"
+                            >TP bản thân</label
+                        >
+                    </div>
+                    <div
+                        class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                        style="justify-content: space-between; gap: 7px"
+                    >
+                        <input
+                            pInputText
+                            id="name1"
+                            type="text"
+                            formControlName="selfComposition"
+                            spellcheck="false"
+                            placeholder="Nhập thành phần bản thân"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ngày sinh -->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="phoneNumber"
+                            >Ngày sinh</label
+                        >
+                    </div>
+                    <div class="col-12 mb-2 md:col-8 md:mb-0">
+                        <p-calendar
+                            dateFormat="dd/mm/yy"
+                            placeholder="dd/mm/yy"
+                            formControlName="dateOfBirth"
+                            [showIcon]="true"
+                            placeholder="Nhập ngày sinh"
+                        ></p-calendar>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dân tộc -->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="name1"
+                            >Dân tộc</label
+                        >
+                    </div>
+                    <div
+                        class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                        style="justify-content: space-between; gap: 7px"
+                    >
+                        <input
+                            pInputText
+                            id="name1"
+                            type="text"
+                            formControlName="ethnicity"
+                            spellcheck="false"
+                            placeholder="Nhập dân tộc"
+                        />
+                    </div>
+                </div>
+            </div>
+            <!-- Giới tính-->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="name1"
+                            >Giới tính</label
+                        >
+                    </div>
+                    <div
+                        class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                        style="justify-content: space-between; gap: 7px"
+                    >
+                        <p-dropdown
+                            [options]="gender"
+                            formControlName="gender"
+                            optionLabel="label"
+                            optionValue="value"
+                            [showClear]="true"
+                            placeholder="Chọn giới tính"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <!-- Tôn giáo-->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="name1"
+                            >Tôn giáo</label
+                        >
+                    </div>
+                    <div
+                        class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                        style="justify-content: space-between; gap: 7px"
+                    >
+                        <input
+                            pInputText
+                            formControlName="religion"
+                            id="name1"
+                            type="text"
+                            spellcheck="false"
+                            placeholder="Nhập tôn giáo"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nơi sinh-->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="name1"
+                            >Nơi sinh</label
+                        >
+                    </div>
+                    <div
+                        class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                        style="justify-content: space-between; gap: 7px"
+                    >
+                        <input
+                            pInputText
+                            formControlName="placeOfBirth"
+                            id="name1"
+                            type="text"
+                            spellcheck="false"
+                            placeholder="Nhập nơi sinh"
+                        />
+                    </div>
+                </div>
+            </div>
+            <!-- Quốc tịch-->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="name1"
+                            >Quốc tịch</label
+                        >
+                    </div>
+                    <div
+                        class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                        style="justify-content: space-between; gap: 7px"
+                    >
+                        <input
+                            pInputText
+                            id="name1"
+                            type="text"
+                            formControlName="nationality"
+                            spellcheck="false"
+                            placeholder="Nhập quốc tịch"
+                        />
+                    </div>
+                </div>
+            </div>
+            <!-- Điện thoại di động-->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="name1"
+                            >Điện thoại di động</label
+                        >
+                    </div>
+                    <div
+                        class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                        style="justify-content: space-between; gap: 7px"
+                    >
+                        <input
+                            pInputText
+                            id="name1"
+                            type="text"
+                            formControlName="phoneNumber"
+                            spellcheck="false"
+                            placeholder="Nhập điện thoại di động"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="identity-info">
+        <h5 class="title__heading">CMND/Thẻ căn cước/Hộ chiếu</h5>
+        <div class="grid p-fluid p-3">
+            <!-- Loại giấy tờ -->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="phoneNumber"
+                            >Loại giấy tờ</label
+                        >
+                    </div>
+                    <div class="col-12 mb-2 md:col-8 md:mb-0">
+                        <input
+                            pInputText
+                            id="phoneNumber"
+                            formControlName="idType"
+                            type="text"
+                            spellcheck="false"
+                            placeholder="Nhập loại giấy tờ"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Số hộ chiếu -->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="phoneNumber"
+                            >Số hộ chiếu</label
+                        >
+                    </div>
+                    <div class="col-12 mb-2 md:col-8 md:mb-0">
+                        <input
+                            pInputText
+                            id="phoneNumber"
+                            formControlName="passportNumber"
+                            type="text"
+                            spellcheck="false"
+                            placeholder="Nhập số hộ chiếu"
+                        />
+                    </div>
+                </div>
+            </div>
+            <!-- Số giấy tờ -->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="phoneNumber"
+                            >Số giấy tờ</label
+                        >
+                    </div>
+                    <div class="col-12 mb-2 md:col-8 md:mb-0">
+                        <input
+                            pInputText
+                            id="phoneNumber"
+                            formControlName="idNumber"
+                            type="text"
+                            spellcheck="false"
+                            placeholder="Nhập số giấy tờ"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ngày cấp hộ chiếu -->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="phoneNumber"
+                            >Ngày cấp hộ chiếu</label
+                        >
+                    </div>
+                    <div class="col-12 mb-2 md:col-8 md:mb-0">
+                        <p-calendar
+                            dateFormat="dd/mm/yy"
+                            placeholder="dd/mm/yy"
+                            formControlName="passportIssueDate"
+                            [showIcon]="true"
+                            placeholder="Nhập ngày cấp hộ chiếu"
+                        ></p-calendar>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ngày cấp giấy tờ -->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="phoneNumber"
+                            >Ngày cấp giấy tờ</label
+                        >
+                    </div>
+                    <div class="col-12 mb-2 md:col-8 md:mb-0">
+                        <p-calendar
+                            dateFormat="dd/mm/yy"
+                            placeholder="dd/mm/yy"
+                            formControlName="idIssueDate"
+                            [showIcon]="true"
+                            placeholder="Nhập ngày cấp giấy tờ"
+                        ></p-calendar>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nơi cấp hộ chiếu-->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="name1"
+                            >Nơi cấp hộ chiếu</label
+                        >
+                    </div>
+                    <div
+                        class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                        style="justify-content: space-between; gap: 7px"
+                    >
+                        <input
+                            pInputText
+                            id="name1"
+                            formControlName="passportIssuePlace"
+                            type="text"
+                            spellcheck="false"
+                            placeholder="Nhập thành phân gia đình"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nơi cấp giấy tờ-->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="name1"
+                            >Nơi cấp giấy tờ</label
+                        >
+                    </div>
+                    <div
+                        class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                        style="justify-content: space-between; gap: 7px"
+                    >
+                        <input
+                            pInputText
+                            id="name1"
+                            formControlName="idIssuePlace"
+                            type="text"
+                            spellcheck="false"
+                            placeholder="Nhập nơi cấp gia đình"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ngày hết hạn hộ chiếu -->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="phoneNumber"
+                            >Ngày hết hạn hộ chiếu</label
+                        >
+                    </div>
+                    <div class="col-12 mb-2 md:col-8 md:mb-0">
+                        <p-calendar
+                            dateFormat="dd/mm/yy"
+                            placeholder="dd/mm/yy"
+                            formControlName="passportExpiryDate"
+                            [showIcon]="true"
+                            placeholder="Nhập ngày hết hạn hộ chiếu"
+                        ></p-calendar>
+                    </div>
+                </div>
+            </div>
+            <!-- Ngày hết hạn giấy tờ -->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="phoneNumber"
+                            >Ngày hết hạn giấy tờ</label
+                        >
+                    </div>
+                    <div class="col-12 mb-2 md:col-8 md:mb-0">
+                        <p-calendar
+                            dateFormat="dd/mm/yy"
+                            placeholder="dd/mm/yy"
+                            formControlName="idExpiryDate"
+                            [showIcon]="true"
+                            placeholder="Nhập ngày hết hạn giấy tờ"
+                        ></p-calendar>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="qualification-info">
+        <h5 class="title__heading">TRÌNH ĐỘ/ BẰNG CẤP</h5>
+        <div class="grid p-fluid p-3">
+            <!-- Trình độ văn hóa -->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="phoneNumber"
+                            >Trình độ văn hóa</label
+                        >
+                    </div>
+                    <div class="col-12 mb-2 md:col-8 md:mb-0">
+                        <input
+                            pInputText
+                            id="phoneNumber"
+                            formControlName="educationLevel"
+                            type="text"
+                            spellcheck="false"
+                            placeholder="Nhập trình độ văn hóa"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chuyên nghành  -->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="name1"
+                            >Chuyên nghành</label
+                        >
+                    </div>
+                    <div
+                        class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                        style="justify-content: space-between; gap: 7px"
+                    >
+                        <input
+                            pInputText
+                            id="name1"
+                            formControlName="major"
+                            type="text"
+                            spellcheck="false"
+                            placeholder="Nhập chuyên nghành"
+                        />
+                    </div>
+                </div>
+            </div>
+            <!-- trình độ đào tạo -->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="name1"
+                            >Trình độ đào tạo</label
+                        >
+                    </div>
+                    <div
+                        class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                        style="justify-content: space-between; gap: 7px"
+                    >
+                        <input
+                            pInputText
+                            id="name1"
+                            type="text"
+                            formControlName="trainingLevel"
+                            spellcheck="false"
+                            placeholder="Nhập trình độ đào tạo"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Năm tốt nghiệp -->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="name1"
+                            >Năm tốt nghiệp</label
+                        >
+                    </div>
+                    <div
+                        class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                        style="justify-content: space-between; gap: 7px"
+                    >
+                        <input
+                            pInputText
+                            id="name1"
+                            formControlName="graduationYear"
+                            type="text"
+                            spellcheck="false"
+                            placeholder="Nhập năm tốt nghiệp"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <!-- nơi đào tạo -->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="name1"
+                            >Nơi đào tạo</label
+                        >
+                    </div>
+                    <div
+                        class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                        style="justify-content: space-between; gap: 7px"
+                    >
+                        <input
+                            pInputText
+                            id="name1"
+                            formControlName="trainingPlace"
+                            type="text"
+                            spellcheck="false"
+                            placeholder="Nhập nơi đào tạo"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Xếp loại -->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="name1"
+                            >Xếp loại</label
+                        >
+                    </div>
+                    <div
+                        class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                        style="justify-content: space-between; gap: 7px"
+                    >
+                        <input
+                            pInputText
+                            id="name1"
+                            formControlName="classification"
+                            type="text"
+                            spellcheck="false"
+                            placeholder="Nhập xếp loại"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <!-- khoa -->
+            <div class="col-12 md:col-6 p-0">
+                <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-4 md:mb-0">
+                        <label
+                            style="font-weight: 600; color: #000"
+                            htmlFor="name1"
+                            >Khoa</label
+                        >
+                    </div>
+                    <div
+                        class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                        style="justify-content: space-between; gap: 7px"
+                    >
+                        <input
+                            pInputText
+                            id="name1"
+                            type="text"
+                            formControlName="department"
+                            spellcheck="false"
+                            placeholder="Nhập khoa"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="flex justify-content-end">
+        <button
+            type="submit"
+            pButton
+            pRipple
+            icon="pi pi-plus"
+            label="Cập nhật hồ sơ"
+        ></button>
+    </div>
+</form>

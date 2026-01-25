@@ -1,0 +1,92 @@
+.app-container {
+    display: flex;
+    background: #fff;
+    margin-bottom: 2rem;
+    border: none;
+    box-shadow: var(--card-shadow);
+    border-radius: 4px;
+}
+
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.topbar {
+    background-color: #3f51b5;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    color: white;
+}
+
+.topbar .add-button {
+    margin-right: 20px;
+}
+
+.navigation-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.navigation-list li {
+    margin-right: 20px;
+}
+
+.navigation-list li button {
+    background-color: transparent;
+    border: none;
+    color: white;
+}
+
+.navigation-list li button .pi {
+    margin-right: 4px;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    height: 100%;
+    // background-color: #f0f0f0;
+}
+
+.sidebar {
+    width: 60px;
+    background-color: #222246;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    height: 86vh;
+}
+
+.navigation-list-sidebar {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.navigation-list-sidebar li {
+    margin: 0 0;
+}
+
+.navigation-list-sidebar li button {
+    color: #ffffff;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.navigation-list-sidebar li button img {
+    // width: 100%;
+    width: 40px;
+    border-radius: 50%;
+    height: auto;
+    display: block; 
+}

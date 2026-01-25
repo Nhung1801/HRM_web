@@ -1,0 +1,54 @@
+<div class="row p-3 pb-0 pt-0">
+    <p-toolbar styleClass="mb-2">
+        <div class="">
+            <strong class="font-size-16">Thêm mới hồ sơ</strong>
+            <p-breadcrumb
+                [model]="items"
+                [home]="{ icon: 'pi pi-home' }"
+            ></p-breadcrumb>
+        </div>
+        <!-- <ng-template pTemplate="right">
+            <button pButton pRipple icon="pi pi-plus" label="Thêm vị trí" (click)="show()"></button>
+        </ng-template> -->
+    </p-toolbar>
+</div>
+<div class="row p-3 pt-0">
+    <div class="col-12 p-0">
+        <div class="sidebar-list flex">
+            <div
+                class="sidebar-item"
+                [ngClass]="{ active: pageFlag === Page.General }"
+                (click)="handleChangePage(Page.General)"
+            >
+                Thông tin chung
+            </div>
+            <div
+                class="sidebar-item"
+                [ngClass]="{ active: pageFlag === Page.Contact }"
+                (click)="handleChangePage(Page.Contact)"
+            >
+                Thông tin liên hệ
+            </div>
+            <div
+                class="sidebar-item"
+                [ngClass]="{ active: pageFlag === Page.Job }"
+                (click)="handleChangePage(Page.Job)"
+            >
+                Thông tin công việc
+            </div>
+        </div>
+    </div>
+    <div class="col-12 p-0">
+        <div class="common">
+            <div class="general-information" *ngIf="pageFlag == Page.General">
+                <app-general-information></app-general-information>
+            </div>
+            <div class="contact-information" *ngIf="pageFlag == Page.Contact">
+                <app-contact-information></app-contact-information>
+            </div>
+            <div class="job-information" *ngIf="pageFlag == Page.Job">
+                <app-job-information></app-job-information>
+            </div>
+        </div>
+    </div>
+</div>

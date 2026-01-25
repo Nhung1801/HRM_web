@@ -1,0 +1,544 @@
+<div class="row p-3 pb-0 pt-0">
+    <p-toolbar styleClass="mb-2">
+        <div class="">
+            <strong class="font-size-16">Đơn từ</strong>
+            <p-breadcrumb
+                [model]="breadcrumbs"
+                [home]="{ icon: 'pi pi-home' }"
+            ></p-breadcrumb>
+        </div>
+        <div class="toast-container">
+            <p-messages
+                [(value)]="messages"
+                [enableService]="false"
+                [closable]="false"
+            ></p-messages>
+        </div>
+    </p-toolbar>
+</div>
+<div class="p-grid p-fluid card-custom">
+    <p-dialog header="Đơn checkin/checkout" [(visible)]="displayDialog" [modal]="true" [style]="{width: '50vw'}">
+        <form [formGroup]="checkInForm">
+            <div class="form-container">
+                <div class="checkbox-group">
+                    <p-checkbox name="checkInOut" value="checkIn"
+                        [binary]="true"
+                        [ngModel]="checkInForm.value.checkType.includes('checkIn')"
+                        (onChange)="onCheckTypeChange($event, 'checkIn')"
+                        label="Chấm vào"
+                        [ngModelOptions]="{standalone: true}">
+                    </p-checkbox>
+
+                    <p-checkbox name="checkInOut" value="checkOut"
+                        [binary]="true"
+                        [ngModel]="checkInForm.value.checkType.includes('checkOut')"
+                        (onChange)="onCheckTypeChange($event, 'checkOut')"
+                        label="Chấm ra"
+                        [ngModelOptions]="{standalone: true}">
+                    </p-checkbox>
+                </div>
+
+                <!-- Ngày - Giờ chấm vào -->
+                <div class="field-group">
+                    <div class="field">
+                        <label>Ngày <span class="red-asterisk">*</span></label>
+                        <p-calendar
+                            [style]="{
+                                height: '50px',
+                                width: '100%'
+                            }"
+                            [showIcon]="true"
+                            dateFormat="dd/mm/yy"
+                            formControlName="date"
+                            placeholder="Chọn ngày">
+                        </p-calendar>
+                    </div>
+                    <div class="field" *ngIf="showCheckIn">
+                        <label>Giờ chấm vào <span class="red-asterisk">*</span></label>
+                        <p-calendar
+                            formControlName="timeCheckIn"
+                            [style]="{
+                                height: '50px',
+                                width: '100%'
+                            }"
+                            [iconDisplay]="'input'"
+                            [showIcon]="true"
+                            [timeOnly]="true"
+                            inputId="time">
+                            <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
+                                <i class="pi pi-clock pointer-events-none pointer-events-none"  (click)="clickCallBack($event)"></i>
+                            </ng-template>
+                        </p-calendar>
+                    </div>
+                    <div class="field" *ngIf="showCheckOut">
+                        <label>Giờ chấm ra</label>
+                        <p-calendar
+                            formControlName="timeCheckOut"
+                            [style]="{
+                                height: '50px',
+                                width: '100%'
+                            }"
+                            [iconDisplay]="'input'"
+                            [showIcon]="true"
+                            [timeOnly]="true"
+                            inputId="time">
+                            <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
+                                <i class="pi pi-clock pointer-events-none pointer-events-none"  (click)="clickCallBack($event)"></i>
+                            </ng-template>
+                        </p-calendar>
+                    </div>
+                </div>
+
+                <!-- Ca - Lý do -->
+                <div class="field-group">
+
+                    <div class="field">
+                        <label>Ca</label>
+                        <p-dropdown
+                            [options]="shiftWorks"
+                            [style]="{
+                                height: '50px',
+                                width: '100%'
+                            }"
+                            optionLabel="shiftTableName"
+                            [showClear]="true"
+                            optionValue="id"
+                            formControlName="shiftWorkId"
+                            placeholder="Chọn thông tin">
+                        </p-dropdown>
+                    </div>
+                    <div class="field">
+                        <label>Người duyệt</label>
+                        <p-dropdown
+                            formControlName="approverId"
+                            [options]="employeess"
+                            [style]="{
+                                height: '50px',
+                                width: '100%'
+                            }"
+                            optionValue="id"
+                            optionLabel="name"
+                            [showClear]="true"
+                            [filter]="true"
+                            [filterBy]="'name,employeeCode'"
+                            placeholder="Chọn thông tin"
+                        ></p-dropdown>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <!-- Người duyệt -->
+                    <div class="field">
+                        <label>Lý do</label>
+                        <textarea pInputTextarea formControlName="reason"></textarea>
+                    </div>
+
+                    <!-- Mô tả -->
+                    <div class="field">
+                        <label>Mô tả</label>
+                        <div class="description-container">
+                            <!-- Thanh công cụ -->
+                            <div class="toolbar">
+                                <!-- <button (click)="formatText('bold')" pTooltip="Bold"><i class="pi pi-bold"></i></button>
+                                <button (click)="formatText('italic')" pTooltip="Italic"><i class="pi pi-italic"></i></button>
+                                <button (click)="formatText('underline')" pTooltip="Underline"><i class="pi pi-face-smile"></i></button>
+                                <button (click)="insertLink()" pTooltip="Insert Link"><i class="pi pi-link"></i></button> -->
+
+                                <!-- Emoji Button -->
+                                <div class="emoji-container">
+                                    <button (click)="toggleEmojiPicker()" pTooltip="Emoji">😀</button>
+
+                                    <!-- Danh sách Emoji -->
+                                    <div class="emoji-picker" *ngIf="showEmojiPicker">
+                                        <span *ngFor="let emoji of emojiList" (click)="insertEmoji(emoji)">
+                                            {{ emoji }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Ô nhập mô tả -->
+                            <textarea formControlName="description" id="descriptionBox" placeholder="Nhập mô tả"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Button -->
+                <div class="button-container">
+                    <button pButton label="Hủy" class="cancel-button" (click)="displayDialog = false"></button>
+                    <button type="submit" pButton label="Gửi" class="submit-button" (click)="submitForm()"></button>
+                </div>
+
+            </div>
+        </form>
+    </p-dialog>
+    <div class="p-col-2 text-right">
+        <p-button
+            class="ml-2"
+            (click)="onAdd()"
+            icon="pi pi-plus-circle"
+            label="Thêm"
+        />
+    </div>
+</div>
+
+<div class="flex justify-content-between mb-2 card-custom">
+    <div class="flex">
+        <span class="block mt-2 md:mt-0 p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <p-autoComplete
+                [suggestions]="employees"
+                (completeMethod)="onEmployeeSearch($event)"
+                field="displayLabel"
+                [(ngModel)]="queryParameters.employee"
+                [style]="{ width: '20%', height: '44px' }"
+                placeholder="Tìm theo tên nhân viên"
+                (onClear)="onEmployeeSearchClear()"
+            >
+                <ng-template let-employee pTemplate="item">
+                    <div>
+                        <span>{{ employee.fullName }}</span>
+                        <span style="color: rgb(64, 0, 255); font-weight: 600">
+                            - {{ employee.accountEmail }}</span
+                        >
+                    </div>
+                </ng-template>
+            </p-autoComplete>
+        </span>
+        <div class="flex justify-content-center">
+            <p-button class="ml-2" (click)="onSearch()" label="Lọc" />
+        </div>
+        <!-- <div *ngIf="selectedLeaveApplications.length > 0" class="flex justify-content-center">
+            <p-button class="ml-5" label="Duyệt tất cả" (click)="
+                    handleUpdateStatusMultiple(leaveApplicationStatus.Approved)
+                " />
+        </div>
+        <div *ngIf="selectedLeaveApplications.length > 0" class="flex justify-content-center">
+            <button type="button" pButton label="Từ chối tất cả" (click)="
+                    handleUpdateStatusMultiple(leaveApplicationStatus.Rejected)
+                " class="ml-2 custom-cancle-red"></button>
+        </div> -->
+    </div>
+    <div class="flex">
+        <div class="ml-2 me-2 select-tree" style="width: 300px">
+            <p-treeSelect
+                [attr.aria-hidden]="null"
+                class="md:w-20rem w-full"
+                containerStyleClass="w-full"
+                [(ngModel)]="queryParameters.organization"
+                [options]="organizations"
+                placeholder="Chọn đơn vị"
+                [showClear]="true"
+                (onChange)="onChangeOrganization($event)"
+            />
+        </div>
+        <p-dropdown
+            [options]="statuses"
+            placeholder="Trạng thái"
+            [(ngModel)]="queryParameters.status"
+        ></p-dropdown>
+        <div
+            (click)="handleOpenDialogSelectedColumns()"
+            class="p-10 rounded border icon-settings cursor-pointer ml-2 me-2"
+            style="position: relative"
+        >
+            <i class="pi pi-spin pi-cog" style="font-size: 1rem"></i>
+        </div>
+        <div>
+            <p-dialog
+                header="Tùy chỉnh cột hiển thị"
+                [(visible)]="displayColumnsCustom"
+                [style]="{ width: '300px' }"
+                [position]="'right'"
+            >
+                <div>
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input
+                            pInputText
+                            type="text"
+                            (input)="onSearchColumn($event)"
+                            placeholder="Tìm kiếm cột..."
+                        />
+                    </span>
+                    <ul class="custom-checkbox-list p-mt-2">
+                        <li *ngFor="let col of filteredColumns">
+                            <p-checkbox
+                                name="selectedColumns"
+                                [value]="col.field"
+                                [(ngModel)]="col.selected"
+                                binary="true"
+                                label="{{ col.header }}"
+                            ></p-checkbox>
+                        </li>
+                    </ul>
+
+                    <button
+                        pButton
+                        type="button"
+                        label="Áp dụng"
+                        class="button-right"
+                        (click)="handleApplyChangeSelectedColumns()"
+                    ></button>
+                </div>
+            </p-dialog>
+        </div>
+        <div class="flex justify-content-center">
+            <p-button class="ml-2" (click)="onSearch()" label="Lọc" />
+            <p-button
+                class="ml-2"
+                (click)="onRefreshSearch()"
+                icon="pi pi-sync"
+            />
+        </div>
+    </div>
+</div>
+
+<p-table
+    [value]="leaveApplications"
+    [(selection)]="selectedLeaveApplications"
+    [paginator]="false"
+    [rows]="10"
+    responsiveLayout="scroll"
+    styleClass="p-datatable-striped custom-scrollbar"
+    [rowHover]="true"
+    [ngStyle]="{
+        width: 'auto',
+        'overflow-x': 'auto',
+        'table-layout': 'auto'
+    }"
+>
+    <ng-template pTemplate="header">
+        <tr>
+            <th class="text-center">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th
+                *ngFor="let col of columns"
+                [hidden]="!col.selected"
+                class="text-center"
+            >
+                {{ col.header }}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-leaveApp>
+        <tr>
+            <td class="text-center">
+                <p-tableCheckbox [value]="leaveApp"></p-tableCheckbox>
+            </td>
+            <td
+                *ngFor="let col of columns"
+                [hidden]="!col.selected"
+                class="text-center"
+                [style]="{ minWidth: '150px' }"
+            >
+                {{
+                    col.field.includes("employeeName")
+                        ? leaveApp.employee.lastName +
+                          " " +
+                          leaveApp.employee.firstName
+                        : ""
+                }}
+
+                <span *ngIf="col.field.includes('position')">
+                    <span
+                        *ngFor="
+                            let position of leaveApp.employee.staffPositions
+                        "
+                    >
+                        {{ position.positionName }}
+                    </span>
+                </span>
+                <span *ngIf="col.field.includes('approver')">
+                    <span
+                        *ngFor="
+                            let approver of leaveApp.leaveApplicationApprovers
+                        "
+                    >
+                        | {{ approver.approver.lastName }}
+                        {{ approver.approver.firstName }} |
+                    </span>
+                </span>
+                <span *ngIf="col.field.includes('substitute')">
+                    <span
+                        *ngFor="
+                            let replacement of leaveApp.leaveApplicationReplacements
+                        "
+                    >
+                        | {{ replacement.replacement.lastName }}
+                        {{ replacement.replacement.firstName }} |
+                    </span>
+                </span>
+                <span *ngIf="col.field.includes('relatedPerson')">
+                    <span
+                        *ngFor="
+                            let relatedPerson of leaveApp.leaveApplicationRelatedPeople
+                        "
+                    >
+                        | {{ relatedPerson.relatedPerson.lastName }}
+                        {{ relatedPerson.relatedPerson.firstName }} |
+                    </span>
+                </span>
+                <span *ngIf="col.field.includes('typeOfLeave')">
+                    <span>
+                        {{ leaveApp.typeOfLeave.name }}
+                    </span>
+                </span>
+                <span *ngIf="col.field.includes('affiliatedDocument')">
+                    <span>
+                        {{
+                            leaveApp.employee!?.organization!?.organizationName
+                        }}
+                    </span>
+                </span>
+                <span *ngIf="col.field.includes('status')">
+                    <span
+                        class="status-span"
+                        [ngStyle]="{
+                            color: getLeaveApplicationStatus(leaveApp.status)
+                                .color,
+                            'background-color': getLeaveApplicationStatus(
+                                leaveApp.status
+                            ).bgColor
+                        }"
+                    >
+                        {{ getLeaveApplicationStatus(leaveApp.status).text }}
+                    </span>
+                </span>
+                <span *ngIf="col.field.includes('action')">
+                    <div
+                        class=""
+                        style="
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        "
+                    >
+                        <div
+                            *ngIf="
+                                leaveApp.status ==
+                                    leaveApplicationStatus.Pending &&
+                                isApprover(leaveApp)
+                            "
+                            (click)="
+                                handleUpdateStatus(
+                                    leaveApp,
+                                    leaveApplicationStatus.Approved
+                                )
+                            "
+                            class="font-size-16 ml-2"
+                            style="padding: 3px; border-radius: 50%"
+                        >
+                            <i class="pi pi-thumbs-up-fill"></i>
+                        </div>
+                        <div
+                            *ngIf="
+                                leaveApp.status ==
+                                    leaveApplicationStatus.Pending &&
+                                isApprover(leaveApp)
+                            "
+                            (click)="
+                                handleUpdateStatus(
+                                    leaveApp,
+                                    leaveApplicationStatus.Rejected
+                                )
+                            "
+                            class="font-size-16 ml-2"
+                            style="padding: 3px; border-radius: 50%"
+                        >
+                            <i class="pi pi-thumbs-down-fill"></i>
+                        </div>
+                        <div
+                            class="font-size-16 ml-2"
+                            style="padding: 3px; border-radius: 50%"
+                            [routerLink]="[
+                                '/leave-application/detail',
+                                leaveApp.id
+                            ]"
+                        >
+                            <i class="pi pi-eye"></i>
+                        </div>
+                        <div
+                            *ngIf="leaveApp.status === 0"
+                            (click)="confirmDelete(leaveApp.id)"
+                            class="font-size-16 ml-2"
+                            style="padding: 3px; border-radius: 50%"
+                        >
+                            <i class="pi pi-trash"></i>
+                        </div>
+                    </div>
+                </span>
+                <span
+                    *ngIf="
+                        !col.field.includes('status') &&
+                        !col.field.includes('typeOfLeave') &&
+                        !col.field.includes('affiliatedDocument')
+                    "
+                >
+                    {{ leaveApp[col.field] }}
+                </span>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+<div
+    class="flex align-items-center mt-3"
+    style="justify-content: space-between"
+>
+    <p>
+        <span style="font-weight: 500">{{
+            1 + (paging.pageIndex - 1) * paging.pageSize
+        }}</span>
+        -
+        <span style="font-weight: 500">{{
+            1 + (paging.pageIndex - 1) * paging.pageSize + (paging.pageSize - 1)
+        }}</span>
+        trong
+        <span style="font-weight: 500">{{ paging.totalRecords }}</span>
+        bản ghi
+    </p>
+    <div *ngIf="leaveApplications?.length > 0">
+        <p-paginator
+            class="custum-paging"
+            (onPageChange)="onPageChange($event)"
+            [first]="(paging.pageIndex - 1) * paging.pageSize"
+            [rows]="paging.pageSize"
+            [totalRecords]="paging.totalRecords"
+            [rowsPerPageOptions]="config.pageSizeOptions"
+        />
+    </div>
+</div>
+
+<p-dialog
+  [(visible)]="displayDeleteDialog"
+  [modal]="true"
+  [header]="'Xóa đơn xin nghỉ'"
+  [style]="{ width: '450px' }"
+  [closable]="false"
+>
+  <div *ngIf="selectedLeaveId">
+    <p>
+      Bạn có chắc muốn xóa đơn xin nghỉ này không? Lưu ý: Sau khi xóa bạn không thể hoàn tác hay khôi phục.
+    </p>
+    <!-- <strong class="name-delete">{{ selectedLeaveId }}</strong> -->
+  </div>
+  <div class="d-flex justify-content-end mt-4">
+    <button
+      pButton
+      pRipple
+      label="Hủy"
+      class="p-button-secondary me-2"
+      (click)="cancelDelete()"
+    ></button>
+    <button
+      pButton
+      pRipple
+      label="Đồng ý"
+      class="p-button-danger"
+      (click)="deleteLeave()"
+    ></button>
+  </div>
+</p-dialog>
+
+<app-confirm-dialog [message]="dialogMessage"></app-confirm-dialog>

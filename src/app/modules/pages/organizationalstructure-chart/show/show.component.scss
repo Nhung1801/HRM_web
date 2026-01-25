@@ -1,0 +1,374 @@
+.level-1 {
+    border-top: 4px solid #2a62e3 !important;
+}
+
+.level-2 {
+    border-top: 4px solid #ec7996 !important;
+}
+
+.level-3 {
+    border-top: 4px solid #1c9d5d !important;
+}
+.level-4 {
+    border-top: 4px solid red !important;
+}
+.p-organizationchart .p-organizationchart-node-content {
+    padding: 0 !important;
+}
+.chart-container {
+    display: inline-block;
+    transform-origin: top center;
+    transition: transform 0.2s ease-in-out;
+}
+
+.slider-container {
+    margin-bottom: 20px;
+}
+.p-organizationchart > .p-organizationchart-line-down {
+    background-color: black !important;
+}
+
+.p-hidden {
+    display: none !important;
+}
+
+/* Tuỳ chỉnh */
+.p-hidden {
+    visibility: hidden;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+th {
+    background-color: #f2f2f2;
+    text-align: left;
+}
+
+.bt-plus {
+    margin-right: 8px;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+}
+
+.bt-plus {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.bt-plus.expanded {
+    font-weight: bold;
+}
+
+.bt-plus:hover {
+    background-color: #f0f0f0;
+}
+
+.bt-plus {
+    // margin-right: 8px;
+    margin-left: 10px;
+}
+
+.expand-toggle {
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #333;
+    padding: 3px 14px;
+    border-radius: 49%;
+    border: 1px solid #ccc;
+}
+
+
+td > .p-organizationchart .p-organizationchart-node-content {
+    padding: 0px !important;
+}
+
+.expand-toggle-list {
+    z-index: 100;
+    position: sticky;
+    bottom: 0px;
+    margin-top: 5px;
+}
+
+// css icon
+.title-header {
+    padding-top: 10px;
+}
+.item-list {
+    font-size: 20px;
+    padding: 10px;
+    background-color: #eeeded;
+    cursor: pointer;
+}
+
+.item-list.bg {
+    box-shadow: 1px 2px 1px 1px #ccc;
+    background-color: white;
+}
+.zoom-list {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.zoom {
+    padding: 10px 15px;
+    background-color: white;
+    text-align: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.zoom-right {
+    margin-right: 10px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+.zoom-left {
+    margin-left: 10px;
+}
+
+.number-zoom {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding: 6px 10px;
+    border-left: 1px solid #ccc;
+}
+.nameLeader {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100px;
+    display: inline-block;
+    font-size: 12px;
+}
+.nameLeaderAll {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 150px;
+    display: inline-block;
+    font-size: 12px;
+}
+.icon-number {
+    margin-top: 15px;
+}
+
+.chart-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  width: 100%;
+  height: 600px;
+  overflow: hidden;
+  position: relative;
+  cursor: grab;
+  background-color: white;
+}
+
+.chart-container {
+    position: absolute;
+    margin: 0 auto;
+    top: 0;
+    left: 0;
+    transition: transform 0.0000001s linear;
+}
+
+.chart-container:active {
+    cursor: grabbing;
+}
+
+
+
+// css
+
+
+.tree {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.tree ul {
+    padding-top: 20px; position: relative;
+    display: flex;
+	transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+}
+
+.tree li {
+	float: none; text-align: center;
+	list-style-type: none;
+	position: relative;
+	padding: 20px 5px 0 5px;
+
+	transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+}
+
+
+.tree li::before, .tree li::after{
+	content: '';
+	position: absolute; top: 0; right: 50%;
+	border-top: 1px solid #ccc;
+	width: 50%; height: 20px;
+}
+.tree li::after{
+	right: auto; left: 50%;
+	border-left: 1px solid #ccc;
+}
+
+.tree li:only-child::after, .tree li:only-child::before {
+	display: none;
+}
+
+.tree li:only-child{ padding-top: 0;}
+
+.tree li:first-child::before, .tree li:last-child::after{
+	border: 0 none;
+}
+.tree li:last-child::before{
+	border-right: 1px solid #ccc;
+	border-radius: 0 5px 0 0;
+	-webkit-border-radius: 0 5px 0 0;
+	-moz-border-radius: 0 5px 0 0;
+}
+.tree li:first-child::after{
+	border-radius: 5px 0 0 0;
+	-webkit-border-radius: 5px 0 0 0;
+	-moz-border-radius: 5px 0 0 0;
+}
+
+.tree ul ul::before{
+	content: '';
+	position: absolute; top: 0; left: 50%;
+	border-left: 1px solid #ccc;
+	width: 0; height: 20px;
+}
+
+.tree li a{
+	border: 1px solid #ccc;
+	padding: 5px 10px;
+	text-decoration: none;
+	color: #666;
+	font-family: arial, verdana, tahoma;
+	font-size: 11px;
+	display: inline-block;
+
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+
+	transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+}
+
+
+.item-nodes{
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    height: 100px;
+    width: 200px;
+    margin: 0 auto;
+}
+.list-all{
+    width: 100% !important;
+}
+
+.nodes-item{
+    margin-top: 20px;
+    padding: 0 3px;
+}
+.icon-error-user{
+    margin-top: 3px;
+}
+.item-tree{
+    //height: 100px;
+    width: 200px;
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 50px; /* Điều chỉnh theo nhu cầu */
+}
+.item-tree-icon{
+    padding: 0 3px;
+    margin-top: 10px;
+}
+.name-tree{
+    font-size: 14px;
+    font-weight: 600;
+    word-break: break-word;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+.click-show{
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    background-color: white;
+    position: sticky;
+    bottom: 10px;
+    font-size: 5px;
+
+
+}
+.box-click {
+    position: sticky;
+    bottom: -10px;
+    z-index: 10;
+}
+.click-show {
+    font-size: 16px;
+    cursor: pointer;
+
+}
+.item-nodes, .item-tree {
+    position: relative;
+    min-height: 50px;
+    height: auto;
+}
+.expand-toggle-list {
+
+    position: sticky;
+   bottom: -5px;
+
+}
+.status-active {
+    color: green;
+  }
+
+  .status-inactive {
+    color: red;
+  }
+  .work-status-span {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 400;
+    text-align: center;
+  }
+

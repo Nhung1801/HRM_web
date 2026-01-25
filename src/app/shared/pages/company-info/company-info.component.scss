@@ -1,0 +1,164 @@
+
+.container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+
+p {
+    color: gray;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+::ng-deep .p-calendar input {
+    padding-left: 10px;
+}
+
+
+.section {
+    margin-bottom: 30px;
+}
+
+.info {
+    display: flex;
+    // justify-content:space-around;
+}
+
+.info-content {
+    margin: 0 14.5%;
+}
+
+.info-content-2 {
+    margin: 0 7%;
+}
+
+.info-content-3 {
+    margin: 0 15%;
+}
+
+.section h3 {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+}
+
+.row-info {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.label {
+    width: 300px;
+    line-height: 25px;
+    color: #555;
+}
+
+.value {
+    color: #333;
+    line-height: 25px;
+    width: 327px;
+}
+
+img {
+    max-width: 150px;
+    height: auto;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.upload-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.upload-box {
+    width: 150px;
+    height: 90px;
+    border: 2px dashed #c4c4c4;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.upload-box:hover {
+    border-color: #808080;
+}
+
+.upload-icon i {
+    font-size: 25px;
+    color: #c4c4c4;
+}
+
+.upload-text {
+    margin-top: 8px;
+    font-size: 16px;
+    color: #808080;
+}
+
+.upload-counter {
+    margin-top: 4px;
+    font-size: 14px;
+    color: #c4c4c4;
+}
+
+
+.image-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .news-image {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .news-image:hover {
+    transform: scale(1.05); /* Tăng kích thước ảnh khi hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Tăng độ bóng khi hover */
+  }
+  
+  .trash-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 30px;
+    color: white;
+    background-color: rgba(255, 0, 0, 0.7);
+    border-radius: 50%;
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0; /* Ẩn icon ban đầu */
+  }
+  
+  .image-container:hover .trash-icon {
+    opacity: 1; /* Hiển thị icon khi hover vào container ảnh */
+    transform: scale(1.1); /* Tăng kích thước icon khi hover */
+  }
+  
+  .trash-icon:hover {
+    background-color: red; /* Thay đổi màu nền khi hover vào icon */
+    transform: scale(1.2); /* Tăng kích thước icon khi hover */
+  }

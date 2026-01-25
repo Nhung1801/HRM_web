@@ -1,0 +1,76 @@
+.container {
+    font-family: Arial, sans-serif;
+}
+
+table {
+    margin-top: 10px;
+}
+
+th,
+td {
+    vertical-align: middle;
+}
+
+.p-button-text {
+    font-weight: bold;
+}
+
+h5 {
+    font-size: 15px;
+    margin: 0;
+}
+
+.table-no-border,
+.table-no-border th,
+.table-no-border td {
+    border: none !important; /* Sử dụng !important để đảm bảo ưu tiên cao hơn các định nghĩa khác */
+}
+
+p-checkbox {
+    margin-right: 5px;
+}
+
+/* Màu nền khi nút GPS được chọn */
+.p-button-secondary {
+    background-color: white;
+    color: #2a2986; /* Màu chữ xanh */
+    border: 1px solid #2a2986; /* Đường viền màu xanh */
+}
+
+/* Màu nền khi nút GPS được chọn */
+.button-gps-active {
+    background-color: #2a2986;
+    color: white;
+}
+
+/* Màu nền khi nút chấm công được chọn */
+.button-cham-cong-active {
+    background-color: #2a2986;
+    color: white;
+}
+
+
+/* Css button đơn vị và áp dụng */
+.button-add {
+    background-color: #d3d3d3;
+    /* Màu xám */
+    color: #2a2986;
+    /* Màu chữ #2a2986 */
+    border: none;
+}
+
+.button-add:hover {
+    background-color: #bdbdbd;
+    /* Màu xám đậm hơn khi hover */
+}
+
+
+/* button dialog */
+.dialog-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.dialog-buttons button {
+    margin: 0 5px; /* Adjust as needed */
+}

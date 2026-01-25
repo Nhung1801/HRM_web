@@ -1,0 +1,413 @@
+<div class="grid">
+    <div class="col-12">
+        <p-toolbar styleClass="mb-2">
+            <div class="">
+                <strong
+                    class="font-size-16 flex gap-3 flex align-items-center d-block"
+                    ><i class="pi pi-arrow-left"></i
+                    >{{ payrollDetailEmployees[0]?.payroll.name }}</strong
+                >
+            </div>
+            <ng-template pTemplate="right"> </ng-template>
+        </p-toolbar>
+        <div class="">
+            <div class="grid">
+                <div class="col-12 lg:col-6 xl:col-4">
+                    <div class="card mb-0" style="height: 530px">
+                        <div class="flex justify-content-between mb-3">
+                            <div>
+                                <span class="block text-500 font-medium mb-3"
+                                    >Tổng lương</span
+                                >
+                                <div class="text-900 font-medium text-xl">
+                                    {{ totalSalary | number : "1.0-0" }}
+                                </div>
+                            </div>
+                            <div
+                                class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                                [ngStyle]="{
+                                    width: '2.5rem',
+                                    height: '2.5rem'
+                                }"
+                            >
+                                <i
+                                    class="pi pi-shopping-cart text-blue-500 text-xl"
+                                ></i>
+                            </div>
+                        </div>
+                        <div class="flex justify-content-between mb-3">
+                            <div>
+                                <span class="block text-500 font-medium mb-3"
+                                    >Khấu trừ</span
+                                >
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6 flex justify-content-end font-semibold"
+                                    style="padding: 0.75rem 1rem; color: red"
+                                >
+                                    {{ getTotalDeduction() | number : "1.0-0" }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-content-between mb-3">
+                            <div>
+                                <span class="block text-500 font-medium mb-3"
+                                    >Tổng lương thực nhận</span
+                                >
+                                <div class="text-900 font-medium text-xl">
+                                    {{ totalReceiptSalary | number : "1.0-0" }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="col-12 lg:col-4"
+                    [ngClass]="{
+                        'xl:col-8': payrollDetailEmployees?.length === 1,
+                        'xl:col-4': payrollDetailEmployees?.length === 2
+                    }"
+                    *ngFor="
+                        let payrollDetailEmployee of payrollDetailEmployees;
+                        index as i
+                    "
+                >
+                    <div class="card mb-0" style="height: 530px">
+                        <div class="flex justify-content-between">
+                            <div class="mb-3">
+                                <span class="block text-800 font-medium mb-3"
+                                    >Thông tin lương {{ i + 1 }}</span
+                                >
+                                <span class="block text-800 font-medium mb-3">{{
+                                    payrollDetailEmployee.contract.contractType
+                                        .name
+                                }}</span>
+                            </div>
+                            <div
+                                class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                                [ngStyle]="{
+                                    width: '2.5rem',
+                                    height: '2.5rem'
+                                }"
+                            >
+                                <i
+                                    class="pi pi-dollar text-blue-500 text-xl"
+                                ></i>
+                            </div>
+                        </div>
+                        <div class="flex flex-column">
+                            <div class="grid">
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    Lương cứng
+                                </div>
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6 flex justify-content-end"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    {{
+                                        payrollDetailEmployee?.baseSalary
+                                            | number : "1.0-0"
+                                    }}
+                                </div>
+                            </div>
+                            <div class="grid">
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    Ngày công chuẩn
+                                </div>
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6 flex justify-content-end"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    {{
+                                        payrollDetailEmployee?.standardWorkDays
+                                    }}
+                                </div>
+                            </div>
+                            <div class="grid">
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    Ngày công thực tế
+                                </div>
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6 flex justify-content-end"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    {{ payrollDetailEmployee?.actualWorkDays }}
+                                </div>
+                            </div>
+                            <div class="grid">
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6 font-semibold"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    Lương cứng thực nhận
+                                </div>
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6 flex justify-content-end font-semibold"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    {{
+                                        payrollDetailEmployee?.receivedSalary
+                                            | number : "1.0-0"
+                                    }}
+                                </div>
+                            </div>
+                            <div class="grid">
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    Lương KPI
+                                </div>
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6 flex justify-content-end"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    {{
+                                        payrollDetailEmployee?.kpiSalary
+                                            | number : "1.0-0"
+                                    }}
+                                </div>
+                            </div>
+                            <div class="grid">
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    KPI đạt (%)
+                                </div>
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6 flex justify-content-end"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    {{ payrollDetailEmployee?.kpiPercentage }}
+                                </div>
+                            </div>
+                            <div class="grid">
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6 font-semibold"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    Lương KPI thực nhận
+                                </div>
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6 flex justify-content-end font-semibold"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    {{
+                                        payrollDetailEmployee?.kpi
+                                            | number : "1.0-0"
+                                    }}
+                                </div>
+                            </div>
+                            <div class="grid">
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6 font-semibold"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    Lương thưởng
+                                </div>
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6 flex justify-content-end font-semibold"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    {{
+                                        payrollDetailEmployee?.bonus
+                                            | number : "1.0-0"
+                                    }}
+                                </div>
+                            </div>
+                            <div class="grid">
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6 font-semibold"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    Tỉ lệ hưởng lương (%)
+                                </div>
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6 flex justify-content-end font-semibold"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    {{ payrollDetailEmployee?.salaryRate }}
+                                </div>
+                            </div>
+                            <div class="grid">
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6 font-semibold"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    Bảo hiểm xã hội
+                                </div>
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6 flex justify-content-end font-semibold"
+                                    style="padding: 0.75rem 1rem"
+                                    style="color: red; font-weight: 500"
+                                >
+                                    -
+                                    {{
+                                        payrollDetailEmployee?.socialInsurance
+                                            | number : "1.0-0"
+                                    }}
+                                </div>
+                            </div>
+                            <div class="grid">
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6 font-semibold"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    Công đoàn
+                                </div>
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6 flex justify-content-end font-semibold"
+                                    style="padding: 0.75rem 1rem"
+                                    style="color: red; font-weight: 500"
+                                >
+                                    -
+                                    {{
+                                        payrollDetailEmployee?.unionFee
+                                            | number : "1.0-0"
+                                    }}
+                                </div>
+                            </div>
+
+                            <div class="grid">
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6 font-semibold"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    Khoản khấu trừ 1
+                                </div>
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6 flex justify-content-end font-semibold"
+                                    style="padding: 0.75rem 1rem; color: red"
+                                >
+                                    {{
+                                        payrollDetailEmployee?.totalDeduction
+                                            | number : "1.0-0"
+                                    }}
+                                </div>
+                            </div>
+                            <!-- <div
+                                class="grid"
+                                *ngFor="
+                                    let deduction of payrollDetailEmployee?.deductions
+                                "
+                            >
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    {{ deduction.deducationName }}
+                                </div>
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6 flex justify-content-end"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    {{ deduction.value | number : "1.0-0" }}
+                                </div>
+                            </div> -->
+                            <div class="grid">
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6 font-semibold"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    Tổng lương thực nhận
+                                </div>
+                                <div
+                                    class="col-12 lg:col-6 xl:col-6 flex justify-content-end font-semibold"
+                                    style="padding: 0.75rem 1rem"
+                                >
+                                    {{
+                                        payrollDetailEmployee?.totalReceivedSalary
+                                            | number : "1.0-0"
+                                    }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 lg:col-12 xl:col-12">
+                    <div class="card mb-0">
+                        <div
+                            class="flex justify-content-center align-items-center gap-3"
+                        >
+                            <span>
+                                Thời hạn:
+                                <strong style="color: red; font-weight: 500"
+                                    >{{
+                                        this.payrollDetailEmployees[0]
+                                            .responseDeadline
+                                            | date : "dd/MM/yyyy HH:mm:ss"
+                                    }}
+                                </strong></span
+                            >
+                            <p-button
+                                icon="pi pi-check"
+                                [label]="
+                                    payrollDetailEmployees[0]
+                                        ?.confirmationStatus ===
+                                    PayrollConfirmationStatusEnum.Confirmed
+                                        ? 'Đã xác nhận'
+                                        : 'Xác nhận'
+                                "
+                                (click)="handleConfirmPayrollEmployee()"
+                                [disabled]="
+                                    payrollDetailEmployees[0]
+                                        ?.confirmationStatus ===
+                                    PayrollConfirmationStatusEnum.Confirmed
+                                "
+                            ></p-button>
+                            <p-button
+                                label="Thắc mắc"
+                                [outlined]="true"
+                                (click)="updateReasonVisible = true"
+                            ></p-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-dialog
+    header="Lý do cập nhật"
+    [modal]="true"
+    [(visible)]="updateReasonVisible"
+    [style]="{ width: '25rem' }"
+>
+    <textarea
+        pInputTextarea
+        [style]="{ width: '100%' }"
+        [autoResize]="true"
+        [rows]="5"
+        [cols]="30"
+        [ngModel]="reasonResponse"
+    ></textarea>
+    <ng-template pTemplate="footer">
+        <div class="flex justify-content-end gap-3">
+            <p-button
+                type="button"
+                label="Hủy"
+                [outlined]="true"
+                class="p-button-secondary"
+                (click)="updateReasonVisible = false"
+            ></p-button>
+            <p-button
+                type="button"
+                label="Lưu"
+                class="p-button-primary"
+                (click)="saveReason()"
+            ></p-button>
+        </div>
+    </ng-template>
+</p-dialog>

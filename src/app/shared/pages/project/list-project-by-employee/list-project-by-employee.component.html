@@ -1,0 +1,27 @@
+<p-dialog header="Danh sách dự án" [(visible)]="displayDialog"  [style]="{width: '50vw',height:'50vh'}" modal="true" [closable]="true" [resizable]="false">
+	<ng-template pTemplate="content">
+		<p-table [value]="projects"  responsiveLayout="scroll" styleClass="p-datatable-striped custom-scrollbar">
+			<ng-template pTemplate="header">
+				<tr>
+					<th>Tên dự án</th>
+					<th>Mô tả</th>
+					<th>Loại dự án</th>
+					<th>Thời hạn</th>
+					<th>Tên phòng ban</th>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="body" let-project>
+				<tr (click)="showDetail(project.departmentId,project.id)">
+					<td>{{project.name}}</td>
+					<td>{{project.description}}</td>
+					<td>{{project.projectType==1?'Trong phòng ban':'Ngoài phòng ban'}}</td>
+					<td>{{project.startDate | date:'dd-MM-yyyy'}} => {{project.endDate | date:'dd-MM-yyyy'}}</td>
+					<td>{{project.department?.name}}</td>
+				</tr>
+			</ng-template>
+		</p-table>
+	</ng-template>
+	<ng-template pTemplate="footer">
+		<button pButton type="button" label="Đóng" (click)="displayDialog = false"></button>
+	</ng-template>
+</p-dialog>

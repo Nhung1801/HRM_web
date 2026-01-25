@@ -1,0 +1,392 @@
+/* Điều chỉnh chung */
+.breadcrumb-left {
+    margin-left: 20px;
+}
+
+/* phần ảnh đại diện */
+.p-d-flex {
+    display: flex;
+}
+
+.p-ai-center {
+    align-items: center;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.profile-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    width: 60px;
+    height: 60px;
+    border-radius: 40%;
+    background-color: #ece8e8be;
+    text-align: center;
+    margin-left: 220px;
+}
+
+.profile-image i {
+    font-size: 2rem;
+    color: #444;
+}
+
+.profile-image-text p {
+    margin-left: 20px;
+    font-size: 1rem;
+    color: #444;
+}
+
+.text-h2 {
+    color: #444;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.divider {
+    width: 1px;
+    height: 40px;
+    background-color: #c5bfbf;
+}
+
+.horizontal-divider {
+    width: 120%;
+    height: 1px;
+    background-color: #c5bfbf;
+    margin-top: 20px;
+}
+
+/* phần thông tin chung và công việc */
+.required {
+    color: red;
+    font-weight: bold;
+}
+
+.p-field {
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.p-field label {
+    margin-right: 60px;
+    width: 150px;
+}
+
+.p-field input {
+    width: 100%;
+    max-width: 350px;
+    padding: 10px;
+    font-size: 0.9rem;
+}
+
+.button-container {
+    margin-left: 385px;
+    margin-top: 20px;
+}
+
+.button {
+    padding: 10px 20px;
+    font-size: 14px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+
+.button-container-popup {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.button-popup {
+    padding: 10px 20px;
+    font-size: 14px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.wide-dropdown {
+    width: 100%;
+    max-width: 310px;
+    font-size: 0.9rem;
+}
+
+
+
+/* phần xử lí validate */
+
+/* Họ và tên */
+.error-message {
+    color: red;
+    font-size: 0.9rem;
+    position: absolute;
+    top: 100%;
+    left: 210px;
+    margin-top: 5px;
+    white-space: nowrap;
+}
+.input-error {
+    border-color: red;
+}
+
+
+
+/* Responsive design cho màn hình 768px và 480px */
+@media (max-width: 768px) {
+    /* Ảnh đại diện */
+    .profile-image {
+        margin-left: 0;
+    }
+
+    .button-container {
+        margin-left: 0;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .p-field label {
+        width: 120px; /* Thu hẹp label để tiết kiệm không gian */
+    }
+
+    .p-field input {
+        max-width: 100%;
+    }
+
+    .grid {
+        display: block;
+    }
+
+    .col-12 {
+        width: 100%;
+    }
+
+    .md\:col-6 {
+        width: 100%;
+    }
+}
+
+/* Responsive design cho màn hình 480px */
+@media (max-width: 480px) {
+    .checkbox-group {
+        display: flex;
+        flex-direction: column; 
+        gap: 10px; 
+        align-items: flex-start; 
+        margin-left: 0; 
+    }
+
+    .checkbox-group p-checkbox {
+        margin-left: 0; 
+    }
+
+    
+    .profile-image {
+        margin-left: 0;
+        width: 50px;
+        height: 50px;
+    }
+
+    .profile-image-text {
+        display: block;
+        text-align: center;
+        margin-top: 10px;
+    }
+}
+
+
+
+
+
+.position-item{
+    position: relative;
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 10px;
+    border-bottom: 1px solid #f9f7f7;
+    padding: 11px 0px;
+    width: 100%;
+}
+.position__list{
+    width: 100%;
+}
+
+.position-add{
+    position: absolute;
+    bottom: 60px;
+    width: 100%;
+}
+
+.position-add-btn{
+    display: flex;
+    gap: 8px;
+    padding: 11px 0;
+    color: #579cfb;
+}
+
+.position-add-btn i{
+    font-size:13px;
+}
+
+
+.position-tools svg{
+    display: block;
+}
+
+.position-tools{
+    display: none;
+    position: absolute;
+    right: 0;
+    display: flex;
+    gap: 5px;
+}
+
+.position-tools span{
+    padding: 5px;
+    border-radius: 50%;
+    background-color: #eae8e8;
+    transition: all 0.1s;
+}
+
+
+.upload-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.upload-box {
+    width: 150px;
+    height: 90px;
+    border: 2px dashed #c4c4c4;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+    margin-left: 130px;
+}
+
+.upload-box:hover {
+    border-color: #808080;
+}
+
+.upload-icon i {
+    font-size: 25px;
+    color: #c4c4c4;
+}
+
+.upload-text {
+    margin-top: 8px;
+    font-size: 16px;
+    color: #808080;
+}
+
+.upload-counter {
+    margin-top: 4px;
+    font-size: 14px;
+    color: #c4c4c4;
+}
+
+
+.image-container {
+    width: 300px; /* Khung bao quanh ảnh */
+    height: 150px; /* Khung bao quanh ảnh */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border-radius: 50px;
+    overflow: hidden; /* Cắt bỏ phần ảnh vượt ra ngoài */
+  }
+  
+  .news-image {
+    width: 300px; /* Đặt chiều rộng cố định */
+    height: 150px; /* Đặt chiều cao cố định */
+    object-fit: cover; /* Cắt ảnh để khớp với khung */
+    border-radius: 50px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-left: 120px;
+  }
+  
+  .news-image:hover {
+    transform: scale(1.05);   
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .trash-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 30px;
+    color: white;
+    background-color: rgba(255, 0, 0, 0.7);
+    border-radius: 50%;
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0; 
+  }
+  
+  .image-container:hover .trash-icon {
+    opacity: 1;
+    transform: scale(1.1); 
+  }
+  
+  .trash-icon:hover {
+    background-color: red; 
+    transform: scale(1.2); 
+  }
+
+
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Chia layout thành 2 cột bằng nhau */
+    gap: 20px; /* Khoảng cách giữa các cột */
+  }
+  
+  .left-section {
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .right-section {
+    padding: 20px;
+    border-radius: 8px;
+  }
+
+
+  .custom-calendar {
+    width: 100%; /* Chiều rộng tự động theo container */
+    max-width: 350px; /* Giới hạn chiều rộng */
+    font-size: 0.9rem; /* Font chữ đồng nhất */
+  }
+  
+  /* Điều chỉnh input bên trong p-calendar */
+  .custom-calendar .p-inputtext {
+    width: 100%; /* Input bên trong chiếm toàn bộ chiều rộng */
+    padding: 10px; /* Padding giống input thông thường */
+    font-size: 0.9rem;
+  }
+  
+  /* Điều chỉnh biểu tượng lịch */
+  .custom-calendar .p-datepicker-trigger {
+    height: 100%;
+  }
+  

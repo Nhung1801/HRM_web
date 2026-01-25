@@ -1,0 +1,131 @@
+<div class="row p-3 pb-0 pt-0">
+    <p-toolbar styleClass="mb-2">
+        <div class="">
+            <strong class="font-size-16">Hồ sơ</strong>
+            <p-breadcrumb
+                [model]="items"
+                [home]="{ icon: 'pi pi-home' }"
+            ></p-breadcrumb>
+        </div>
+    </p-toolbar>
+</div>
+<div class="col-12 p-0">
+    <div class="sidebar-list-header">
+        <div class="d-flex justify-content-between">
+            <div class=" ">
+                <i
+                    [routerLink]="['/profile']"
+                    class="pi pi-arrow-left cursor-pointer"
+                ></i>
+            </div>
+            <div class="col-10 d-flex">
+                <div
+                    class="col-2 avatar d-flex flex-column align-items-center justify-content-center"
+                >
+                    <div class="frame-image">
+                        <span>
+                            <img
+                                [src]="baseImageUrl + dataGetById?.avatarUrl"
+                                style="border-radius: 50%"
+                                width="100px"
+                                height="100px"
+                                class="me-2"
+                            />
+                        </span>
+                    </div>
+                    <div class="d-inline-block text-center">
+                        <span>
+                            {{ dataGetById?.lastName }}
+                            {{ dataGetById?.firstName }}
+                        </span>
+                        <br />
+                        <span>{{ dataGetById?.employeeCode }}</span>
+                    </div>
+                </div>
+
+                <div class="col-8 d-flex justify-content-between">
+                    <div class="">
+                        <span class="css-header-text">Đơn vị công tác</span>
+                        <p class="css-header-text">
+                            {{ dataGetById?.organization?.organizationName }}
+                        </p>
+                        <span class="css-header-text">Ngày sinh</span>
+                        <p class="css-header-text">
+                            {{ dataGetById?.dateOfBirth | date : "dd/MM/yyyy" }}
+                        </p>
+                    </div>
+                    <div class="">
+                        <span class="css-header-text">Ngày thử việc</span>
+                        <p class="css-header-text">
+                            {{
+                                dataGetById?.probationDate | date : "dd/MM/yyyy"
+                            }}
+                        </p>
+                        <span class="css-header-text">Điện thoại di động</span>
+                        <p class="css-header-text">
+                            {{ dataGetById?.phoneNumber }}
+                        </p>
+                    </div>
+                    <div class="">
+                        <span class="css-header-text">Ngày chính thức</span>
+                        <p class="css-header-text">
+                            {{
+                                dataGetById?.officialDate | date : "dd/MM/yyyy"
+                            }}
+                        </p>
+                        <span class="css-header-text">Email cá nhân</span>
+                        <p class="css-header-text">
+                            {{ dataGetById?.personalEmail }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <!-- <p-button
+                    [routerLink]="['/update-personal-record', dataGetById?.id]"
+                    label="Sửa"
+                ></p-button> -->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row p-3 pt-0">
+    <div class="col-2 p-0">
+        <div class="sidebar-list">
+            <div
+                class="sidebar-item"
+                [ngClass]="{ active: pageFlag === Page.General }"
+                (click)="handleChangePage(Page.General)"
+            >
+                Thông tin chung
+            </div>
+            <div
+                class="sidebar-item"
+                [ngClass]="{ active: pageFlag === Page.Contact }"
+                (click)="handleChangePage(Page.Contact)"
+            >
+                Thông tin liên hệ
+            </div>
+            <div
+                class="sidebar-item"
+                [ngClass]="{ active: pageFlag === Page.Job }"
+                (click)="handleChangePage(Page.Job)"
+            >
+                Thông tin công việc
+            </div>
+        </div>
+    </div>
+    <div class="col-10 p-0">
+        <div class="common">
+            <div class="general-information" *ngIf="pageFlag == Page.General">
+                <app-general-information></app-general-information>
+            </div>
+            <div class="contact-information" *ngIf="pageFlag == Page.Contact">
+                <app-contact-information></app-contact-information>
+            </div>
+            <div class="job-information" *ngIf="pageFlag == Page.Job">
+                <app-job-information></app-job-information>
+            </div>
+        </div>
+    </div>
+</div>

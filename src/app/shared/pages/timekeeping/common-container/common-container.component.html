@@ -1,0 +1,37 @@
+<div class="row p-3 pb-0 pt-0">
+    <p-toolbar styleClass="mb-2">
+        <div class="">
+            <h3>Thiết lập chấm công</h3>
+        </div>
+        
+    </p-toolbar>
+</div>
+<div class="row p-3 pt-0">
+    <div class="col-12 p-0">
+        
+        
+        <div class="common">
+            <div class="sidebar-list flex">
+                <div class="sidebar-item" [ngClass]="{'active': pageFlag === Page.General}"
+                    (click)="handleChangePage(Page.General)">
+                    Chung
+                </div>
+               
+                <div class="sidebar-item" [ngClass]="{'active': pageFlag === Page.Tracking}"
+                    (click)="handleChangePage(Page.Tracking)">
+                    Chấm công
+                </div>
+        
+        
+            </div>
+            <div class="general-information" *ngIf="pageFlag==Page.General">
+                <app-general-rules></app-general-rules>
+             
+            </div>
+           
+            <div class="tracking-information" *ngIf="pageFlag==Page.Tracking">
+                <app-attendance-tracking></app-attendance-tracking>
+            </div>
+        </div>
+    </div>
+</div>

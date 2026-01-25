@@ -1,0 +1,35 @@
+<ul class="layout-menu">
+    <!-- <div class="container mb-2">
+        <div class="row">
+            <div
+                class="col-md-8 align-items-center justify-content flex flex-column"
+            >
+                <div class="user-info flex mb-2">
+                    <div class="avatar">
+                        <img src="assets/image/logospin.png" width="40px" height="40px">
+                    </div>
+                    <div class="name flex align-items-center justify-content-center pl-2">
+                        <p>Phạm Xuân Thu</p>
+                    </div>
+                </div> 
+                <div class="search">
+                    <p-inputGroup>
+                        <input type="text" pInputText placeholder="Keyword" />
+                        <button type="button" pButton icon="pi pi-search" ></button>
+                    </p-inputGroup>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <ng-container *ngFor="let item of model; let i = index">
+        <li
+            app-menuitem
+            *ngIf="!item.separator"
+            [item]="item"
+            [index]="i"
+            [root]="true"
+        ></li>
+        <li *ngIf="item.separator" class="menu-separator"></li>
+    </ng-container>
+</ul>
+<p-toast />

@@ -1,0 +1,74 @@
+/* tny add */
+.font-size-16{
+    font-size: 1.5rem;
+}
+.status-span {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.text-success {
+    color: green;
+}
+
+.text-danger {
+    color: red;
+}
+
+.text-warning {
+    color: orange;
+}
+
+.p-input-icon-left .p-inputtext {
+    width: 100%;
+}
+
+.text-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.p-grid {
+    margin-bottom: 20px;
+}
+
+.icon-settings {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: auto 0px auto 5px;
+}
+
+.custom-checkbox-list li {
+    list-style-type: none;
+    padding: 8px 0;
+}
+
+.custom-checkbox-list .p-checkbox {
+    margin: 0;
+}
+
+.button-right {
+    margin-left: 100px;
+}
+
+.card-custom {
+    background: #fff;
+    margin-bottom: 2rem;
+    border: none;
+    box-shadow: var(--card-shadow);
+    border-radius: 4px;
+    padding: 1rem;
+}
+
+
+.custom-cancle-red {
+    background-color: #AA0000;
+    border-color: #AA0000;
+}
+

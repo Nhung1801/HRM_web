@@ -1,0 +1,209 @@
+<div class="content-work">
+    <div cdkDropListGroup class="row align-items-start list-work-group">
+        <!-- Hiển thị danh sách nhóm công việc -->
+        <div
+            class="col-sm-3 bg-col"
+            *ngFor="let group of listworkwidthprojectid; let i = index"
+            cdkDropList
+            [cdkDropListData]="group"
+            [cdkDropListConnectedTo]="connectedDropLists"
+            (cdkDropListDropped)="drop($event, i)"
+            id="group-{{ i }}"
+        >
+            <!-- nhóm công việc có sẵn -->
+            <div class="title-col" [ngStyle]="{ backgroundColor: group.color }">
+                <i
+                    class="pi pi-times"
+                    (click)="handleDelete(group.id)"
+                    [ngStyle]="{ backgroundColor: white }"
+                    [style]="{ color: 'white' }"
+                ></i>
+                <input
+                    type="text"
+                    pInputText
+                    [style]="{
+                        backgroundColor: getValidColor(group.color),
+                        height: '30px',
+                        border: 'none',
+                        textAlign: 'center',
+                        color: 'white'
+                    }"
+                    placeholder="Tên nhóm công việc"
+                    value="{{ group.name }}"
+                    (keydown.enter)="
+                        handleCreateandUpdate(
+                            $event.target.value,
+                            group.color,
+                            group.id
+                        )   
+                    "
+                />
+                <i
+                    *ngIf="!(isColorPickerVisible && selectedGroupIndex === i)"
+                    class="pi pi-ellipsis-v cursor-pointer icon-color"
+                    (click)="toggleColorPicker(i)"
+                    [style]="{ color: 'white' }"
+                ></i>
+
+                <i
+                    *ngIf="isColorPickerVisible && selectedGroupIndex === i"
+                    class="pi pi-times cursor-pointer icon-color"
+                    (click)="closeColorPicker()"
+                    [style]="{ color: 'white' }"
+                ></i>
+
+                <div>
+                    <p-colorPicker
+                        *ngIf="isColorPickerVisible && selectedGroupIndex === i"
+                        class="list-color"
+                        [(ngModel)]="group.color"
+                        [inline]="true"
+                    ></p-colorPicker>
+                </div>
+            </div>
+            <!--  thêm mới 1 nhóm công việc  -->
+
+            <!--thêm  các công việc trong từng nhóm công việc  -->
+            <div class="list-work-main">
+                <!--  danh sách các công việc con trong nhón công việc -->
+                <div >
+                    <div
+                        class="status-work"
+                        *ngFor="let item of group.works; let j = index"
+                        cdkDrag
+                        [cdkDragData]="item"
+                    >
+                        <div class="list-work-item">
+                            <!-- <div class="status-work p-2">
+                                <i
+                                    class="bi bi-check-circle-fill icon-succ"
+                                ></i>
+                                <span class="ml-2">Hoàn thành</span>
+                            </div> -->
+                            <p>
+                                {{ item?.name }}
+                            </p>
+                            <div class="d-flex align-items-center mb-3">
+                                <img
+                                    class="img-item-work"
+                                    [src]="baseImageUrl +item?.executor?.avatarUrl"
+                                    alt=""
+                                />
+                                <div class="ml-3">
+                                    <i class="pi pi-calendar icon-footer"></i>
+                                    <span>{{item?.startTime | date : "dd/MM/yyyy"}}- {{item?.dueDate | date : "dd/MM/yyyy"}}</span>
+                                </div>
+                            </div>
+                            <div class="list-information d-flex">
+                                <div class="">
+                                    <i class="bi bi-chat-dots icon-footer"></i>
+                                    <span>0</span>
+                                </div>
+                                <div class="ml-3">
+                                    <i class="bi bi-person icon-footer"></i>
+                                    <span>{{item?.workAssignments.length}}</span>
+                                </div>
+                                <div class="ml-3">
+                                    <i class="bi bi-share icon-footer"></i>
+                                    <span>0</span>
+                                </div>
+                            </div>
+                            <div class="list-tagwork">
+                                <div class="tag-work" *ngFor="let tag of item.tagWorks" [ngStyle]="{ 'background-color': tag?.color }">
+                                    <span >
+                                        {{tag?.name}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="icon-creatework" (click)="togglePopup()">
+                    <i class="bi bi-plus-circle"></i>
+                </p>
+                <app-popup *ngIf="isPopupVisible"></app-popup>
+            </div>
+        </div>
+
+
+
+
+
+
+        <!--  thêm mới nhóm công việc -->
+        <div
+            class="col-sm-3 bg-col"
+            *ngFor="let group of workGroups; let i = index"
+            cdkDropList
+            [cdkDropListData]="group.tasks"
+            [cdkDropListConnectedTo]="connectedDropLists"
+            (cdkDropListDropped)="drop($event, i)"
+            id="group-{{ i }}"
+        >
+            <div class="title-col" [ngStyle]="{ backgroundColor: group.color }">
+                <i
+                    class="pi pi-times"
+                    (click)="deleteWorkGroup(i)"
+                    [ngStyle]="{ backgroundColor: white }"
+                    [style]="{ color: 'white' }"
+                ></i>
+                <input
+                    type="text"
+                    pInputText
+                    [style]="{
+                        backgroundColor: group.color,
+                        height: '30px',
+                        border: 'none',
+                        textAlign: 'center',
+                        color: 'white'
+                    }"
+                    placeholder="Tên nhóm công việc"
+                    value="{{ group.name }}"
+                    (keydown.enter)="
+                        handleCreateandUpdate($event.target.value, group.color)
+                    "
+                />
+                <i
+                    *ngIf="!(isColorPickerVisiblecreate && selectedGroupIndexCreate === i)"
+                    class="pi pi-ellipsis-v cursor-pointer icon-color"
+                    (click)="toggleColorPickercreate(i)"
+                    [style]="{ color: 'white' }"
+                ></i>
+
+                <i
+                    *ngIf="isColorPickerVisiblecreate && selectedGroupIndexCreate === i"
+                    class="pi pi-times cursor-pointer icon-color"
+                    (click)="closeColorPickerCreate()"
+                    [style]="{ color: 'white' }"
+                ></i>
+
+                <div>
+                    <p-colorPicker
+                        *ngIf="isColorPickerVisiblecreate && selectedGroupIndexCreate === i"
+                        class="list-color"
+                        [(ngModel)]="group.color"
+                        [inline]="true"
+                    ></p-colorPicker>
+                </div>
+            </div>
+            <!--  thêm mới công việc -->
+            <div class="list-work-main">
+                <p class="icon-creatework" (click)="togglePopup()">
+                    <i class="bi bi-plus-circle"></i>
+                </p>
+                <app-popup *ngIf="isPopupVisible"></app-popup>
+            </div>
+        </div>
+        <!-- Nút thêm nhóm công việc -->
+        <div
+            class="col-sm-3 bg-col"
+            (click)="addWorkGroup()"
+            style="cursor: pointer"
+        >
+            <div class="title-col">
+                <i class="bi bi-plus"></i>
+                <span>Thêm nhóm công việc</span>
+            </div>
+        </div>
+    </div>
+</div>

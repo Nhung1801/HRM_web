@@ -1,0 +1,395 @@
+/* Container */
+.container-timesheet {
+    width: 90%;
+    margin: 20px auto;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.header h1 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.edit-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.lock {
+    font-size: 14px;
+    color: gray;
+}
+
+/* Filters */
+.filters {
+    display: flex;
+    justify-content: right;
+    margin-bottom: 15px;
+}
+
+.filter-icons span {
+    margin-right: 10px;
+}
+
+.green-dot::before {
+    content: "●";
+    color: green;
+}
+
+.orange-dot::before {
+    content: "●";
+    color: orange;
+}
+
+.yellow-dot::before {
+    content: "●";
+    color: yellow;
+}
+
+.grey-dot::before {
+    content: "●";
+    color: rgb(174, 174, 174);
+}
+
+.red-dot::before {
+    content: "●";
+    color: red;
+}
+
+.search-bar {
+    padding: 5px;
+    width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Table */
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.attendance-table th,
+.attendance-table td {
+    border: 1px solid #ddd;
+    text-align: center;
+    padding: 10px;
+}
+
+.attendance-table th {
+    background-color: #f2f2f2;
+}
+
+.attendance-table td label {
+    display: block;
+}
+
+.status {
+    padding: 5px;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.status.green {
+    background-color: #e0ffe0;
+    color: green;
+}
+
+.status.yellow {
+    background-color: #fff8dc;
+    color: orange;
+}
+
+.status.purple {
+    background-color: #e6e6fa;
+    color: purple;
+}
+
+.status.gray {
+    color: #bbb;
+}
+
+.status.national {
+    background-color: #d9edf7;
+    color: #31708f;
+}
+
+.sheet-key {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+.card-container {
+    display: flex;
+    gap: 20px;
+    justify-content: start;
+    // margin: 20px;
+}
+
+/* Individual card styling */
+.card-sheet {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 140px;
+    // box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Icon styling */
+.icon {
+    font-size: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    color: white;
+}
+
+/* Icon colors */
+.icon.work {
+    background-color: #4caf50;
+}
+
+/* Green */
+.icon.leave {
+    background-color: #ff9800;
+}
+
+/* Orange */
+.icon.late {
+    background-color: #9c27b0;
+}
+
+/* Purple */
+.icon.pending {
+    background-color: #f44336;
+}
+
+/* Red */
+
+/* Label text */
+.label {
+    flex: 1;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Counter text */
+.counter {
+    font-weight: bold;
+    color: #555;
+}
+
+i {
+    font-size: 12px;
+}
+
+
+th {
+    text-align: center;
+    background-color: #f4f4f4;
+    padding: 10px;
+}
+
+td {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.disabled-class {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.custom-button {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    color: #333;
+    background-color: #f2f2f2;
+    border: 1px solid #a1b5f2;
+    border-radius: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.custom-button:hover {
+    background-color: #e0e0e0;
+}
+
+.salary-transfer {
+    display: flex;
+    gap: 10px;
+}
+
+.salary-transfer-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #a1b5f2;
+    border-radius: 5px;
+    background-color: #fff;
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    gap: 8px;
+}
+
+.salary-transfer-button .icon {
+    font-size: 18px;
+}
+
+.salary-transfer-button:hover {
+    background-color: #f0f0f0;
+}
+
+.more-button {
+    width: 40px;
+    justify-content: center;
+}
+
+.disabled-class {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.custom-button-summary {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 10px;
+    font-family: Arial, sans-serif;
+    color: #333;
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.custom-button-summary:hover {
+    background-color: #e0e0e0;
+}
+
+/* Add custom styles for each status */
+.confirmed {
+    background-color: #4cacaf; /* Green background for "Đã xác nhận" */
+    color: white;
+}
+
+.not-sent {
+    background-color: #b0aca6; /* Orange background for "Chưa gửi xác nhận" */
+    color: white;
+}
+
+.rejected {
+    background-color: #f57171; /* Orange background for "Chưa gửi xác nhận" */
+    color: white;
+}
+
+.confirmed {
+    background-color: #91e39a; /* Orange background for "Chưa gửi xác nhận" */
+    color: white;
+}
+
+/* tny add */
+.status-span {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.text-success {
+    color: green;
+}
+
+.text-danger {
+    color: red;
+}
+
+.text-warning {
+    color: orange;
+}
+
+.p-input-icon-left .p-inputtext {
+    width: 100%;
+}
+
+.text-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.p-grid {
+    margin-bottom: 20px;
+}
+
+.icon-settings {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: auto 0px auto 5px;
+}
+
+.custom-checkbox-list li {
+    list-style-type: none;
+    padding: 8px 0;
+}
+
+.custom-checkbox-list .p-checkbox {
+    margin: 0;
+}
+
+.button-right {
+    margin-left: 100px;
+}
+
+.card-custom {
+    background: #fff;
+    margin-bottom: 2rem;
+    border: none;
+    box-shadow: var(--card-shadow);
+    border-radius: 4px;
+    padding: 1rem;
+}
+
+
+.custom-cancle-red {
+    background-color: #AA0000;
+    border-color: #AA0000;
+}
+
+::ng-deep .p-treeselect {
+    width: 100%;
+}
+
+
+// tny add
+.cutsom-cancel{
+    background-color: #64748B;
+    border-color: #64748B;
+}
+.boder-x{
+    border-color: #a1b5f2;
+}

@@ -1,0 +1,619 @@
+<main id="main" class="main">
+    <div class="pagetitle">
+        <div>
+            <strong class="font-size-16"
+                >Bảng chi tiết chấm công tổng hợp</strong
+            >
+            <p-breadcrumb [model]="items"> </p-breadcrumb>
+        </div>
+    </div>
+    <div class="toast-container">
+        <p-messages
+            [(value)]="messages"
+            [enableService]="false"
+            [closable]="false"
+        ></p-messages>
+    </div>
+    <!-- End Page Title -->
+    <section class="section k-list-table">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card-body">
+                    <div class="card mt-3">
+                        <header class="header">
+                            <div class="header-info header">
+                                <h1>
+                                    {{
+                                        this.summarysheet?.timekeepingSheetName
+                                    }}
+                                </h1>
+                                <button
+                                    class="edit-btn"
+                                    (click)="showDialogEdit()"
+                                >
+                                    ✎
+                                </button>
+                                <button
+                                    class="custom-button"
+                                    [ngStyle]="{
+                                        'background-color': getButtonColor()
+                                    }"
+                                >
+                                    {{ getButtonText() }}
+                                </button>
+                            </div>
+
+                            <div class="salary-transfer">
+                                <button
+                                    class="salary-transfer-button"
+                                    *ngIf="
+                                        this.permisionHelper.hasPermissions([
+                                            permissionConstant.ManageGeneralTimekeepingTransferSalary
+                                        ])
+                                    "
+                                >
+                                    <span
+                                        ><i class="pi pi-money-bill"></i
+                                    ></span>
+                                    Chuyển tính lương
+                                </button>
+                                <button
+                                    (click)="handleShowSendConfirm()"
+                                    class="salary-transfer-button"
+                                    *ngIf="
+                                        this.permisionHelper.hasPermissions([
+                                            permissionConstant.ManageGeneralTimekeepingSendConfirmation
+                                        ])
+                                    "
+                                >
+                                    <span><i class="pi pi-send"></i></span> Gửi
+                                    xác nhận
+                                </button>
+                                <button
+                                    class="salary-transfer-button more-button"
+                                >
+                                    ...
+                                </button>
+                            </div>
+                        </header>
+
+                        <div class="sheet-key">
+                            <p-autoComplete
+                                [style]="{ height: '43px', width: '100%' }"
+                                [(ngModel)]="selectedEmployee"
+                                [suggestions]="filteredEmployees"
+                                (completeMethod)="searchEmployee($event)"
+                                [field]="'displayName'"
+                                [forceSelection]="true"
+                                [showClear]="true"
+                                placeholder="Tìm kiếm nhân viên"
+                                (onSelect)="fetchData()"
+                                (onClear)="fetchData()"
+                            >
+                            </p-autoComplete>
+
+                            <div style="display: flex">
+                                <p-treeSelect
+                                    [options]="treeData"
+                                    [(ngModel)]="selectedNode"
+                                    [placeholder]="'Chọn đơn vị'"
+                                    [style]="{ width: '300px' }"
+                                    [showClear]="true"
+                                    (onNodeSelect)="fetchData()"
+                                    (onClear)="fetchData()"
+                                ></p-treeSelect>
+
+                                <div style="display: flex; margin: 0 20px">
+                                    <button
+                                        pButton
+                                        style="border-color: #a1b5f2 !important"
+                                        class="boder-x"
+                                        label=""
+                                        severity="secondary"
+                                        icon="pi pi-filter"
+                                    ></button>
+
+                                    <p-button
+                                        style="border-color: #a1b5f2 !important"
+                                        class="boder-x"
+                                        style="margin-left: 10px"
+                                        label=""
+                                        severity="secondary"
+                                        icon="pi pi-file-export"
+                                    ></p-button>
+
+                                    <p-button
+                                        style="border-color: #a1b5f2 !important"
+                                        class="boder-x"
+                                        style="margin-left: 10px"
+                                        severity="secondary"
+                                        icon="pi pi-cog"
+                                        (click)="openColumnDialog()"
+                                    ></p-button>
+
+                                    <p-dialog
+                                        header="Tùy chỉnh cột hiển thị"
+                                        [(visible)]="displayColumnsCustom"
+                                        [style]="{ width: '300px' }"
+                                        [position]="'right'"
+                                    >
+                                        <div>
+                                            <span class="p-input-icon-left">
+                                                <i class="pi pi-search"></i>
+                                                <input
+                                                    pInputText
+                                                    type="text"
+                                                    (input)="
+                                                        onSearchColumn($event)
+                                                    "
+                                                    placeholder="Tìm kiếm cột..."
+                                                />
+                                            </span>
+                                            <ul
+                                                class="custom-checkbox-list p-mt-2"
+                                            >
+                                                <li
+                                                    *ngFor="
+                                                        let col of filteredColumns
+                                                    "
+                                                >
+                                                    <p-checkbox
+                                                        name="selectedColumns"
+                                                        [value]="col.field"
+                                                        [(ngModel)]="
+                                                            col.selected
+                                                        "
+                                                        binary="true"
+                                                        label="{{ col.header }}"
+                                                    ></p-checkbox>
+                                                </li>
+                                            </ul>
+
+                                            <button
+                                                pButton
+                                                type="button"
+                                                label="Áp dụng"
+                                                class="button-right"
+                                                (click)="
+                                                    handleApplyChangeSelectedColumns()
+                                                "
+                                            ></button>
+                                        </div>
+                                    </p-dialog>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p-table
+                            [value]="detaisummary"
+                            [(selection)]="selectedEmployeeSends"
+                            [rows]="pageSize"
+                            [totalRecords]="totalRecords"
+                            (onPage)="onPageChange($event)"
+                            responsiveLayout="scroll"
+                            styleClass="p-datatable-striped custom-scrollbar"
+                            [rowHover]="true"
+                            [ngStyle]="{
+                                width: 'auto',
+                                'overflow-x': 'auto',
+                                'table-layout': 'auto'
+                            }"
+                        >
+                            <!-- Table Header -->
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <!-- <th *ngIf="isColumnVisible('select')" style="width: 1%;">
+										<p-checkbox [binary]="true" inputId="binary"></p-checkbox>
+									</th> -->
+                                    <th style="width: 1%">
+                                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                    </th>
+                                    <th
+                                        *ngIf="isColumnVisible('employeeCode')"
+                                        style="width: 6%"
+                                    >
+                                        Mã nhân viên
+                                    </th>
+                                    <th
+                                        *ngIf="isColumnVisible('fullName')"
+                                        style="width: 10%"
+                                    >
+                                        Họ và tên
+                                    </th>
+                                    <th
+                                        *ngIf="isColumnVisible('organization')"
+                                        style="width: 10%"
+                                    >
+                                        Đơn vị công tác
+                                    </th>
+                                    <th
+                                        *ngIf="isColumnVisible('position')"
+                                        style="width: 7%"
+                                    >
+                                        Vị trí công việc
+                                    </th>
+                                    <th
+                                        *ngIf="isColumnVisible('workingDays')"
+                                        style="width: 7%"
+                                    >
+                                        Số công chuẩn
+                                    </th>
+                                    <th
+                                        *ngIf="isColumnVisible('leaveDays')"
+                                        style="width: 7%"
+                                    >
+                                        Nghỉ phép
+                                    </th>
+                                    <th
+                                        *ngIf="isColumnVisible('daysPerMonth')"
+                                        style="width: 5%"
+                                    >
+                                        Số Ngày/Tháng
+                                    </th>
+                                    <th
+                                        *ngIf="isColumnVisible('totalHours')"
+                                        style="width: 5%"
+                                    >
+                                        Tổng giờ
+                                    </th>
+                                    <th
+                                        *ngIf="isColumnVisible('equalDays')"
+                                        style="width: 5%"
+                                    >
+                                        Quy ngày
+                                    </th>
+                                    <th
+                                        *ngIf="
+                                            isColumnVisible(
+                                                'remainingLeaveDays'
+                                            )
+                                        "
+                                        style="width: 8%"
+                                    >
+                                        Số ngày phép còn lại
+                                    </th>
+                                    <th
+                                        *ngIf="isColumnVisible('status')"
+                                        style="width: 11%"
+                                    >
+                                        Trạng thái
+                                    </th>
+                                </tr>
+                            </ng-template>
+
+                            <!-- Table Body -->
+                            <ng-template pTemplate="body" let-contract>
+                                <tr>
+                                    <!-- <td *ngIf="isColumnVisible('select')"><p-checkbox [binary]="true"
+											inputId="binary"></p-checkbox></td> -->
+                                    <td class="text-center">
+                                        <p-tableCheckbox
+                                            [value]="contract"
+                                        ></p-tableCheckbox>
+                                    </td>
+
+                                    <td *ngIf="isColumnVisible('employeeCode')">
+                                        {{ contract.employeeCode }}
+                                    </td>
+                                    <td *ngIf="isColumnVisible('fullName')">
+                                        {{ contract.lastName }}
+                                        {{ contract.firstName }}
+                                    </td>
+                                    <td *ngIf="isColumnVisible('organization')">
+                                        {{
+                                            contract.organization
+                                                .organizationName
+                                        }}
+                                    </td>
+                                    <td *ngIf="isColumnVisible('position')">
+                                        {{
+                                            contract.staffPosition.positionName
+                                        }}
+                                    </td>
+                                    <td *ngIf="isColumnVisible('workingDays')">
+                                        {{ contract.totalWorkingDay }}
+                                    </td>
+                                    <td *ngIf="isColumnVisible('leaveDays')">
+                                        {{ contract.totalLeaveDay }}
+                                    </td>
+                                    <td *ngIf="isColumnVisible('daysPerMonth')">
+                                        {{ contract.datePerMonth }}
+                                    </td>
+                                    <td *ngIf="isColumnVisible('totalHours')">
+                                        {{
+                                            contract.totalHour
+                                                | number : "0.2-2"
+                                        }}
+                                    </td>
+                                    <td *ngIf="isColumnVisible('equalDays')">
+                                        {{
+                                            contract.equalDay | number : "0.2-2"
+                                        }}
+                                    </td>
+                                    <td
+                                        *ngIf="
+                                            isColumnVisible(
+                                                'remainingLeaveDays'
+                                            )
+                                        "
+                                    >
+                                        {{ contract.totalExistLeaveDay }}
+                                    </td>
+                                    <td *ngIf="isColumnVisible('status')">
+                                        <span
+                                            class="status-span"
+                                            [ngStyle]="{
+                                                color: getsummaryTimesheetNameStatus(
+                                                    contract.status
+                                                ).color,
+                                                'background-color':
+                                                    getsummaryTimesheetNameStatus(
+                                                        contract.status
+                                                    ).bgColor
+                                            }"
+                                        >
+                                            {{
+                                                getsummaryTimesheetNameStatus(
+                                                    contract.status
+                                                ).text
+                                            }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+
+                        <div
+                            *ngIf="totalRecords === 0"
+                            style="text-align: center; margin-top: 20px"
+                        >
+                            <strong style="text-align: center; width: 100%"
+                                >Không tìm thấy kết quả phù hợp</strong
+                            >
+                        </div>
+
+                        <div class="paging-bot dg-fix">
+                            <div class="paging-info">
+                                <div [innerHTML]="currentPageReport"></div>
+                            </div>
+                            <p-paginator
+                                [rows]="this.pageSize"
+                                (onPageChange)="onPageChange($event)"
+                                [totalRecords]="
+                                    totalRecords > 0 ? totalRecords : 1
+                                "
+                                [rowsPerPageOptions]="[10, 20, 30]"
+                                [first]="(this.pageIndex - 1) * this.pageSize"
+                            ></p-paginator>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!---->
+    </section>
+</main>
+
+<p-dialog
+    [(visible)]="displayDialogEdit"
+    header="Cập nhật bảng chấm công tổng hợp"
+    [modal]="true"
+    [style]="{ width: '800px' }"
+    [closable]="true"
+    (onHide)="closeDialogEdit()"
+>
+    <form [formGroup]="detailForm">
+        <div class="p-fluid">
+            <div class="p-field">
+                <label class="labelip" for="treeData"
+                    >Đơn vị <span class="red-asterisk">*</span></label
+                >
+                <p-treeSelect
+                    [options]="treeData"
+                    formControlName="organizationId"
+                    optionLabel="label"
+                    [placeholder]="'Chọn đơn vị'"
+                    [showClear]="true"
+                    [style]="{ width: '100%' }"
+                    [filter]="true"
+                    filterPlaceholder="Tìm kiếm"
+                    (onNodeSelect)="onOrganizationChange($event)"
+                    [ngClass]="{ 'disabled-class': isDisabled }"
+                ></p-treeSelect>
+                <div
+                    *ngIf="
+                        (detailForm.get('organizationId')?.invalid &&
+                            (detailForm.get('organizationId')?.dirty ||
+                                detailForm.get('organizationId')?.touched)) ||
+                        showErrorOrganizationId
+                    "
+                >
+                    <div
+                        *ngIf="detailForm.get('organizationId')?.errors?.['required']"
+                        class="error-message"
+                    >
+                        Đơn vị không được bỏ trống
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-field mt-3">
+                <label class="labelip" for="summaryTimesheetNameStaffPositions"
+                    >Vị trí <span class="red-asterisk">*</span></label
+                >
+                <p-multiSelect
+                    class="custom-multiselect"
+                    [options]="staffPosition"
+                    formControlName="summaryTimesheetNameStaffPositions"
+                    placeholder="Chọn vị trí"
+                    optionLabel="name"
+                    display="chip"
+                    [showClear]="true"
+                    [style]="{ width: '100%' }"
+                    (onChange)="onStaffPositionChange($event)"
+                    [ngClass]="{ 'disabled-class': isDisabled }"
+                >
+                </p-multiSelect>
+                <div
+                    *ngIf="
+                        (detailForm.get('summaryTimesheetNameStaffPositions')
+                            ?.invalid &&
+                            (detailForm.get(
+                                'summaryTimesheetNameStaffPositions'
+                            )?.dirty ||
+                                detailForm.get(
+                                    'summaryTimesheetNameStaffPositions'
+                                )?.touched)) ||
+                        showErrorDetailTimesheet
+                    "
+                >
+                    <div
+                        *ngIf="detailForm.get('summaryTimesheetNameStaffPositions')?.errors?.['required']"
+                        class="error-message"
+                    >
+                        Vị trí không được bỏ trống
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-field mt-3">
+                <label class="labelip" for="value"
+                    >Tên bảng chấm công
+                    <span class="red-asterisk">*</span></label
+                >
+                <input
+                    pInputText
+                    type="text"
+                    formControlName="timekeepingSheetName"
+                    placeholder="Nhập thông tin"
+                />
+                <div
+                    *ngIf="
+                        (detailForm.get('timekeepingSheetName')?.invalid &&
+                            (detailForm.get('timekeepingSheetName')?.dirty ||
+                                detailForm.get('timekeepingSheetName')
+                                    ?.touched)) ||
+                        showErrorTimekeepingSheetName
+                    "
+                >
+                    <div
+                        *ngIf="detailForm.get('timekeepingSheetName')?.errors?.['required']"
+                        class="error-message"
+                    >
+                        Tên không được bỏ trống
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-field mt-3">
+                <label class="labelip" for="timekeepingMethod"
+                    >Danh sách bảng chấm công chi tiết</label
+                >
+                <p-table
+                    [value]="detailTimesheet"
+                    [paginator]="true"
+                    [rows]="10"
+                    [responsiveLayout]="'scroll'"
+                    [scrollable]="true"
+                    [scrollHeight]="'180px'"
+                    [ngClass]="{ 'disabled-class': isDisabled }"
+                >
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width: 1%">
+                                <p-checkbox
+                                    [binary]="true"
+                                    [(ngModel)]="allSelected"
+                                    [ngModelOptions]="{ standalone: true }"
+                                    (ngModelChange)="toggleSelectAll($event)"
+                                >
+                                </p-checkbox>
+                            </th>
+                            <th style="width: 10%">Tên bảng chấm công</th>
+                            <th style="width: 5%">Thời gian</th>
+                            <th style="width: 10%">Chấm công</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template
+                        pTemplate="body"
+                        let-item
+                        let-rowIndex="rowIndex"
+                    >
+                        <tr [pSelectableRow]="item">
+                            <td>
+                                <p-checkbox
+                                    [binary]="true"
+                                    [(ngModel)]="selectedItems[rowIndex]"
+                                    [ngModelOptions]="{ standalone: true }"
+                                    (ngModelChange)="updateSelectAllState()"
+                                >
+                                </p-checkbox>
+                            </td>
+                            <td>{{ item.timekeepingSheetName }}</td>
+                            <td>
+                                {{ item.startDate | date : "dd/MM/yyyy" }} -
+                                {{ item.endDate | date : "dd/MM/yyyy" }}
+                            </td>
+                            <td>{{ item.timekeepingMethod }}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </form>
+
+    <p-footer>
+        <button
+            pButton
+            label="Hủy"
+            class="p-button-secondary"
+            (click)="closeDialogEdit()"
+        ></button>
+
+        <button
+            style="margin-left: 10px"
+            pButton
+            label="Lưu"
+            class="p-button-primary"
+            (click)="onSubmitUpdate()"
+        ></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog
+    header="Gửi bảng chấm công cho nhân viên"
+    [(visible)]="showSendConfirm"
+    [modal]="true"
+    [style]="{ width: '400px' }"
+>
+    <div class="p-field p-grid">
+        <div class="p-col">
+            <!-- <p-calendar formControlName="startDate" id="startDate" placeholder="Chọn ngày bắt đầu" [showIcon]="true"
+				[showTime]="true" [hourFormat]="24" [dateFormat]="'dd-mm-yy'" (onSelect)="onCalendarChange()"
+				(onInput)="onCalendarChange()"></p-calendar> -->
+            <p-calendar
+                [(ngModel)]="date"
+                id="date"
+                placeholder="Chọn ngày xác nhận"
+                [showIcon]="true"
+                [dateFormat]="'dd-mm-yy'"
+            ></p-calendar>
+        </div>
+    </div>
+    <p-footer>
+        <button
+            type="button"
+            pButton
+            label="Hủy"
+            (click)="showSendConfirm = false"
+            class="ui-button-danger cutsom-cancel me-2"
+        ></button>
+        <button
+            type="button"
+            pButton
+            label="Gửi"
+            (click)="handleSendConfirm()"
+            class="ui-button-success"
+        ></button>
+    </p-footer>
+</p-dialog>

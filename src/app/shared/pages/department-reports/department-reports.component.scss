@@ -1,0 +1,221 @@
+.icon-export {
+    font-size: 20px;
+    margin-left: 10px;
+}
+.chart-count-job {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
+.overview-main {
+    display: flex;
+}
+
+.task-list {
+    font-family: Arial, sans-serif;
+    width: 300px;
+    margin: 0 20px;
+    width: 30%;
+}
+
+h3 {
+    text-align: left;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.tiltle-chart p {
+    font-size: 14px;
+    font-weight: 600;
+    border-bottom: 1px solid #2196f3;
+    width: 61px;
+    margin: 20px 0;
+}
+
+.task-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.task-item .status {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.task-item.overdue .status {
+    color: #fa776d;
+    background: #fde8e8;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.task-item.overdue .time {
+    color: #fa776d;
+}
+
+.task-item.incomplete .status {
+    color: #ff9800;
+    background: #fff8e1;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.task-item.incomplete .time {
+    color: #ff9800;
+}
+
+.task-item.completed .status {
+    color: #2196f3;
+    background: #e3f2fd;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.task-item.completed .time {
+    color: #2196f3;
+}
+
+.task-content p {
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+.task-content .time {
+    font-size: 12px;
+    color: #666;
+}
+
+.task-content .time i {
+    padding: 0 5px;
+}
+
+.dashboard {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 60%;
+}
+
+.chart-section {
+    flex: 1;
+    min-width: 300px;
+    min-height: 300px;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.chart {
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+}
+
+canvas {
+    max-width: 100%;
+}
+
+.chart-label {
+    position: absolute;
+    top: 70px;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.chart-label p:first-child {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.chart-label p:last-child {
+    font-size: 16px;
+    color: gray;
+}
+
+.chart-legend {
+    margin-top: 20px;
+    list-style: none;
+    padding: 0;
+    text-align: left;
+}
+
+.chart-legend li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.legend-color {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 10px;
+    border-radius: 50%;
+}
+
+.legend-color.blue {
+    background: blue;
+}
+
+.legend-color.green {
+    background: green;
+}
+
+.legend-color.yellow {
+    background: yellow;
+}
+
+.legend-color.gray {
+    background: gray;
+}
+
+.legend-color.red {
+    background: red;
+}
+
+.legend-color.orange {
+    background: orange;
+}
+
+.chart canvas {
+    max-width: 230px;
+    max-height: 230px;
+    margin: 0 auto;
+}
+
+.chart-label {
+    font-size: 14px;
+}
+
+.chart-label p:first-child {
+    font-size: 20px;
+}
+
+.chart-label p:last-child {
+    font-size: 12px;
+}
+
+.chart-legend {
+    margin-top: 10px;
+}
+
+.chart-legend li {
+    font-size: 12px;
+}
+.slider-container {
+    position: relative;
+    margin-top: 40px;
+}
+.text-today {
+    position: absolute;
+    transform: translateX(-50%);
+    top: -35px;
+    width: 200px;
+}
+
+

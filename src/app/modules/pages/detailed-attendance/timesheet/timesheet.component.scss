@@ -1,0 +1,225 @@
+/* Container */
+.container-timesheet {
+    width: 90%;
+    margin: 20px auto;
+}
+
+/* Header */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.header h1 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.edit-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.lock {
+    font-size: 14px;
+    color: gray;
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+/* Filters */
+.filters {
+    display: flex;
+    justify-content: right;
+    margin-bottom: 15px;
+}
+
+.filter-icons span {
+    margin-right: 10px;
+}
+
+.green-dot::before {
+    content: "●";
+    color: green;
+}
+
+.orange-dot::before {
+    content: "●";
+    color: orange;
+}
+
+.yellow-dot::before {
+    content: "●";
+    color: yellow;
+}
+
+.grey-dot::before {
+    content: "●";
+    color: rgb(174, 174, 174);
+}
+
+.red-dot::before {
+    content: "●";
+    color: red;
+}
+
+.search-bar {
+    padding: 5px;
+    width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Table */
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.attendance-table th,
+.attendance-table td {
+    border: 1px solid #ddd;
+    text-align: center;
+    padding: 10px;
+}
+
+.attendance-table th {
+    background-color: #f2f2f2;
+}
+
+.attendance-table td label {
+    display: block;
+}
+
+.status {
+    padding: 5px;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.status.green {
+    background-color: #e0ffe0;
+    color: green;
+}
+
+.status.yellow {
+    background-color: #fff8dc;
+    color: orange;
+}
+
+.status.purple {
+    background-color: #e6e6fa;
+    color: purple;
+}
+
+.status.gray {
+    color: #bbb;
+}
+
+.status.national {
+    background-color: #d9edf7;
+    color: #31708f;
+}
+
+.sheet-key {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+.card-container {
+    display: flex;
+    gap: 20px;
+    justify-content: start;
+    // margin: 20px;
+}
+
+/* Individual card styling */
+.card-sheet {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 140px;
+    // box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Icon styling */
+.icon {
+    font-size: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    color: white;
+}
+
+/* Icon colors */
+.icon.work {
+    background-color: #4caf50;
+}
+
+/* Green */
+.icon.leave {
+    background-color: #ff9800;
+}
+
+/* Orange */
+.icon.late {
+    background-color: #9c27b0;
+}
+
+/* Purple */
+.icon.pending {
+    background-color: #f44336;
+}
+
+/* Red */
+
+/* Label text */
+.label {
+    flex: 1;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Counter text */
+.counter {
+    font-weight: bold;
+    color: #555;
+}
+
+::ng-deep .p-treeselect {
+    width: 100%;
+}
+
+i {
+    font-size: 12px;
+}
+
+
+th {
+    text-align: center;
+    background-color: #f4f4f4;
+    padding: 10px;
+}
+
+td {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.disabled-class {
+    pointer-events: none;
+    opacity: 0.6;
+}

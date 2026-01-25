@@ -1,0 +1,327 @@
+.avatar-user img{
+    width: 45px; height: 45px;
+    border-radius: 50%;
+}
+
+
+.priority-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #ffcc33;
+    /* Màu nền vàng */
+    border: none;
+    border-radius: 4px;
+    /* Bo góc */
+    padding: 8px 16px;
+    /* Khoảng cách bên trong */
+    color: #ffffff;
+    /* Màu chữ */
+    font-size: 14px;
+    /* Kích thước chữ */
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    /* Đổ bóng */
+    transition: background-color 0.3s ease;
+}
+
+.priority-button:hover {
+    background-color: #e6b800;
+    /* Màu vàng khi hover */
+}
+
+.priority-button i {
+    font-size: 16px;
+    /* Kích thước icon */
+}
+
+.box-priority{
+    position: relative;
+}
+
+.popup-priority{
+    position: absolute;
+}
+
+.box-priority {
+    position: relative;
+    display: inline-block;
+}
+
+.priority-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: 160px;
+    background-color: #ffcc33;
+    /* Màu nền vàng */
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+.priority-button:hover {
+    background-color: #e6b800;
+}
+
+.popup-priority {
+    position: absolute;
+    top: 38px;
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    z-index: 1000;
+    display: none;
+}
+
+.box-priority:hover .popup-priority {
+    display: block;
+}
+
+.popup-priority h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 12px;
+}
+
+.priority-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    color: #ffffff;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+}
+
+.priority-option.high {
+    background-color: #ff4d4f;
+}
+
+.priority-option.high:hover {
+    background-color: #e64547;
+}
+
+.priority-option.medium {
+    background-color: #ffcc33;
+}
+
+.priority-option.medium:hover {
+    background-color: #e6b800;
+}
+
+.priority-option.low {
+    background-color: #1890ff;
+}
+
+.priority-option.low:hover {
+    background-color: #1677c7;
+}
+
+.priority-button.priority-high {
+    background-color: #f44336;
+    /* Màu đỏ */
+}
+
+.priority-button.priority-medium {
+    background-color: #ffc107;
+    /* Màu vàng */
+}
+
+.priority-button.priority-low {
+    background-color: #2196f3;
+    /* Màu xanh dương */
+}
+
+.time-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.time-label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.time-input {
+    width: 150px;
+    padding: 8px 12px;
+    font-size: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    color: #333;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.time-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
+.time-input:hover {
+    border-color: #aaa;
+}
+
+.color-tag{
+    width: 21px;
+    height: 21px;
+    background-color:#ccc;
+    display: block;
+    border-radius: 4px;
+}
+
+.tag-item{
+    padding: 5px 13px;
+    border-radius:5px;
+    background-color: #9a9494;
+    color: #fff;
+}
+
+
+
+
+/* TAg */
+
+
+.tag-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 5px;
+}
+
+.color-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    /* Bo tròn hoàn toàn */
+    margin-right: 8px;
+    border: 1px solid #d3d3d3;
+    /* Viền nhẹ quanh màu */
+}
+
+.tag-item:hover {
+    background-color: #f1f1f1;
+    /* Hiệu ứng khi hover */
+    cursor: pointer;
+}
+
+.tag-item span {
+    display: inline-block;
+    line-height: 1;
+}
+
+.color-indicator {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.btn-save {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.color-picker {
+    appearance: none;
+    /* Ẩn kiểu mặc định */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.color-picker:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.color-picker:focus {
+    outline: 2px solid #007bff;
+    box-shadow: 0 0 5px #007bff;
+}
+
+
+
+
+.selected-tags-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.color-indicator {
+    border: 1px solid #ccc;
+}
+
+.selected-tags-list li {
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.selected-tags-list li:hover {
+    background-color: var(--surface-hover);
+
+}
+.icon-create-job{
+    border: 1px dashed  #ccc;
+    border-radius: 50%;
+    padding: 4px;
+}
+.item-job{
+    margin: 5px 0px;
+    border: 1px solid #ccc;
+    padding: 5px 5px;
+    border-radius: 5px;
+}
+.infor-job{
+    max-height: 500px;
+    overflow-y: auto;
+}
+.text-job-item{
+    margin-left: 5px;
+    max-width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+}

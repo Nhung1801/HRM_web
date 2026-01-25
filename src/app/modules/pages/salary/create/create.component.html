@@ -1,0 +1,164 @@
+<p-dialog
+    [(visible)]="displayDialog"
+    header="Thêm bảng lương"
+    [modal]="true"
+    [style]="{ width: '800px' }"
+    [closable]="true"
+    (onHide)="closeDialogAdd()"
+>
+    <form [formGroup]="salaryForm">
+        <div class="p-fluid">
+            <div class="p-field">
+                <label class="labelip" for="treeData"
+                    >Đơn vị <span class="red-asterisk">*</span></label
+                >
+                <p-treeSelect
+                    [options]="treeData"
+                    formControlName="organizationId"
+                    [placeholder]="'Chọn đơn vị'"
+                    [showClear]="true"
+                    [style]="{ width: '100%' }"
+                    [filter]="true"
+                    filterPlaceholder="Tìm kiếm"
+                    (onNodeSelect)="onOrganizationChange($event)"
+                ></p-treeSelect>
+                <app-validation-message
+                    [form]="salaryForm"
+                    [messages]="validationMessages"
+                    field="organizationId"
+                ></app-validation-message>
+            </div>
+
+            <div class="p-field mt-3">
+                <label class="labelip" for="summaryTimesheetNameStaffPositions"
+                    >Vị trí <span class="red-asterisk">*</span></label
+                >
+                <p-multiSelect
+                    class="custom-multiselect"
+                    [options]="staffPosition"
+                    formControlName="salaryTableNameStaffPositions"
+                    placeholder="Chọn vị trí"
+                    optionLabel="name"
+                    display="chip"
+                    [showClear]="true"
+                    [style]="{ width: '100%' }"
+                    (onChange)="onStaffPositionChange($event)"
+                >
+                </p-multiSelect>
+                <app-validation-message
+                    [form]="salaryForm"
+                    [messages]="validationMessages"
+                    field="staffPositionId"
+                ></app-validation-message>
+            </div>
+
+            <div class="p-field mt-3">
+                <label class="labelip" for="value"
+                    >Tên bảng tổng hợp
+                    <span class="red-asterisk">*</span></label
+                >
+                <input
+                    pInputText
+                    type="text"
+                    formControlName="summaryTableName"
+                    placeholder="Nhập thông tin"
+                />
+                <app-validation-message
+                    [form]="salaryForm"
+                    [messages]="validationMessages"
+                    field="summaryTableName"
+                ></app-validation-message>
+            </div>
+
+            <div class="p-field mt-3">
+                <label class="labelip" for="timekeepingMethod"
+                    >Tổng hợp từ<span class="red-asterisk">*</span></label
+                >
+                <p-table
+                    [value]="summaryTimesheets"
+                    [paginator]="true"
+                    [rows]="10"
+                    [(selection)]="selectedSummaryTimesheets"
+                    [responsiveLayout]="'scroll'"
+                    [scrollable]="true"
+                    [scrollHeight]="'180px'"
+                >
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width: 1%">
+                                <p-tableHeaderCheckbox />
+                            </th>
+                            <th style="width: 10%">Tên bảng chấm công</th>
+                            <th style="width: 5%">Thời gian</th>
+                            <th style="width: 10%">Chấm công</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template
+                        pTemplate="body"
+                        let-item
+                        let-rowIndex="rowIndex"
+                    >
+                        <tr>
+                            <td>
+                                <p-tableCheckbox [value]="item" />
+                            </td>
+                            <td>{{ item?.name }}</td>
+                            <td>
+                                {{ item?.startDate | date : "dd/MM/yyyy" }} -
+                                {{ item?.endDate | date : "dd/MM/yyyy" }}
+                            </td>
+                            <td>{{ item?.timekeepingMethod }}</td>
+                            <!-- <td>
+                                <span *ngIf="item.positionNames.length <= 100">
+                                    {{ item.positionNames }}
+                                </span>
+                                <span *ngIf="item.positionNames.length > 100">
+                                    <span *ngIf="!expandedRows[rowIndex]">
+                                        {{
+                                            item.positionNames | slice : 0 : 100
+                                        }}
+                                        ...
+                                        <a
+                                            href="#"
+                                            (click)="
+                                                toggleRow(rowIndex, $event)
+                                            "
+                                            >Xem thêm</a
+                                        >
+                                    </span>
+                                    <span *ngIf="expandedRows[rowIndex]">
+                                        {{ item.positionNames }}
+                                        <a
+                                            href="#"
+                                            (click)="
+                                                toggleRow(rowIndex, $event)
+                                            "
+                                            >Ẩn bớt</a
+                                        >
+                                    </span>
+                                </span>
+                            </td> -->
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </form>
+
+    <p-footer>
+        <button
+            pButton
+            label="Hủy"
+            class="p-button-secondary"
+            (click)="closeDialogAdd()"
+        ></button>
+
+        <button
+            style="margin-left: 10px"
+            pButton
+            (click)="handleCreateSalary()"
+            label="Lưu"
+            class="p-button-primary"
+        ></button>
+    </p-footer>
+</p-dialog>

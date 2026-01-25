@@ -1,0 +1,87 @@
+<main id="main" class="main">
+  <div class="pagetitle">
+  </div>
+  <!-- <div class="toast-container">
+    <p-messages [(value)]="messages" [enableService]="false"
+      [closable]="false"></p-messages>
+  </div> -->
+  <!-- End Page Title -->
+  <section class="section k-list-table">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card-body">
+          <div class="card mt-3">
+            <div class="header-container d-flex align-items-center justify-content-between">
+              <!-- Left Section -->
+              <div class="left-section">
+                <span class="title">Bảng</span>
+                <span class="title">Lịch</span>
+                <hr class="underline" />
+              </div>
+            
+              <!-- Right Section -->
+              <div class="right-section d-flex align-items-center">
+                <button class="add-filter-btn">+ Add filter</button>
+                <div class="statistics ms-3">
+                  <span>Thống kê: <strong>67 công việc</strong>.</span>
+                  <span>Hoàn thành: <strong>34 công việc</strong>.</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="month">
+              <div class="current-month-main">
+                <i class="pi pi-angle-left nav-button " (click)="prevMonth()"></i>
+                <i class="pi pi-angle-right nav-button " (click)="nextMonth()"></i>
+                <span class="current-month">{{ getMonthName(currentMonth) }}, {{ currentYear }}</span>
+              </div>
+              <div class="container-month">
+                <div class="today">Hôm nay</div>
+                <div class="tabs">
+                  <button [class.active]="selectedTab === 'week'" (click)="selectTab('week')">Tuần</button>
+                  <button [class.active]="selectedTab === 'month'" (click)="selectTab('month')">Tháng</button>
+                </div>
+                <div class="more">...</div>
+              </div>              
+            </div>
+            <p-table [value]="weeks" [responsiveLayout]="'scroll'" class="calendar-table">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th *ngFor="let day of ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ nhật']">
+                    {{ day }}
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-week>
+                <tr>
+                  <td 
+                    *ngFor="let day of week" 
+                    [ngClass]="{'current-month': day.isCurrentMonth, 'other-month': !day.isCurrentMonth}"
+                    [style.height.px]="calculateCellHeight(day.tasks)">
+                    <span style="font-size: 13px;" *ngIf="day.isCurrentMonth">{{ day.date.getDate() }}</span>
+                    <div *ngIf="day.isCurrentMonth && day.tasks.length > 0">
+                      <div 
+                        *ngFor="let task of day.tasks" 
+                        class="task-duration" 
+                        [style.width.px]="task.width">
+                        {{ task.name }}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <!---->
+  </section>
+</main>
+
+
+
+
+
+

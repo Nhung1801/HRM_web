@@ -1,0 +1,1163 @@
+<div class="grid">
+    <div class="col-12">
+        <p-toolbar styleClass="mb-2">
+            <div>
+                <strong class="font-size-16">Thành phần lương</strong>
+                <p-breadcrumb></p-breadcrumb>
+            </div>
+            <div class="btn-add-wrapper">
+                <!-- <button
+                    class="list-default-salary"
+                    pButton
+                    pRipple
+                    label="Danh mục hệ thống"
+                    (click)="showDialog2()"
+                >
+                    <i class="pi pi-pencil"></i>
+                </button> -->
+                <!-- *ngIf="hasPermissionHelper.hasPermissions([
+                    permisstion.ManageSalaryComponentsView
+                ])" -->
+                <button
+                    *ngIf="
+                        this.permisionHelper.hasPermissions([
+                            permissionConstant.ManageSalaryComponentsCreate
+                        ])
+                    "
+                    pButton
+                    pRipple
+                    label="Thêm mới"
+                    style="height: 40px; width: 130px; border-radius: 10px"
+                    (click)="showDialog2()"
+                ></button>
+            </div>
+        </p-toolbar>
+        <div class="card">
+            <div class="flex justify-content-between">
+                <!--  input search -->
+                <div class="">
+                    <span
+                        class="block mt-2 md:mt-0 p-input-icon-left"
+                        style="width: 320px"
+                    >
+                        <p-autoComplete
+                            containerStyleClass="w-full"
+                            [(ngModel)]="textSearch"
+                            [suggestions]="suggestions"
+                            (completeMethod)="searchAutoComplete($event)"
+                            (onSelect)="onSelectSuggestion($event)"
+                            (ngModelChange)="onChangeHandler($event)"
+                            field="display"
+                            placeholder="Tìm kiếm theo thành phần, tên thành phần"
+                            showClear="true"
+                        >
+                        </p-autoComplete>
+                    </span>
+                </div>
+                <div class="flex">
+                    <!--  trạng thái tài khoản -->
+                    <p-dropdown
+                        [options]="optionAccountStatus"
+                        [(ngModel)]="selectedAccountStatus"
+                        optionLabel="name"
+                        placeholder="Trạng thái"
+                        [showClear]="true"
+                        [style]="{ width: '250px' }"
+                    ></p-dropdown>
+
+                    <!--  chọn đơn vị -->
+                    <div class="ml-2 select-tree" style="width: 300px">
+                        <p-treeSelect
+                            class="md:w-20rem w-full"
+                            containerStyleClass="w-full"
+                            [(ngModel)]="organizatioParentSelect1"
+                            [options]="nodes"
+                            placeholder="Chọn đơn vị"
+                            [showClear]="true"
+                            (onChange)="onParentUnitChangeSearch($event)"
+                        />
+                    </div>
+                    <div
+                        class="p-10 rounded border icon-settings cursor-pointer"
+                        style="position: relative"
+                    >
+                        <i
+                            (click)="openDialog('right')"
+                            class="pi pi-spin pi-cog"
+                            style="font-size: 1rem"
+                        ></i>
+
+                        <p-dialog
+                            header="Tùy chỉnh cột"
+                            [(visible)]="visible1"
+                            class="custom-dialog"
+                            [baseZIndex]="1000"
+                            [dismissableMask]="true"
+                            [position]="position"
+                        >
+                            <span class="block p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input
+                                    pInputText
+                                    type="text"
+                                    placeholder="Tìm kiếm"
+                                    [(ngModel)]="searchText"
+                                    (input)="onSearch()"
+                                    [style]="{ paddingLeft: '30px' }"
+                                />
+                            </span>
+
+                            <div class="content-scroll">
+                                <div
+                                    class="flex align-items-center gap-3 mb-3 mt-3"
+                                    *ngFor="let pr of filteredListheaderTable"
+                                >
+                                    <label for="username" class="font-semibold">
+                                        <p-checkbox
+                                            [(ngModel)]="pr.status"
+                                            [binary]="true"
+                                            inputId="binary"
+                                        />
+                                    </label>
+                                    <span
+                                        class="d-flex justify-content-between"
+                                        >{{ pr.name }}</span
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="p-dialog-footer">
+                                <p-button
+                                    (click)="resetDefaults()"
+                                    label="Mặc định"
+                                    [style]="{
+                                        color: 'white',
+                                        backgroundColor: '#ccc',
+                                        borderColor: '#ccc',
+                                        marginRight: '5px'
+                                    }"
+                                />
+                                <p-button
+                                    (click)="applyChanges()"
+                                    label="Áp dụng"
+                                />
+                            </div>
+                        </p-dialog>
+                    </div>
+                    <div class="flex justify-content-center">
+                        <p-button class="ml-2" (click)="search()" label="Lọc" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-section" style="margin-top: 20px">
+                <div class="table-wrapper">
+                    <p-table
+                        responsiveLayout="scroll"
+                        styleClass="p-datatable-striped"
+                        [rowHover]="true"
+                        [paginator]="false"
+                        [value]="listAllEmployee"
+                        [ngStyle]="{
+                            width: 'auto',
+                            'overflow-x': 'auto',
+                            'table-layout': 'auto'
+                        }"
+                    >
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th class="sticky-column">
+                                    <p-checkbox
+                                        [(ngModel)]="checked"
+                                        [binary]="true"
+                                        inputId="binary"
+                                        (onChange)="onSelectAllChange()"
+                                    />
+                                </th>
+                                <th
+                                    [hidden]="!listable[0].status"
+                                    class="text-center sticky-column"
+                                    [style]="{ minWidth: '200px' }"
+                                >
+                                    Mã thành phần
+                                </th>
+                                <th
+                                    [hidden]="!listable[1].status"
+                                    class="text-center sticky-column"
+                                    [style]="{ minWidth: '200px' }"
+                                >
+                                    Tên thành phần
+                                </th>
+                                <th
+                                    [hidden]="!listable[2].status"
+                                    class="text-center"
+                                    [style]="{ minWidth: '300px' }"
+                                >
+                                    Đơn vị áp dụng
+                                </th>
+                                <th
+                                    [hidden]="!listable[3].status"
+                                    class="text-center"
+                                    [style]="{ minWidth: '200px' }"
+                                >
+                                    Mô tả
+                                </th>
+                                <th
+                                    [hidden]="!listable[4].status"
+                                    class="text-center"
+                                    [style]="{ minWidth: '200px' }"
+                                >
+                                    Giá trị
+                                </th>
+                                <th
+                                    [hidden]="!listable[5].status"
+                                    class="text-center"
+                                    [style]="{ minWidth: '200px' }"
+                                >
+                                    Thuộc tính
+                                </th>
+                                <th
+                                    [hidden]="!listable[6].status"
+                                    class="text-center"
+                                    [style]="{ minWidth: '200px' }"
+                                >
+                                    Tính chất
+                                </th>
+                                <th
+                                    [hidden]="!listable[7].status"
+                                    class="text-center"
+                                    [style]="{ minWidth: '200px' }"
+                                >
+                                    Trạng thái
+                                </th>
+
+                                <th
+                                    class="text-center"
+                                    [style]="{ minWidth: '150px' }"
+                                >
+                                    Hành động
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template
+                            pTemplate="body"
+                            let-rowData
+                            let-i="rowIndex"
+                        >
+                            <tr style="cursor: pointer">
+                                <td class="sticky-column">
+                                    <p-checkbox
+                                        [(ngModel)]="rowData.checked"
+                                        [binary]="true"
+                                        inputId="binary{{ i }}"
+                                        (onChange)="onCheckboxChange()"
+                                    />
+                                </td>
+                                <td
+                                    class="min-w-200 text-center sticky-column"
+                                    [hidden]="!listable[0].status"
+                                >
+                                    {{ rowData?.componentCode }}
+                                </td>
+                                <td
+                                    class="min-w-200 text-center sticky-column"
+                                    [hidden]="!listable[1].status"
+                                >
+                                    {{ rowData?.componentName }}
+                                </td>
+                                <td
+                                    class="text-center"
+                                    [hidden]="!listable[2].status"
+                                >
+                                    {{ rowData?.organizationName }}
+                                </td>
+
+                                <td
+                                    class="text-center"
+                                    [hidden]="!listable[3].status"
+                                >
+                                    {{ rowData?.description }}
+                                </td>
+                                <td
+                                    class="text-center"
+                                    [hidden]="!listable[4].status"
+                                >
+                                    <ng-container
+                                        *ngIf="
+                                            isNumber(rowData?.valueFormula);
+                                            else nonNumber
+                                        "
+                                    >
+                                        {{
+                                            rowData?.valueFormula
+                                                | number : "1.3-3"
+                                        }}
+                                        <!-- <span
+                                            *ngIf="
+                                                rowData?.valueFormula != '' &&
+                                                rowData?.valueFormula !=
+                                                    undefined
+                                            "
+                                            >đ</span
+                                        > -->
+                                    </ng-container>
+                                    <ng-template #nonNumber>
+                                        {{ rowData?.valueFormula }}
+                                    </ng-template>
+                                </td>
+
+                                <td
+                                    class="text-center"
+                                    [hidden]="!listable[5].status"
+                                >
+                                    {{
+                                        getNature(rowData?.characteristic).text
+                                    }}
+                                </td>
+                                <td
+                                    class="text-center"
+                                    [hidden]="!listable[6].status"
+                                >
+                                    {{ getCharater(rowData?.nature).text }}
+                                </td>
+                                <td
+                                    class="text-center"
+                                    [hidden]="!listable[7].status"
+                                >
+                                    <span
+                                        class="work-status-span"
+                                        [ngStyle]="{
+                                            color: getStatus(rowData?.status)
+                                                .color,
+                                            'background-color': getStatus(
+                                                rowData?.status
+                                            ).bgColor
+                                        }"
+                                    >
+                                        {{ getStatus(rowData?.status).text }}
+                                    </span>
+                                </td>
+
+                                <td
+                                    class="text-center cursor-pointer position-relative"
+                                >
+                                    <div
+                                        class="d-flex justify-content-center align-items-center"
+
+                                    >
+                                        <ng-container
+                                            *ngIf="
+                                                isStattusCharacter(
+                                                    rowData?.characteristic
+                                                );
+                                                else noData
+                                            "
+                                        >
+                                            <!-- <i
+                                                *ngIf="rowData?.status == 0"
+                                                class="bi bi-dash-circle dash-circle"
+                                            ></i>
+                                            <i
+                                                class="pi pi-file-edit icon-edit"
+                                            ></i>
+                                            <i
+                                                class="pi pi-trash icon-delete"
+                                            ></i> -->
+                                            <i
+                                                *ngIf="
+                                                    this.permisionHelper.hasPermissions(
+                                                        [
+                                                            permissionConstant.ManageSalaryComponentsEdit
+                                                        ]
+                                                    ) && rowData?.status === 0
+                                                "
+                                                (click)="
+                                                    showdialogStatus(rowData)
+                                                "
+                                                class="bi bi-dash-circle dash-circle"
+                                            ></i>
+                                            <i
+                                                *ngIf="
+                                                    this.permisionHelper.hasPermissions(
+                                                        [
+                                                            permissionConstant.ManageSalaryComponentsEdit
+                                                        ]
+                                                    )
+                                                    && rowData?.status === 1
+                                                "
+                                                (click)="
+                                                    showdialogStatus(rowData)
+                                                "
+                                                class="pi pi-check-circle"
+                                                style="color: green"
+                                            ></i>
+                                            <i
+                                                *ngIf="
+                                                    this.permisionHelper.hasPermissions(
+                                                        [
+                                                            permissionConstant.ManageSalaryComponentsEdit
+                                                        ]
+                                                    )
+                                                "
+                                                (click)="
+                                                    showDialogUpdate(rowData.id)
+                                                "
+                                                class="pi pi-file-edit icon-edit"
+                                            ></i>
+                                            <i
+                                                *ngIf="
+                                                    this.permisionHelper.hasPermissions(
+                                                        [
+                                                            permissionConstant.ManageSalaryComponentsDelete
+                                                        ]
+                                                    )
+                                                "
+                                                (click)="
+                                                    openDeleteDialog(rowData)
+                                                "
+                                                class="pi pi-trash icon-delete"
+                                            ></i>
+                                        </ng-container>
+                                        <ng-template #noData>
+                                            <i
+                                                *ngIf="
+                                                    this.permisionHelper.hasPermissions(
+                                                        [
+                                                            permissionConstant.ManageSalaryComponentsEdit
+                                                        ]
+                                                    ) && rowData?.status === 0
+                                                "
+                                                (click)="
+                                                    showdialogStatus(rowData)
+                                                "
+                                                class="bi bi-dash-circle dash-circle"
+                                            ></i>
+                                            <i
+                                                *ngIf="
+                                                    this.permisionHelper.hasPermissions(
+                                                        [
+                                                            permissionConstant.ManageSalaryComponentsEdit
+                                                        ]
+                                                    ) && rowData?.status === 1
+                                                "
+                                                (click)="
+                                                    showdialogStatus(rowData)
+                                                "
+                                                class="pi pi-check-circle"
+                                                style="color: green"
+                                            ></i>
+                                            <i
+                                                *ngIf="
+                                                    this.permisionHelper.hasPermissions(
+                                                        [
+                                                            permissionConstant.ManageSalaryComponentsEdit
+                                                        ]
+                                                    )
+                                                "
+                                                (click)="
+                                                    showDialogUpdate(rowData.id)
+                                                "
+                                                class="pi pi-file-edit icon-edit"
+                                            ></i>
+                                            <i
+                                                *ngIf="
+                                                    this.permisionHelper.hasPermissions(
+                                                        [
+                                                            permissionConstant.ManageSalaryComponentsDelete
+                                                        ]
+                                                    )
+                                                "
+                                                (click)="
+                                                    openDeleteDialog(rowData)
+                                                "
+                                                class="pi pi-trash icon-delete"
+                                            ></i>
+                                        </ng-template>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="empty">
+                            <tbody>
+                                <tr>
+                                    <td colspan="8" class="text-center">
+                                        Không có dữ liệu
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </ng-template>
+                    </p-table>
+                </div>
+
+                <div>
+                    <div
+                        class="flex justify-content-between"
+                        *ngIf="totalItems > 0"
+                    >
+                        <div class="paging-info">
+                            <p [innerHTML]="currentPageReport"></p>
+                        </div>
+                        <p-paginator
+                            [rows]="pageSize"
+                            [totalRecords]="totalItems"
+                            [rowsPerPageOptions]="[10, 20, 30]"
+                            (onPageChange)="onPageChange($event)"
+                            (onRowsPerPageChange)="onPageSizeChange($event)"
+                            [first]="(pageIndex - 1) * pageSize"
+                            [pageLinkSize]="3"
+                        ></p-paginator>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- thêm -->
+<p-dialog
+    header="Thêm thành phần lương"
+    [modal]="true"
+    [(visible)]="dialogVisible"
+    [style]="{ width: '550px' }"
+    (onHide)="hadleResetCreate()"
+>
+    <form [formGroup]="createForm" (ngSubmit)="handleCreate()">
+        <div class="">
+            <!-- Tên thành phần -->
+            <div class="row align-items-center mb-3">
+                <div class="col-md-4">
+                    <label for="position"
+                        >Tên thành phần<span class="text-danger">*</span></label
+                    >
+                </div>
+                <div class="col-md-8">
+                    <input
+                        type="text"
+                        pInputText
+                        [style]="{
+                            width: '340px'
+                        }"
+                        formControlName="nameSalary"
+                        placeholder="Nhập tên thành phần"
+                        (input)="onNameInput($event.target.value)"
+                    />
+                    <div
+                        *ngIf="
+                            createForm.get('nameSalary')?.invalid &&
+                            createForm.get('nameSalary')?.touched
+                        "
+                    >
+                        <span [ngStyle]="{ color: 'red' }">
+                            Vui lòng nhập đầy đủ tên thành phần
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <!-- Mã thành phần -->
+            <div class="row align-items-center mb-3">
+                <div class="col-md-4">
+                    <label for="position"
+                        >Mã thành phần<span class="text-danger">*</span></label
+                    >
+                </div>
+                <div class="col-md-8">
+                    <input
+                        type="text"
+                        pInputText
+                        [style]="{
+                            width: '340px'
+                        }"
+                        placeholder="Nhập mã thành phần"
+                        formControlName="codeSalary"
+                        readonly
+                    />
+                </div>
+            </div>
+            <!--  Đơn vị -->
+
+            <div class="row align-items-center mb-3">
+                <div class="col-md-4">
+                    <label for="organization">
+                        Đơn vị áp dụng <span class="text-danger">*</span>
+                    </label>
+                </div>
+                <div class="col-md-8">
+                    <p-treeSelect
+                        containerStyleClass="w-full"
+                        [options]="nodes"
+                        placeholder="Chọn đơn vị"
+                        [showClear]="true"
+                        (onClear)="validateParentUnit()"
+                        (onChange)="onParentUnitChange($event)"
+                        [style]="{
+                            width: '340px',
+                            'margin-right': '10px'
+                        }"
+                        formControlName="origanoSalary"
+                    ></p-treeSelect>
+                    <div
+                        *ngIf="
+                            createForm.get('origanoSalary')?.invalid &&
+                            createForm.get('origanoSalary')?.touched
+                        "
+                        class="text-danger mt-1"
+                        style="font-size: 12px"
+                    >
+                        Vui lòng chọn đơn vị
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vị trí công việc -->
+            <div class="row align-items-center mb-3">
+                <div class="col-md-4">
+                    <label for="position"
+                        >Tính chất<span class="text-danger">*</span></label
+                    >
+                </div>
+                <div class="col-md-8">
+                    <p-dropdown
+                        containerStyleClass="w-full"
+                        [options]="listProperty"
+                        optionLabel="name"
+                        placeholder="Tính chất"
+                        [showClear]="true"
+                        [style]="{
+                            width: '160px'
+                        }"
+                        formControlName="nature"
+                    ></p-dropdown>
+                    <div
+                        *ngIf="
+                            createForm.get('nature')?.invalid &&
+                            createForm.get('nature')?.touched
+                        "
+                        class="text-danger mt-1"
+                        style="font-size: 12px"
+                    >
+                        Vui lòng chọn tính chất
+                    </div>
+                </div>
+            </div>
+            <!-- Vị trí công việc -->
+            <div class="row align-items-center mb-3">
+                <div class="col-md-4">
+                    <label for="position"
+                        >Thuộc tính<span class="text-danger">*</span></label
+                    >
+                </div>
+                <div class="col-md-8">
+                    <p-dropdown
+                        containerStyleClass="w-full"
+                        [options]="listAttribute"
+                        optionLabel="name"
+                        placeholder="Thuộc tính"
+                        [showClear]="true"
+                        [style]="{
+                            width: '160px'
+                        }"
+                        formControlName="characteristic"
+                    ></p-dropdown>
+                    <div
+                        *ngIf="
+                            createForm.get('characteristic')?.invalid &&
+                            createForm.get('characteristic')?.touched
+                        "
+                        class="text-danger mt-1"
+                        style="font-size: 12px"
+                    >
+                        Vui lòng chọn thuộc tính
+                    </div>
+                </div>
+            </div>
+
+            <!-- giá trị -->
+            <div class="row align-items-center mb-3">
+                <div class="col-md-4">
+                    <label for="position">giá trị</label>
+                </div>
+                <div class="col-md-8 input-value">
+                    <textarea
+                        rows="3"
+                        cols="5"
+                        pInputTextarea
+                        placeholder="Nhập giá trị"
+                        [style]="{
+                            width: '340px'
+                        }"
+                        formControlName="valueSalary"
+                        (input)="onInputCreate($event)"
+                        (keydown)="onKeyDown($event)"
+                    ></textarea>
+
+                    <div
+                        class="listValueSalary"
+                        *ngIf="filteredList.length > 0"
+                        (mouseleave)="hideList()"
+                    >
+                        <div class="d-flex list_title_value">
+                            <span
+                                class="title_value"
+                                [class.title_value_click]="
+                                    activeTab === 'formula'
+                                "
+                                (click)="clicksetActiveTab('formula')"
+                                >Công thức</span
+                            >
+                            <span
+                                class="title_value"
+                                [class.title_value_click]="
+                                    activeTab === 'parameter'
+                                "
+                                (click)="clicksetActiveTab('parameter')"
+                                >Tham số</span
+                            >
+                        </div>
+                        <div class="list_value_salary">
+                            <!--  công thức -->
+                            <div
+                                class="list_value_salary-1"
+                                *ngIf="activeTab === 'formula'"
+                            >
+                                <ul class="list_value_math">
+                                    <li
+                                        (click)="onClickItemli(item.name)"
+                                        class="item_value_math"
+                                        *ngFor="let item of filteredList"
+                                    >
+                                        <span>{{ item.name }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div
+                                class="list_value_salary-2"
+                                *ngIf="activeTab === 'parameter'"
+                            >
+                                <ul class="list_value_data">
+                                    <li
+                                        (click)="onClickItemli(item.name)"
+                                        class="item_value_data"
+                                        *ngFor="let item of filteredList"
+                                    >
+                                        <span>{{ item?.name }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Mô tả -->
+            <div class="row align-items-center mb-3">
+                <div class="col-md-4">
+                    <label for="position">Mô tả</label>
+                </div>
+                <div class="col-md-8">
+                    <textarea
+                        rows="3"
+                        cols="10"
+                        pInputTextarea
+                        placeholder="Nhập mô tả"
+                        [style]="{
+                            width: '340px'
+                        }"
+                        formControlName="descriptionSalary"
+                    ></textarea>
+                </div>
+            </div>
+
+            <div class="" style="display: flex; justify-content: end">
+                <span
+                    (click)="hadleResetCreate()"
+                    style="
+                        padding: 10px 10px;
+                        background-color: #fff;
+                        color: #000;
+                        border-radius: 6px;
+                        border: 1px solid #ccc;
+                        margin-right: 3px;
+                        cursor: pointer;
+                    "
+                    >Hủy</span
+                >
+                <p-button
+                    [disabled]="createForm.invalid"
+                    type="submit"
+                    label="Thêm"
+                />
+            </div>
+        </div>
+    </form>
+</p-dialog>
+<!-- sửa -->
+<p-dialog
+    header="Cập nhật thành phần lương"
+    [modal]="true"
+    [(visible)]="updateDialog"
+    [style]="{ width: '550px' }"
+    (onHide)="handleResetUpdate()"
+>
+    <form [formGroup]="updateForm" (ngSubmit)="handleUpdate()">
+        <div class="">
+            <!-- Tên thành phần -->
+            <div class="row align-items-center mb-3">
+                <div class="col-md-4">
+                    <label for="position"
+                        >Tên thành phần<span class="text-danger">*</span></label
+                    >
+                </div>
+                <div class="col-md-8">
+                    <input
+                        type="text"
+                        pInputText
+                        [style]="{
+                            width: '340px'
+                        }"
+                        formControlName="nameSalaryUpdate"
+                        placeholder="Nhập tên thành phần"
+                        (input)="onNameInputupdate($event.target.value)"
+                    />
+                    <div
+                        *ngIf="
+                            updateForm.get('nameSalaryUpdate')?.invalid &&
+                            updateForm.get('nameSalaryUpdate')?.touched
+                        "
+                    >
+                        <span [ngStyle]="{ color: 'red' }">
+                            Vui lòng nhập đầy đủ tên thành phần
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <!-- Mã thành phần -->
+            <div class="row align-items-center mb-3">
+                <div class="col-md-4">
+                    <label for="position"
+                        >Mã thành phần<span class="text-danger">*</span></label
+                    >
+                </div>
+                <div class="col-md-8">
+                    <input
+                        type="text"
+                        pInputText
+                        [style]="{
+                            width: '340px'
+                        }"
+                        placeholder="Nhập mã thành phần"
+                        formControlName="codeSalaryUpdate"
+                        readonly
+                    />
+                </div>
+            </div>
+            <!--  Đơn vị -->
+
+            <div class="row align-items-center mb-3">
+                <div class="col-md-4">
+                    <label for="organization">
+                        Đơn vị áp dụng <span class="text-danger">*</span>
+                    </label>
+                </div>
+                <div class="col-md-8">
+                    <p-treeSelect
+                        containerStyleClass="w-full"
+                        [options]="nodes"
+                        placeholder="Chọn đơn vị"
+                        [showClear]="true"
+                        (onClear)="validateParentUnit()"
+                        (onChange)="onParentUnitChange($event)"
+                        [style]="{
+                            width: '340px',
+                            'margin-right': '10px'
+                        }"
+                        formControlName="origanoSalaryUpdate"
+                    ></p-treeSelect>
+                    <div
+                        *ngIf="
+                            updateForm.get('origanoSalaryUpdate')?.invalid &&
+                            updateForm.get('origanoSalaryUpdate')?.touched
+                        "
+                        class="text-danger mt-1"
+                        style="font-size: 12px"
+                    >
+                        Vui lòng chọn đơn vị
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vị trí công việc -->
+            <div class="row align-items-center mb-3">
+                <div class="col-md-4">
+                    <label for="position"
+                        >Tính chất<span class="text-danger">*</span></label
+                    >
+                </div>
+                <div class="col-md-8">
+                    <p-dropdown
+                        containerStyleClass="w-full"
+                        [options]="listProperty"
+                        optionLabel="name"
+                        placeholder="Tính chất"
+                        optionValue="label"
+                        [showClear]="true"
+                        [style]="{
+                            width: '160px'
+                        }"
+                        formControlName="natureUpdate"
+                    ></p-dropdown>
+                    <div
+                        *ngIf="
+                            updateForm.get('natureUpdate')?.invalid &&
+                            updateForm.get('natureUpdate')?.touched
+                        "
+                        class="text-danger mt-1"
+                        style="font-size: 12px"
+                    >
+                        Vui lòng chọn tính chất
+                    </div>
+                </div>
+            </div>
+            <!-- Vị trí công việc -->
+            <div class="row align-items-center mb-3">
+                <div class="col-md-4">
+                    <label for="position"
+                        >Thuộc tính<span class="text-danger">*</span></label
+                    >
+                </div>
+                <div class="col-md-8">
+                    <p-dropdown
+                        containerStyleClass="w-full"
+                        [options]="listAttribute"
+                        optionLabel="name"
+                        optionValue="label"
+                        placeholder="Thuộc tính"
+                        [showClear]="true"
+                        [style]="{
+                            width: '160px'
+                        }"
+                        formControlName="characteristicUpdate"
+                    ></p-dropdown>
+                    <div
+                        *ngIf="
+                            updateForm.get('characteristicUpdate')?.invalid &&
+                            updateForm.get('characteristicUpdate')?.touched
+                        "
+                        class="text-danger mt-1"
+                        style="font-size: 12px"
+                    >
+                        Vui lòng chọn thuộc tính
+                    </div>
+                </div>
+            </div>
+
+            <!-- giá trị -->
+            <div class="row align-items-center mb-3">
+                <div class="col-md-4">
+                    <label for="position">giá trị</label>
+                </div>
+                <div class="col-md-8 input-value">
+                    <textarea
+                        rows="3"
+                        cols="5"
+                        pInputTextarea
+                        placeholder="Nhập giá trị"
+                        [style]="{
+                            width: '340px'
+                        }"
+                        formControlName="valueSalaryUpdate"
+                        (input)="onInputCreate($event)"
+                        (keydown)="onKeyDownUpdate($event)"
+                    ></textarea>
+
+                    <div
+                        class="listValueSalary"
+                        *ngIf="filteredList.length > 0"
+                        (mouseleave)="hideList()"
+                    >
+                        <div class="d-flex list_title_value">
+                            <span
+                                class="title_value"
+                                [class.title_value_click]="
+                                    activeTab === 'formula'
+                                "
+                                (click)="clicksetActiveTab('formula')"
+                                >Công thức</span
+                            >
+                            <span
+                                class="title_value"
+                                [class.title_value_click]="
+                                    activeTab === 'parameter'
+                                "
+                                (click)="clicksetActiveTab('parameter')"
+                                >Tham số</span
+                            >
+                        </div>
+                        <div class="list_value_salary">
+                            <!--  công thức -->
+                            <div
+                                class="list_value_salary-1"
+                                *ngIf="activeTab === 'formula'"
+                            >
+                                <ul class="list_value_math">
+                                    <li
+                                        (click)="onClickItemliUPadte(item.name)"
+                                        class="item_value_math"
+                                        *ngFor="let item of filteredList"
+                                    >
+                                        <span>{{ item.name }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div
+                                class="list_value_salary-2"
+                                *ngIf="activeTab === 'parameter'"
+                            >
+                                <ul class="list_value_data">
+                                    <li
+                                        (click)="onClickItemliUPadte(item.name)"
+                                        class="item_value_data"
+                                        *ngFor="let item of filteredList"
+                                    >
+                                        <span>{{ item?.name }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Mô tả -->
+            <div class="row align-items-center mb-3">
+                <div class="col-md-4">
+                    <label for="position">Mô tả</label>
+                </div>
+                <div class="col-md-8">
+                    <textarea
+                        rows="3"
+                        cols="10"
+                        pInputTextarea
+                        placeholder="Nhập mô tả"
+                        [style]="{
+                            width: '340px'
+                        }"
+                        formControlName="descriptionSalaryUpdate"
+                    ></textarea>
+                </div>
+            </div>
+
+            <div class="" style="display: flex; justify-content: end">
+                <span
+                    (click)="handleResetUpdate()"
+                    style="
+                        padding: 10px 10px;
+                        background-color: #fff;
+                        color: #000;
+                        border-radius: 6px;
+                        border: 1px solid #ccc;
+                        margin-right: 3px;
+                        cursor: pointer;
+                    "
+                    >Hủy</span
+                >
+                <p-button
+                    [disabled]="updateForm.invalid"
+                    type="submit"
+                    label="Cập nhật"
+                />
+            </div>
+        </div>
+    </form>
+</p-dialog>
+<!-- tắt theo dõi -->
+<p-dialog
+    header="Chuyển trạng thái thành phần lương"
+    [modal]="true"
+    [(visible)]="booleanStatus"
+    [style]="{ width: '25rem' }"
+    (onHide)="closeDialogstatus()"
+>
+    <p>
+        Bạn có chắc chắn muốn chuyển trạng thái của thành phần lương:
+        {{ nameSalaryresetStatus }}
+    </p>
+    <div class="flex justify-content-end gap-2">
+        <p-button
+            (click)="hadleUpdateStatus()"
+            label="Chuyển trạng thái"
+            class="btn-delete"
+            [style]="{
+                backgroundColor: 'red',
+                borderColor: 'red',
+                borderRadius: '5px !important'
+            }"
+        />
+        <p-button
+            (click)="closeDialogstatus()"
+            label="Hủy"
+            severity="secondary"
+            class="btn-cancel"
+            [style]="{
+                backgroundColor: '#2a2986',
+                borderColor: '#2a2986',
+                borderRadius: '5px !important',
+                color: 'white'
+            }"
+        />
+    </div>
+</p-dialog>
+<!-- dialog xóa -->
+<p-dialog
+    header="Thông báo"
+    [modal]="true"
+    [(visible)]="showdialogdelete"
+    [style]="{ width: '25rem' }"
+    (onHide)="closeDialogstatus()"
+>
+    <ng-container>
+        <p>
+            Bạn có chắc chắn muốn xóa thành phần lương: {{ namedeletesalary }}
+        </p>
+
+        <div class="flex justify-content-end gap-2">
+            <p-button
+                (click)="closeDeleteDialog()"
+                label="Hủy"
+                class="btn-delete"
+                [style]="{
+                    backgroundColor: 'red',
+                    borderColor: 'red',
+                    borderRadius: '5px !important'
+                }"
+            />
+            <p-button
+                (click)="hadleDelete()"
+                label="Chắc chắn"
+                severity="secondary"
+                class="btn-cancel"
+                [style]="{
+                    backgroundColor: '#2a2986',
+                    borderColor: '#2a2986',
+                    borderRadius: '5px !important',
+                    color: 'white'
+                }"
+            />
+        </div>
+    </ng-container>
+    <ng-template #noSalary>
+        <p>
+            Thành phần lương: {{ namedeletesalary }} đang được áp dụng không thể
+            xóa, hãy xóa bảng luong chi tiết đang áp dụng thành phần lương đó.
+        </p>
+        <p-button
+            (click)="closeDeleteDialog()"
+            label="Hủy"
+            class="btn-delete"
+            [style]="{
+                backgroundColor: 'red',
+                borderColor: 'red',
+                borderRadius: '5px !important'
+            }"
+        />
+    </ng-template>
+</p-dialog>

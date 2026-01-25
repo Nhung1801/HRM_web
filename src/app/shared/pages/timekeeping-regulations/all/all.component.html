@@ -1,0 +1,88 @@
+<form class="grid-container" [formGroup]="allForm" (ngSubmit)="onSubmit()" *ngIf="this.permission.hasPermissions([permissionConstant.ManageLeaveRegulationsView])">
+    <div class="d-flex justify-content-between">
+        <span>
+            <h3>Thiết lập quy định nghỉ trong công ty</h3>
+        </span>
+        <div style="margin-top: -60px;">
+            <p-button type="submit" label="Thiết lập" *ngIf="this.permission.hasPermissions([permissionConstant.ManageLeaveRegulationsCreate])"></p-button>
+            <p-button type="button" label="Xóa dữ liệu" class="ml-2" *ngIf="this.permission.hasPermissions([permissionConstant.ManageLeaveRegulationsDelete])" (click)="onCancel()"></p-button>
+        </div>
+    </div>
+
+    <div class="plus-date-one mt-3">            
+        <div>
+            <label>Cộng ngày cho phép nhân viên vào
+                <input class="time-input" formControlName="admissionDay" type="number" id="start-time"/> hằng tháng
+            </label>
+        </div>
+
+        <div class="plus-date-two mt-4">
+            <h6 style="font-weight: bold;">Số ngày phép được cộng hàng tháng</h6>
+            <div class="radiobutton mt-3">
+                <p-radioButton 
+                    [value]="0" 
+                    formControlName="monthlyLeaveAccrual" 
+                    label="Mỗi tháng được cộng một ngày phép">
+                </p-radioButton>
+            </div>
+            <div class="radiobutton mt-3">
+                <p-radioButton 
+                    [value]="1" 
+                    formControlName="monthlyLeaveAccrual" 
+                    label="Không cộng ngày phép hàng tháng">
+                </p-radioButton>
+            </div>
+        </div>
+
+        <div class="plus-date-three mt-4">
+            <h6 style="font-weight: bold;">Điểm bắt đầu tính phép</h6>
+            <div class="d-flex mt-3">
+                <p-radioButton 
+                    [value]="0" 
+                    formControlName="leaveCalculationStartPoint" 
+                    label="Thử việc">
+                </p-radioButton>
+                <p-radioButton 
+                    [value]="1" 
+                    formControlName="leaveCalculationStartPoint" 
+                    label="Chính thức" class="ml-4">
+                </p-radioButton>
+                <p-radioButton 
+                    [value]="2" 
+                    formControlName="leaveCalculationStartPoint" 
+                    label="Thâm niên" class="ml-4">
+                </p-radioButton>
+                <div>
+                    <input class="time-input-2 ml-4" formControlName="seniorityMonths" type="number" id="seniority-months"/>
+                    <label class="ml-2">Tháng kể từ ngày thử việc</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="plus-date-three mt-4">
+            <h6 style="font-weight: bold;">Tính phép cho tháng</h6>
+            <div class="radiobutton mt-3">
+                <p-radioButton 
+                    [value]="0" 
+                    formControlName="leaveCalculationForPartialMonth" 
+                    label="Nghỉ việc ngày bất kì trong tháng">
+                </p-radioButton>
+            </div>
+            <div class="d-flex mt-3">
+                <p-radioButton 
+                    [value]="1" 
+                    formControlName="leaveCalculationForPartialMonth" 
+                    label="Nghỉ việc sau hai ngày">
+                </p-radioButton>
+                <div>
+                    <input 
+                    class="time-input-3 ml-4" 
+                    formControlName="numberOfDaysOff" 
+                    type="number" 
+                    id="days-after-quit"
+                    [disabled]="allForm.get('leaveCalculationForPartialMonth')?.value !== 1"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

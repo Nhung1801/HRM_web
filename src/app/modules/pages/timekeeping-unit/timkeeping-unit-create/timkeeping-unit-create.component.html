@@ -1,0 +1,414 @@
+<main id="main" class="main">
+    <div class="pagetitle">
+        <div>
+            <h3>
+                <i
+                [routerLink]="['/timekeeping']" [queryParams]="{ page: 'tracking' }" 
+                    class="pi pi-arrow-left cursor-pointer"
+                ></i>
+                Thêm mới đơn vị
+            </h3>
+        </div>
+
+        <div class="btn-add-wrapper"></div>
+    </div>
+    <div class="toast-container"></div>
+    <!-- End Page Title -->
+    <section class="section k-list-table">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card-body">
+                    <div class="card">
+                        <div
+                            class="btn-footer"
+                            style="display: flex; justify-content: end"
+                        >
+                            <div class="">
+                                <p-button
+                                    (click)="handleCreate()"
+                                    type="submit"
+                                    label="Thêm"
+                                />
+                            </div>
+                            <span
+                            [routerLink]="['/timekeeping']" [queryParams]="{ page: 'tracking' }" 
+                                style="
+                                    padding: 10px 10px;
+                                    background-color: #fff;
+                                    color: #000;
+                                    border-radius: 6px;
+                                    border: 1px solid #ccc;
+                                    margin-left: 10px;
+                                    cursor: pointer;
+                                "
+                                >Hủy</span
+                            >
+                        </div>
+                        <h5>THÔNG TIN CHUNG</h5>
+                        <div class="">
+                            <div class="mb-10">
+                                
+                                <div class="">
+                                    <!-- Tên địa điểm -->
+                                    <form [formGroup]="createForm">
+                                         <div class="">
+
+                                             <div class="row mt-4">
+                                                 <label
+                                                     for="placeName"
+                                                     class="col-sm-3 col-form-label"
+                                                     >Đơn vị
+                                                     <span class="text-danger"
+                                                         >*</span
+                                                     ></label
+                                                 >
+                                                 <div class="col-sm-9">
+                                                     <div
+                                                         class=""
+                                                         style="width: 300px"
+                                                         (focusout)="
+                                                             handleTreeSelectFocusOut(
+                                                                 $event
+                                                             )
+                                                         "
+                                                     >
+                                                       
+                                                         <p-treeSelect
+                                                             class="w-full custom-tree-select w-full"
+                                                             containerStyleClass="w-full"
+                                                             formControlName="organizatioParentIdObject"
+                                                             [options]="nodes"
+                                                             placeholder="Chọn đơn vị"
+                                                             [showClear]="true"
+                                                             (onClear)="
+                                                                 validateParentUnit(
+                                                                     'isParentUnitInvalid',
+                                                                     organizatioParentIdObject
+                                                                 )
+                                                             "
+                                                             (onChange)="
+                                                                 onParentUnitChange(
+                                                                     $event,
+                                                                     'isParentUnitInvalid'
+                                                                 )
+                                                             "
+                                                             [style]="{
+                                                                 width: '300px',
+                                                                 marginRight: '10px'
+                                                             }"
+                                                             selectionMode="checkbox"
+                                                             [filter]="true"
+                                                             filterPlaceholder="Tìm kiếm đơn vị"
+                                                             [selectionMode]="'checkbox'"
+                                                         >
+                                                         </p-treeSelect>
+         
+                                                         <div
+                                                             *ngIf="isParentUnitInvalid"
+                                                             style="
+                                                                 color: red;
+                                                                 font-size: 12px;
+                                                             "
+                                                         >
+                                                             <span
+                                                                 >Vui lòng chọn đơn
+                                                                 vị</span
+                                                             >
+                                                         </div>
+                                                     </div>
+                                                     <!-- <div
+                                                             
+                                                             class="text-danger"
+                                                         >
+                                                             Tên địa điểm là bắt buộc.
+                                                         </div> -->
+                                                 </div>
+                                             </div>
+         
+                                             <div class="row mt-4">
+                                                 <label
+                                                     for="latitude"
+                                                     class="col-sm-3 col-form-label"
+                                                     >Địa điểm chấm công
+                                                     <span class="text-danger"
+                                                         >*</span
+                                                     ></label
+                                                 >
+                                                 <div class="col-sm-9">
+                                                     <div
+                                                         class="d-flex"
+                                                         (focusout)="
+                                                             handleTreeSelectFocusOut(
+                                                                 $event
+                                                             )
+                                                         "
+                                                     >
+                                                         <div
+                                                             *ngFor="
+                                                                 let category of listSelectTask
+                                                             "
+                                                             class="field-checkbox"
+                                                         >
+                                                             <p-radioButton
+                                                                 [inputId]="
+                                                                     category.value
+                                                                 "
+                                                                 [value]="category.value"
+                                                               
+                                                                   formControlName="statusLocation"
+                                                                 
+                                                             >
+                                                             </p-radioButton>
+                                                             <label
+                                                                 [for]="category.value"
+                                                                 class="ml-2"
+                                                             >
+                                                                 {{ category.label }}
+                                                             </label>
+                                                         </div>
+                                                     </div>
+         
+                                                     <p-dropdown
+                                                         *ngIf="isFixedLocation()"
+                                                         [options]="listLocation"
+                                                         formControlName="idLocation"
+                                                         class="dropdown-locaion"
+                                                         optionLabel="name"
+                                                         placeholder="Chọn địa điểm chấm công"
+                                                         [style]="{
+                                                             width: '300px',
+                                                             height: '45px'
+                                                         }"
+                                                         (onClear)="
+                                                             validateParentUnit(
+                                                                 'isParentUnitInvalid1',
+                                                                 idLocation
+                                                             )
+                                                         "
+                                                         (onChange)="
+                                                             onParentUnitChange(
+                                                                 $event,
+                                                                 'isParentUnitInvalid1'
+                                                             )
+                                                         "
+                                                         [showClear]="true"
+                                                     />
+                                                     <div
+                                                     *ngIf="
+                                                         createForm.get(
+                                                             'idLocation'
+                                                         )?.invalid &&
+                                                         createForm.get(
+                                                             'idLocation'
+                                                         )?.touched
+                                                     "
+                                                     style="
+                                                         color: red;
+                                                         font-size: 12px;
+                                                     "
+                                                 >
+                                                     <span
+                                                         >Vui lòng chọn địa
+                                                         điểm chấm công
+                                                         vị</span
+                                                     >
+                                                 </div>
+                                                 </div>
+                                             </div>
+                                             <!--  phương thức chấm công -->
+                                             <!-- <div class="row mt-4">
+                                                 <label
+                                                     for="latitude"
+                                                     class="col-sm-3 col-form-label dropdown-method"
+                                                     >Phương thức chấm công
+                                                     <span class="text-danger"
+                                                         >*</span
+                                                     ></label
+                                                 >
+                                                 <div
+                                                     class="col-sm-9"
+                                                   
+                                                 >
+                                                     <p-dropdown
+                                                         [options]="methodkeeping"
+                                                         formControlName="methodStatus"
+                                                         class="dropdown-method"
+                                                         optionLabel="label"
+                                                         placeholder="Chọn phương thức chấm công"
+                                                         [style]="{
+                                                             width: '300px',
+                                                             height: '45px'
+                                                         }"
+                                                         (onClear)="
+                                                             validateParentUnit(
+                                                                 'isParentUnitInvalid2',
+                                                                 methodStatus
+                                                             )
+                                                         "
+                                                         (onChange)="
+                                                             onParentUnitChange(
+                                                                 $event,
+                                                                 'isParentUnitInvalid2'
+                                                             )
+                                                         "
+                                                         [showClear]="true"
+                                                     />
+                                                     <div
+                                                         *ngIf="isParentUnitInvalid2"
+                                                         style="
+                                                             color: red;
+                                                             font-size: 12px;
+                                                         "
+                                                     >
+                                                         <span
+                                                             >Vui lòng chọn phương thức
+                                                             chấm công
+                                                         </span>
+                                                     </div>
+                                                 </div>
+                                             </div> -->
+                                         </div>
+                                    </form>
+                                   
+                                        <div class="mt-10">
+                                            <p>
+                                                Yêu cầu xác thực bằng phương pháp
+                                                khác
+                                            </p>
+                                            <div
+                                                class="list-checked"
+                                                *ngFor="let lt of listSelected"
+                                            >
+                                                <span
+                                                    class="item-checked d-flex my-2"
+                                                >
+                                                    <p-checkbox />
+                                                    <p class="mx-3">
+                                                        {{ lt.label }}
+                                                    </p>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="mt-10">
+                                            <h5>Danh sách nhân viên áp dụng</h5>
+                                            <div
+                                                class="d-flex justify-content-between"
+                                            >
+                                                <div class="">
+                                                    <div
+                                                        *ngFor="
+                                                            let category of listSelectEmployee
+                                                        "
+                                                        class="field-checkbox"
+                                                    >
+                                                        <p-radioButton
+                                                            [inputId]="
+                                                                category.value
+                                                            "
+                                                            name="status"
+                                                            [value]="category.value"
+                                                            [(ngModel)]="
+                                                                statusEmployee
+                                                            "
+                                                        >
+                                                        </p-radioButton>
+                                                        <label
+                                                            [for]="category.value"
+                                                            class="ml-2"
+                                                        >
+                                                            {{ category.label }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <p-button
+                                                    type="submit"
+                                                    label="Thêm nhân viên"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                               
+                            </div>
+                        </div>
+                        <div class="table-section" style="margin-top: 20px">
+                            <p-table
+                                responsiveLayout="scroll"
+                                styleClass="p-datatable-striped"
+                                [rowHover]="true"
+                                [paginator]="false"
+                                [ngStyle]="{
+                                    width: 'auto',
+                                    'overflow-x': 'auto',
+                                    'table-layout': 'auto'
+                                }"
+                            >
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th>
+                                            <p-checkbox
+                                                [(ngModel)]="checked"
+                                                [binary]="true"
+                                                inputId="binary"
+                                                (onChange)="onSelectAllChange()"
+                                            />
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            [style]="{ minWidth: '200px' }"
+                                        >
+                                            Mã NV
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            [style]="{ minWidth: '200px' }"
+                                        >
+                                            Tên NV
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            [style]="{ minWidth: '200px' }"
+                                        >
+                                            Vị trí
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            [style]="{ minWidth: '200px' }"
+                                        >
+                                            Đơn vị
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template
+                                    pTemplate="body"
+                                    let-rowData
+                                    let-i="rowIndex"
+                                >
+                                    <tr style="cursor: pointer">
+                                        <td>
+                                            <p-checkbox
+                                                [(ngModel)]="rowData.checked"
+                                                [binary]="true"
+                                                inputId="binary{{ i }}"
+                                                (onChange)="onCheckboxChange()"
+                                            />
+                                        </td>
+                                    </tr>
+                                </ng-template>
+
+                                <ng-template pTemplate="empty">
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="8" class="text-center">
+                                                Không có dữ liệu
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

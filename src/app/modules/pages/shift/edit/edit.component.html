@@ -1,0 +1,729 @@
+<div class="grid">
+    <div class="col-12">
+        <p-toolbar styleClass="mb-2">
+            <div class="">
+                <strong class="font-size-16">Thiết lập ca</strong>
+                <p-breadcrumb
+                    [model]="items"
+                    [home]="{ icon: 'pi pi-home' }"
+                ></p-breadcrumb>
+            </div>
+            <ng-template pTemplate="right">
+                <!-- <button
+                    pButton
+                    pRipple
+                    icon="pi pi-plus"
+                    label="Thêm ca"
+                    (click)="startLoading()"
+                ></button> -->
+            </ng-template>
+        </p-toolbar>
+        <div class="card">
+            <form [formGroup]="shiftCreateForm" (ngSubmit)="onSubmit()">
+                <div class="flex flex-column mb-5">
+                    <h5>THÔNG TIN CHUNG</h5>
+                    <div class="grid p-fluid p-3">
+                        <!-- Tên ca -->
+                        <div class="col-12 md:col-12 p-0">
+                            <div class="field mb-0 flex align-items-center">
+                                <div class="col-12 mb-2 md:col-2 md:mb-0">
+                                    <label
+                                        style="font-weight: 600; color: #000"
+                                        htmlFor="phoneNumber"
+                                        >Tên ca<span class="red-asterisk"
+                                            >*</span
+                                        ></label
+                                    >
+                                </div>
+                                <div class="col-12 mb-2 md:col-9 md:mb-0">
+                                    <input
+                                        pInputText
+                                        id="phoneNumber"
+                                        type="text"
+                                        spellcheck="false"
+                                        formControlName="Name"
+                                        placeholder="Nhập tên ca"
+                                    />
+                                    <div
+                                        *ngIf="
+                                            shiftCreateForm.get('Name')
+                                                ?.invalid &&
+                                            (shiftCreateForm.get('Name')
+                                                ?.dirty ||
+                                                shiftCreateForm.get('Name')
+                                                    ?.touched)
+                                        "
+                                    >
+                                        <div
+                                            *ngIf="shiftCreateForm.get('Name')?.errors?.['required']"
+                                            class="error-message"
+                                        >
+                                            Vui lòng nhập tên ca
+                                        </div>
+                                        <div
+                                            *ngIf="!shiftCreateForm.get('Name')?.errors?.['required'] &&
+                                                shiftCreateForm.get('Name')?.errors?.['whitespace']"
+                                            class="error-message"
+                                        >
+                                            Tên không được chứa khoảng trắng
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Mã ca -->
+                        <div class="col-12 md:col-12 p-0">
+                            <div class="field mb-0 flex align-items-center">
+                                <div class="col-12 mb-2 md:col-2 md:mb-0">
+                                    <label
+                                        style="font-weight: 600; color: #000"
+                                        htmlFor="phoneNumber"
+                                        >Mã ca<span class="red-asterisk"
+                                            >*</span
+                                        ></label
+                                    >
+                                </div>
+                                <div class="col-12 mb-2 md:col-9 md:mb-0">
+                                    <input
+                                        pInputText
+                                        id="phoneNumber"
+                                        type="text"
+                                        spellcheck="false"
+                                        formControlName="Code"
+                                        placeholder="Nhập mã ca"
+                                    />
+                                    <div
+                                        *ngIf="
+                                            shiftCreateForm.get('Code')
+                                                ?.invalid &&
+                                            (shiftCreateForm.get('Code')
+                                                ?.dirty ||
+                                                shiftCreateForm.get('Code')
+                                                    ?.touched)
+                                        "
+                                    >
+                                        <div
+                                            *ngIf="shiftCreateForm.get('Code')?.errors?.['required']"
+                                            class="error-message"
+                                        >
+                                            Vui lòng nhập mã ca
+                                        </div>
+                                        <div
+                                            *ngIf="!shiftCreateForm.get('Code')?.errors?.['required'] &&
+                                                shiftCreateForm.get('Code')?.errors?.['whitespace']"
+                                            class="error-message"
+                                        >
+                                            Tên không được chứa khoảng trắng
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Giờ bắt đầu -->
+                        <div class="col-12 md:col-12 p-0">
+                            <div class="field mb-0 flex align-items-center">
+                                <div class="col-12 mb-2 md:col-2 md:mb-0">
+                                    <label
+                                        style="font-weight: 600; color: #000"
+                                        htmlFor="phoneNumber"
+                                        >Giờ bắt đầu<span class="red-asterisk"
+                                            >*</span
+                                        ></label
+                                    >
+                                </div>
+                                <div
+                                    class="col-12 mb-2 md:col-9 md:mb-0 flex gap-5"
+                                >
+                                    <div
+                                        class="field mb-0 flex align-items-center flex-column"
+                                    >
+                                        <input
+                                            class="time-input"
+                                            type="time"
+                                            formControlName="StartTime"
+                                            id="start-time"
+                                            value="08:00"
+                                        />
+                                        <div
+                                            *ngIf="
+                                                shiftCreateForm.get('StartTime')
+                                                    ?.invalid &&
+                                                (shiftCreateForm.get(
+                                                    'StartTime'
+                                                )?.dirty ||
+                                                    shiftCreateForm.get(
+                                                        'StartTime'
+                                                    )?.touched)
+                                            "
+                                        >
+                                            <div
+                                                *ngIf="shiftCreateForm.get('StartTime')?.errors?.['required']"
+                                                class="error-message"
+                                            >
+                                                Vui lòng nhập giờ vào
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="field mb-0 flex align-items-center gap-2"
+                                        style="width: 100px"
+                                    >
+                                        <p-checkbox
+                                            [binary]="true"
+                                            formControlName="IsTimeChecked"
+                                            inputId="binary"
+                                        ></p-checkbox>
+                                        <label class="mb-0">Chấm vào</label>
+                                    </div>
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <label class="mb-0 mr-3">Từ:</label>
+                                        <input
+                                            class="time-input"
+                                            type="time"
+                                            id="start-time"
+                                            formControlName="StartTimeIn"
+                                            value="08:00"
+                                        />
+                                    </div>
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <label class="mb-0 mr-3">Đến:</label>
+                                        <input
+                                            class="time-input"
+                                            type="time"
+                                            formControlName="EndTimeIn"
+                                            id="start-time"
+                                            value="08:00"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Giờ kết thúc -->
+                        <div class="col-12 md:col-12 p-0">
+                            <div class="field mb-0 flex align-items-center">
+                                <div class="col-12 mb-2 md:col-2 md:mb-0">
+                                    <label
+                                        style="font-weight: 600; color: #000"
+                                        htmlFor="phoneNumber"
+                                        >Giờ kết thúc<span class="red-asterisk"
+                                            >*</span
+                                        ></label
+                                    >
+                                </div>
+                                <div
+                                    class="col-12 mb-2 md:col-9 md:mb-0 flex gap-5"
+                                >
+                                    <div
+                                        class="field mb-0 flex align-items-center flex-column"
+                                    >
+                                        <input
+                                            class="time-input"
+                                            type="time"
+                                            id="start-time"
+                                            formControlName="EndTime"
+                                            value="08:00"
+                                        />
+                                        <div
+                                            *ngIf="
+                                                shiftCreateForm.get('EndTime')
+                                                    ?.invalid &&
+                                                (shiftCreateForm.get('EndTime')
+                                                    ?.dirty ||
+                                                    shiftCreateForm.get(
+                                                        'EndTime'
+                                                    )?.touched)
+                                            "
+                                        >
+                                            <div
+                                                *ngIf="shiftCreateForm.get('EndTime')?.errors?.['required']"
+                                                class="error-message"
+                                            >
+                                                Vui lòng nhập giờ ra
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="field mb-0 flex align-items-center gap-2"
+                                        style="width: 100px"
+                                    >
+                                        <p-checkbox
+                                            [binary]="true"
+                                            inputId="binary"
+                                            formControlName="IsBreak"
+                                        ></p-checkbox>
+                                        <label class="mb-0">Chấm ra</label>
+                                    </div>
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <label class="mb-0 mr-3">Từ:</label>
+                                        <input
+                                            class="time-input"
+                                            type="time"
+                                            formControlName="StartTimeOut"
+                                            id="start-time"
+                                            value="08:00"
+                                        />
+                                    </div>
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <label class="mb-0 mr-3">Đến:</label>
+                                        <input
+                                            class="time-input"
+                                            type="time"
+                                            formControlName="EndTimeOut"
+                                            id="start-time"
+                                            value="08:00"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Nghỉ giữa ca -->
+                        <div class="col-12 md:col-12 p-0">
+                            <div class="field mb-0 flex align-items-center">
+                                <div class="col-12 mb-2 md:col-2 md:mb-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center gap-2"
+                                        style="width: 100px"
+                                    >
+                                        <p-checkbox
+                                            [binary]="true"
+                                            formControlName="TakeABreak"
+                                            inputId="binary"
+                                        ></p-checkbox>
+                                        <span
+                                            class="mb-0"
+                                            style="white-space: nowrap"
+                                            >Nghỉ giữa ca</span
+                                        >
+                                    </div>
+                                </div>
+                                <div
+                                    class="col-12 mb-2 md:col-9 md:mb-0 flex gap-5"
+                                >
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <label
+                                            style="
+                                                font-weight: 600;
+                                                color: #000;
+                                            "
+                                            htmlFor="phoneNumber"
+                                            >Giờ bắt đầu<span
+                                                class="red-asterisk"
+                                                >*</span
+                                            ></label
+                                        >
+                                    </div>
+
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <input
+                                            class="time-input"
+                                            type="time"
+                                            formControlName="StartTakeABreak"
+                                            id="start-time"
+                                            value="08:00"
+                                        />
+                                    </div>
+
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <label
+                                            style="
+                                                font-weight: 600;
+                                                color: #000;
+                                            "
+                                            htmlFor="phoneNumber"
+                                            >Giờ kết thúc<span
+                                                class="red-asterisk"
+                                                >*</span
+                                            ></label
+                                        >
+                                    </div>
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <input
+                                            class="time-input"
+                                            type="time"
+                                            formControlName="EndTakeABreak"
+                                            id="start-time"
+                                            value="08:00"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex">
+                    <div class="flex flex-column">
+                        <h5>TÍNH CÔNG</h5>
+                        <div class="grid p-fluid p-3">
+                            <!-- Giờ bắt đầu -->
+                            <div class="col-12 md:col-12 p-0 flex flex-column">
+                                <div class="flex">
+                                    <div
+                                        class="col-12 md:col-6 p-0 field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-6 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Giờ công</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-6 md:mb-0 flex gap-5"
+                                        >
+                                            <div
+                                                class="field mb-0 flex align-items-center"
+                                            >
+                                                <input
+                                                    class="time-input"
+                                                    type="number"
+                                                    formControlName="WorkingHours"
+                                                    id="start-time"
+                                                    value="08:00"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="col-12 md:col-6 p-0 field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-6 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Ngày công</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-6 md:mb-0 flex gap-5"
+                                        >
+                                            <div
+                                                class="field mb-0 flex align-items-center"
+                                            >
+                                                <input
+                                                    class="time-input"
+                                                    type="number"
+                                                    formControlName="WorkingDays"
+                                                    id="start-time"
+                                                    value="08:00"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div
+                                        class="col-12 md:col-6 p-0 field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-6 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Hệ số ngày lễ</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-6 md:mb-0 flex gap-5"
+                                        >
+                                            <div
+                                                class="field mb-0 flex align-items-center"
+                                            >
+                                                <input
+                                                    class="time-input"
+                                                    formControlName="HolidayMultiplier"
+                                                    type="number"
+                                                    id="start-time"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="col-12 md:col-6 p-0 field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-6 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Hệ số ngày thường</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-6 md:mb-0 flex gap-5"
+                                        >
+                                            <div
+                                                class="field mb-0 flex align-items-center"
+                                            >
+                                                <input
+                                                    class="time-input"
+                                                    type="number"
+                                                    formControlName="RegularMultiplier"
+                                                    id="start-time"
+                                                    value="08:00"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div
+                                        class="col-12 md:col-6 p-0 field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-6 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Hệ số ngày nghỉ</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-6 md:mb-0 flex gap-5"
+                                        >
+                                            <div
+                                                class="field mb-0 flex align-items-center"
+                                            >
+                                                <input
+                                                    class="time-input"
+                                                    formControlName="LeaveDaysMultiplier"
+                                                    type="number"
+                                                    id="start-time"
+                                                    value="08:00"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                </div>
+                                <div class="flex mt-2">
+                                    <div
+                                        class="col-12 md:col-6 p-0 field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-12 md:mb-0"
+                                        >
+                                            <label
+                                                (click)="showCoefficient()"
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Thiết lập riêng cho từng ngày
+                                                lễ
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-content-end">
+                    <div class="flex gap-3">
+                        <p-button
+                            label="Hủy"
+                            [routerLink]="['/shift']"
+                            severity="secondary"
+                        ></p-button>
+                        <button type="submit" pButton label="Lưu"></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Thiết lập hệ số chấm công cho từng ngày lễ -->
+<p-dialog
+    header="Thiết lập hệ số chấm công cho từng ngày lễ"
+    [modal]="true"
+    [(visible)]="coefficientVisible"
+    [style]="{ width: '50vw' }"
+>
+    <div class="mb-3 flex gap-3">
+        <div class="flex gap-2">
+            <p-button
+                [outlined]="true"
+                (click)="decreaseYear()"
+                icon="pi pi-arrow-left"
+            ></p-button>
+            <p-button
+                [outlined]="true"
+                (click)="increaseYear()"
+                icon="pi pi-arrow-right"
+            ></p-button>
+        </div>
+        <p-calendar
+            [(ngModel)]="date"
+            view="year"
+            [showIcon]="true"
+            dateFormat="yy"
+            inputId="yearpicker"
+        ></p-calendar>
+    </div>
+    <div class="card p-0" style="position: sticky; top: 97px">
+        <!-- <p-table
+            responsiveLayout="scroll"
+            styleClass="p-datatable-striped"
+            [rowHover]="true"
+            [paginator]="false"
+            [value]="holidays"
+            dataKey="id"
+        >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Tên ngày nghỉ</th>
+                    <th>Thời gian</th>
+                    <th>Đối tượng áp dụng</th>
+                    <th>Hệ số</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-i="rowIndex">
+                <tr>
+                    <td>
+                        {{ rowData.name }}
+                    </td>
+                    <td>
+                        {{ rowData?.fromDate | date : "dd/MM/yyyy" }} -
+                        {{ rowData?.toDate | date : "dd/MM/yyyy" }}
+                    </td>
+
+                    <td>
+                        {{ rowData.applyObject }}
+                    </td>
+                    <td>
+                        <input
+                            class="time-input"
+                            type="number"
+                            formControlName="AllowedEarlyLeaveMinutes"
+                            id="start-time"
+                           
+                        />
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table> -->
+
+        <p-table
+            [value]="holidays"
+            dataKey="id"
+            [tableStyle]="{ 'min-width': '50rem' }"
+        >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Tên ngày nghỉ</th>
+                    <th>Thời gian</th>
+                    <th>Đối tượng áp dụng</th>
+                    <th>Hệ số</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item let-editing="editing">
+                <tr>
+                    <td
+                        [pEditableColumn]="item.holiday.code"
+                        pEditableColumnField="code"
+                    >
+                        {{ item.holiday.name }}
+                    </td>
+                    <td
+                        [pEditableColumn]="item.holiday.name"
+                        pEditableColumnField="name"
+                    >
+                        {{ item.holiday?.fromDate | date : "dd/MM/yyyy" }} -
+                        {{ item.holiday?.toDate | date : "dd/MM/yyyy" }}
+                    </td>
+                    <td
+                        [pEditableColumn]="item.holiday.applyObject"
+                        pEditableColumnField="inventoryStatus"
+                    >
+                        {{ item.holiday.applyObject }}
+                    </td>
+
+                    <td
+                        [pEditableColumn]="item.holiday.coefficient"
+                        pEditableColumnField="price"
+                    >
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input
+                                    pInputText
+                                    type="text"
+                                    [(ngModel)]="item.factor"
+                                />
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{ item.factor }}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <div
+        class="footer-buttons justify-content-end flex gap-2"
+        style="text-align: right"
+    >
+        <!-- <button
+            pButton
+            type="button"
+            label="Hủy"
+            severity="danger"
+            icon="pi pi-times"
+            (click)="coefficientVisible = false"
+            class="red-button"
+        ></button> -->
+        <p-button
+            label="Hủy"
+            [outlined]="true"
+            (click)="coefficientVisible = false"
+            severity="secondary"
+        ></p-button>
+        <button
+            pButton
+            type="button"
+            label="Lưu"
+            severity="danger"
+            (click)="handleSave()"
+        ></button>
+    </div>
+    <!-- Footer -->
+    <!-- <ng-template pTemplate="footer">
+    </ng-template> -->
+</p-dialog>

@@ -1,0 +1,107 @@
+.position-item{
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 10px;
+    border-bottom: 1px solid #f9f7f7;
+    padding: 11px 0px;
+    width: 100%;
+}
+.position__list{
+    width: 100%;
+}
+
+.position-add{
+    position: absolute;
+    bottom: 60px;
+    width: 100%;
+}
+
+.position-add-btn{
+    display: flex;
+    gap: 8px;
+    padding: 11px 0;
+    color: #579cfb;
+}
+
+.position-add-btn i{
+    font-size:13px;
+}
+
+.frame-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #f4f1f1;
+}
+
+.frame-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.frame-image svg{
+    font-size: 20px;
+    color: #878787;
+}
+
+.avatar{
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    color: #878787;
+}
+
+.profile{
+    margin-top:20px;
+}
+
+.title__heading{
+    font-size: 20px;
+    padding-top: 15px;
+    padding-left: 10px;
+}
+
+::ng-deep p-dropdown {
+    width: 100% !important;
+}
+
+.allowance-list{
+    margin-top:15px;
+    margin-bottom: 15px;
+}
+
+.allowance-add{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #4f75cd;
+    cursor: pointer;
+}
+
+.allowance-add-icon i{
+    font-size:12px;
+    display: block;
+}
+
+.allowance-add-text-none{
+    font-style: italic;
+    color: #ccc;
+}
+
+.allowance-add-text{
+    font-weight: 500;
+}
+
+.sidebar-item{
+    padding: 10px ;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.card-main{
+    height: 550px;
+    scrollbar-width: none;
+    overflow-y: auto;
+}

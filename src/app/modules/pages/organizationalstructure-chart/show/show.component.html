@@ -1,0 +1,664 @@
+<main id="main" class="main">
+    <div class="pagetitle">
+        <!-- <div>
+      <strong class="font-size-16">Cơ cấu tổ chức</strong>
+      <p-breadcrumb
+        [model]="items">
+      </p-breadcrumb>
+    </div> -->
+    </div>
+    <div class="toast-container">
+        <p-messages
+            [(value)]="messages"
+            [enableService]="false"
+            [closable]="false"
+        ></p-messages>
+    </div>
+    <!-- End Page Title -->
+    <section class="section k-list-table">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card-body justify-content-between">
+                    <div
+                        class="d-flex w-full justify-content-between title-header"
+                    >
+                        <div class="">
+                            <h3>Cơ cấu tổ chức</h3>
+                        </div>
+                        <div class="d-flex">
+                            <div
+                                class="d-flex"
+                                [style]="{ marginRight: '10px' }"
+                            >
+                                <i
+                                    class="pi pi-bars item-list"
+                                    [ngClass]="{ bg: selectedIcon === 'bars' }"
+                                    (click)="handleClick('bars')"
+                                ></i>
+                                <i
+                                    class="pi pi-sitemap item-list"
+                                    [ngClass]="{
+                                        bg: selectedIcon === 'sitemap'
+                                    }"
+                                    (click)="handleClick('sitemap')"
+                                ></i>
+                            </div>
+
+                            <p-button
+                                [routerLink]="[
+                                    '/organizational-structure/create'
+                                ]"
+                                label="Thêm mới"
+                            />
+                        </div>
+                    </div>
+
+                    <div *ngIf="selectedIcon === 'sitemap'">
+                        <div class="mb-5">
+                            <div
+                                class="flex justify-content-start align-items-center zoom-list shadow-sm mb-5 bg-body rounded w-fit"
+                            >
+                                <i
+                                    class="pi pi-minus zoom zoom-right"
+                                    (click)="decreaseValue()"
+                                ></i>
+                                <p-slider
+                                    [(ngModel)]="value"
+                                    styleClass="w-14rem"
+                                    [min]="0"
+                                    [max]="2"
+                                    [step]="0.1"
+                                />
+                                <i
+                                    class="pi pi-plus zoom zoom-left"
+                                    (click)="increaseValue()"
+                                ></i>
+                                <span class="number-zoom"
+                                    >{{ (value * 100).toFixed(0) }}%</span
+                                >
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-center">
+                            <div
+                                class="chart-wrapper"
+                                (mousedown)="startDragging($event)"
+                                (mousemove)="onDragging($event)"
+                                (mouseup)="stopDragging()"
+                            >
+                                <div
+                                    class="chart-container"
+                                    [ngStyle]="{
+                                        transform:
+                                            'scale(' +
+                                            value +
+                                            ') translate(' +
+                                            offsetX +
+                                            'px, ' +
+                                            offsetY +
+                                            'px)'
+                                    }"
+                                >
+                                    <!--  sơ đồ -->
+                                    <div class="tree">
+                                        <ul>
+                                            <ng-container
+                                                *ngFor="let node of data"
+                                            >
+                                                <li
+                                                    class="list-all"
+                                                    [attr.data-node-id]="
+                                                        node.id
+                                                    "
+                                                >
+                                                    <a
+                                                        class="item-tree"
+                                                        [ngClass]="
+                                                            'level-' +
+                                                            node?.data.level
+                                                        "
+                                                    >
+                                                        <p class="name-tree nameLeaderAll">
+                                                            {{ node.label }}
+                                                        </p>
+                                                        <div
+                                                            class="d-flex justify-content-between item-tree-icon"
+                                                        >
+                                                            <div
+                                                                class="manager-info"
+                                                                *ngIf="
+                                                                    node?.data
+                                                                        ?.manager;
+                                                                    else noManager
+                                                                "
+                                                            >
+                                                                <small
+                                                                    class="nameLeader"
+                                                                    >{{
+                                                                        node
+                                                                            .data
+                                                                            .manager
+                                                                    }}</small
+                                                                >
+                                                            </div>
+                                                            <ng-template
+                                                                #noManager
+                                                            >
+                                                                <small>
+                                                                    <i
+                                                                        class="pi pi-user-minus"
+                                                                    ></i>
+                                                                </small>
+                                                            </ng-template>
+                                                            <div
+                                                                class="child-count"
+                                                                *ngIf="
+                                                                    node?.data
+                                                                        ?.childCount >
+                                                                    0
+                                                                "
+                                                            >
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    width="16"
+                                                                    height="16"
+                                                                    fill="currentColor"
+                                                                    class="bi bi-share"
+                                                                    viewBox="0 0 16 16"
+                                                                >
+                                                                    <path
+                                                                        d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"
+                                                                    />
+                                                                </svg>
+                                                                <span
+                                                                    class="ml-2"
+                                                                    >{{
+                                                                        node
+                                                                            .data
+                                                                            .childCount
+                                                                    }}</span
+                                                                >
+                                                            </div>
+                                                        </div>
+                                                        <div
+                                                            class="expand-toggle-list"
+                                                            *ngIf="
+                                                                node?.children
+                                                                    ?.length
+                                                            "
+                                                            (click)="
+                                                                toggleNode(node)
+                                                            "
+                                                        >
+                                                            <span>
+                                                                <ng-container
+                                                                    *ngIf="
+                                                                        node?.expanded;
+                                                                        else expandIcon
+                                                                    "
+                                                                >
+                                                                    <i
+                                                                        class="pi pi-minus click-show"
+                                                                    ></i>
+                                                                </ng-container>
+                                                                <ng-template
+                                                                    #expandIcon
+                                                                >
+                                                                    <i
+                                                                        class="pi pi-plus click-show"
+                                                                    ></i>
+                                                                </ng-template>
+                                                            </span>
+                                                        </div>
+                                                    </a>
+                                                    <ul
+                                                        *ngIf="
+                                                            node.expanded &&
+                                                            node?.children
+                                                                ?.length
+                                                        "
+                                                    >
+                                                        <ng-container
+                                                            *ngTemplateOutlet="
+                                                                recursiveNode;
+                                                                context: {
+                                                                    $implicit:
+                                                                        node.children
+                                                                }
+                                                            "
+                                                        ></ng-container>
+                                                    </ul>
+                                                </li>
+                                            </ng-container>
+                                        </ul>
+                                    </div>
+
+                                    <ng-template #recursiveNode let-nodes>
+                                        <ng-container
+                                            *ngFor="let childNode of nodes"
+                                        >
+                                            <li>
+                                                <div
+                                                    class="item-nodes"
+                                                    [ngClass]="
+                                                        'level-' +
+                                                        childNode?.data.level
+                                                    "
+                                                >
+                                                    <strong>{{
+                                                        childNode.label
+                                                    }}</strong>
+                                                    <div
+                                                        class="d-flex justify-content-between nodes-item"
+                                                    >
+                                                        <div
+                                                            class="manager-info"
+                                                            *ngIf="
+                                                                childNode?.data
+                                                                    ?.manager;
+                                                                else noManager
+                                                            "
+                                                        >
+                                                            <small class="nameLeader">{{
+                                                                childNode.data
+                                                                    .manager
+                                                            }}</small>
+                                                        </div>
+                                                        <ng-template #noManager>
+                                                            <small
+                                                                class="icon-error-user"
+                                                            >
+                                                                <i
+                                                                    class="pi pi-user-minus"
+                                                                    style="
+                                                                        color: #708090;
+                                                                    "
+                                                                ></i>
+                                                            </small>
+                                                        </ng-template>
+                                                        <div
+                                                            class="child-count"
+                                                            *ngIf="
+                                                                childNode?.data
+                                                                    ?.childCount >
+                                                                0
+                                                            "
+                                                        >
+                                                            <svg
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                width="16"
+                                                                height="16"
+                                                                fill="currentColor"
+                                                                class="bi bi-share"
+                                                                viewBox="0 0 16 16"
+                                                            >
+                                                                <path
+                                                                    d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"
+                                                                />
+                                                            </svg>
+                                                            <span
+                                                                class="ml-2"
+                                                                >{{
+                                                                    childNode
+                                                                        .data
+                                                                        .childCount
+                                                                }}</span
+                                                            >
+                                                        </div>
+                                                    </div>
+                                                    <div
+                                                        class="expand-toggle-list"
+                                                        *ngIf="
+                                                            childNode?.children
+                                                                ?.length
+                                                        "
+                                                        (click)="
+                                                            toggleNode(
+                                                                childNode
+                                                            )
+                                                        "
+                                                    >
+                                                        <span class="box-click">
+                                                            <ng-container
+                                                                *ngIf="
+                                                                    childNode.expanded;
+                                                                    else expandIcon
+                                                                "
+                                                            >
+                                                                <i
+                                                                    class="pi pi-minus click-show"
+                                                                ></i>
+                                                            </ng-container>
+                                                            <ng-template
+                                                                #expandIcon
+                                                            >
+                                                                <i
+                                                                    class="pi pi-plus click-show"
+                                                                ></i>
+                                                            </ng-template>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <ul
+                                                    *ngIf="
+                                                        childNode.expanded &&
+                                                        childNode?.children
+                                                            ?.length
+                                                    "
+                                                >
+                                                    <ng-container
+                                                        *ngTemplateOutlet="
+                                                            recursiveNode;
+                                                            context: {
+                                                                $implicit:
+                                                                    childNode.children
+                                                            }
+                                                        "
+                                                    ></ng-container>
+                                                </ul>
+                                            </li>
+                                        </ng-container>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="selectedIcon === 'bars'">
+                        <section class="section k-list-table">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="card-body">
+                                        <div class="card mt-3">
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 23%">
+                                                            Tên đơn vị
+                                                        </th>
+                                                        <th style="width: 10%">
+                                                            Mã đơn vị
+                                                        </th>
+                                                        <th style="width: 10%">
+                                                            Tên viết tắt
+                                                        </th>
+                                                        <th style="width: 10%">
+                                                            Độ ưu tiên
+                                                        </th>
+                                                        <th style="width: 8%">
+                                                            Số nhân viên
+                                                        </th>
+                                                        <th style="width: 10%">
+                                                            Cấp tổ chức
+                                                        </th>
+                                                        <th style="width: 10%">
+                                                            Trưởng đơn vị
+                                                        </th>
+                                                        <th style="width: 10%">
+                                                            Trạng thái
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <ng-container
+                                                        *ngFor="
+                                                            let unit of organizationUnits
+                                                        "
+                                                    >
+                                                        <tr>
+                                                            <td
+                                                                [ngStyle]="{
+                                                                    'padding-left':
+                                                                        (unit.level -
+                                                                            1) *
+                                                                            10 +
+                                                                        'px'
+                                                                }"
+                                                            >
+                                                                <button
+                                                                    class="bt-plus"
+                                                                    *ngIf="
+                                                                        unit.children &&
+                                                                        unit
+                                                                            .children
+                                                                            .length >
+                                                                            0
+                                                                    "
+                                                                    (click)="
+                                                                        toggleExpand(
+                                                                            unit
+                                                                        )
+                                                                    "
+                                                                >
+                                                                    {{
+                                                                        unit.expanded
+                                                                            ? "-"
+                                                                            : "+"
+                                                                    }}
+                                                                </button>
+                                                                <span
+                                                                    style="
+                                                                        padding-left: 10px;
+                                                                    "
+                                                                    >{{
+                                                                        unit.organizationName
+                                                                    }}</span
+                                                                >
+                                                            </td>
+                                                            <td>
+                                                                {{
+                                                                    unit.organizationCode
+                                                                }}
+                                                            </td>
+                                                            <td>
+                                                                {{
+                                                                    unit.abbreviation
+                                                                }}
+                                                            </td>
+                                                            <td>
+                                                                {{
+                                                                    unit.rank
+                                                                }}
+                                                            </td>
+
+                                                            <td>
+                                                                {{
+                                                                    unit.employees
+                                                                }}
+                                                            </td>
+                                                            <td>
+                                                                {{
+                                                                    unit.organizational
+                                                                }}
+                                                            </td>
+                                                            <td>
+                                                                {{
+                                                                    unit.unithead
+                                                                }}
+                                                            </td>
+                                                            <td>
+                                                                <span
+                                                                    class="work-status-span"
+                                                                    [ngStyle]="{
+                                                                        color: getWorkStatus(
+                                                                            unit.status
+                                                                        ).color,
+                                                                        'background-color':
+                                                                            getWorkStatus(
+                                                                                unit.status
+                                                                            )
+                                                                                .bgcolor
+                                                                    }"
+                                                                >
+                                                                    {{
+                                                                        getWorkStatus(
+                                                                            unit.status
+                                                                        ).text
+                                                                    }}
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+
+                                                        <!-- Hiển thị con cái (recursively) -->
+                                                        <ng-container
+                                                            *ngIf="
+                                                                unit.expanded
+                                                            "
+                                                        >
+                                                            <ng-container
+                                                                *ngFor="
+                                                                    let child of unit.children
+                                                                "
+                                                            >
+                                                                <ng-container
+                                                                    *ngTemplateOutlet="
+                                                                        recursiveNode;
+                                                                        context: {
+                                                                            $implicit:
+                                                                                child
+                                                                        }
+                                                                    "
+                                                                ></ng-container>
+                                                            </ng-container>
+                                                        </ng-container>
+                                                    </ng-container>
+
+                                                    <ng-template
+                                                        #recursiveNode
+                                                        let-node
+                                                    >
+                                                        <tr>
+                                                            <td
+                                                                [ngStyle]="{
+                                                                    'padding-left':
+                                                                        (node.level -
+                                                                            1) *
+                                                                            20 +
+                                                                        'px'
+                                                                }"
+                                                            >
+                                                                <button
+                                                                    class="bt-plus"
+                                                                    *ngIf="
+                                                                        node.children &&
+                                                                        node
+                                                                            .children
+                                                                            .length >
+                                                                            0
+                                                                    "
+                                                                    (click)="
+                                                                        toggleExpand(
+                                                                            node
+                                                                        )
+                                                                    "
+                                                                >
+                                                                    {{
+                                                                        node.expanded
+                                                                            ? "-"
+                                                                            : "+"
+                                                                    }}
+                                                                </button>
+                                                                {{
+                                                                    node.organizationName
+                                                                }}
+                                                            </td>
+                                                            <td>
+                                                                {{
+                                                                    node.organizationCode
+                                                                }}
+                                                            </td>
+                                                            <td>
+                                                                {{
+                                                                    node.abbreviation
+                                                                }}
+                                                            </td>
+                                                            <td>
+                                                                {{
+                                                                    node.rank
+                                                                }}
+                                                            </td>
+                                                            <td>
+                                                                {{
+                                                                    node.employees
+                                                                }}
+                                                            </td>
+                                                            <td>
+                                                                {{
+                                                                    node.organizational
+                                                                }}
+                                                            </td>
+                                                            <td>
+                                                                {{
+                                                                    node.unithead
+                                                                }}
+                                                            </td>
+                                                            <td>
+                                                                <span
+                                                                    class="work-status-span"
+                                                                    [ngStyle]="{
+                                                                        color: getWorkStatus(
+                                                                            node.status
+                                                                        ).color,
+                                                                        'background-color':
+                                                                            getWorkStatus(
+                                                                                node.status
+                                                                            )
+                                                                                .bgcolor
+                                                                    }"
+                                                                >
+                                                                    {{
+                                                                        getWorkStatus(
+                                                                            node.status
+                                                                        ).text
+                                                                    }}
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+
+                                                        <ng-container
+                                                            *ngIf="
+                                                                node.expanded
+                                                            "
+                                                        >
+                                                            <ng-container
+                                                                *ngFor="
+                                                                    let grandChild of node.children
+                                                                "
+                                                            >
+                                                                <ng-container
+                                                                    *ngTemplateOutlet="
+                                                                        recursiveNode;
+                                                                        context: {
+                                                                            $implicit:
+                                                                                grandChild
+                                                                        }
+                                                                    "
+                                                                ></ng-container>
+                                                            </ng-container>
+                                                        </ng-container>
+                                                    </ng-template>
+                                                </tbody>
+                                            </table>
+
+                                            <div class="paging-bot dg-fix">
+                                                <div class="paging-info">
+                                                    <div
+                                                        [innerHTML]="
+                                                            currentPageReport
+                                                        "
+                                                    ></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!---->
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!---->
+    </section>
+</main>
+<!-- End #main -->

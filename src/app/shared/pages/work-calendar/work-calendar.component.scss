@@ -1,0 +1,231 @@
+/* Định dạng cho bảng p-table */
+.calendar-table {
+  border-collapse: collapse; /* Gộp viền của bảng */
+  width: 100%; /* Bảng rộng 100% */
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+  background-color: #ffffff; /* Nền trắng */
+  border-radius: 8px; /* Bo tròn bảng */
+  overflow: hidden; /* Giới hạn nội dung */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+}
+
+// .calendar-table th, .calendar-table td {
+//   padding: 15px;
+//   border: 1px solid #ddd; /* Thêm đường viền cho các ô */
+// }
+
+.calendar-table th {
+  background-color: #dddddd; /* Màu nền xanh lá */
+  color: black; /* Chữ màu trắng */
+  text-align: center;
+  padding: 10px;
+  border-bottom: 2px solid #3e8e41; /* Đường viền bên dưới */
+  font-size: 16px;
+  text-transform: uppercase; /* Chữ in hoa */
+}
+
+.calendar-table td {
+  text-align: left;
+  width: 80px;
+  vertical-align: top;
+  padding: 10px;
+  border: 1px solid #ddd; /* Viền nhạt */
+  position: relative; /* Định vị để hỗ trợ các nội dung bên trong */
+  background-color: #f9f9f9; /* Nền sáng */
+  transition: background-color 0.3s ease;
+}
+
+
+.calendar-table .current-month {
+  background-color: #ffffff;
+  font-weight: bold;
+}
+
+.calendar-table .other-month {
+  background-color: #e9ecef;
+  color: #b0b0b0;
+}
+
+.calendar-table td:hover {
+  background-color: #e0f7fa; /* Nền xanh nhạt */
+}
+
+// .task-container {
+//   position: relative;
+//   z-index: 9999;
+// }
+
+.calendar-table .task-duration {
+  position: absolute;
+  left: 10px;
+  height: 25px;
+  padding: 2px;
+  border: 1px solid #ccc; /* Viền xám */
+  border-radius: 5px; /* Bo góc */
+  background-color: #d5d5d5; /* Nền nhẹ */
+  font-size: 12px;
+  color: #333;
+  z-index: 9999;
+}
+
+.calendar-table .task-duration + .task-duration {
+  margin-top: 30px; /* Khoảng cách giữa các công việc */
+}
+
+/* Thêm hiệu ứng hover khi người dùng di chuột vào ngày */
+.calendar-table td:hover {
+  background-color: #e9e9ea;
+  color: #606060;
+}
+
+/* Làm nổi bật ngày hiện tại */
+.calendar-table .today {
+  background-color: #d1e7dd;
+  border: 2px solid #4caf50;
+  font-weight: bold;
+  color: #4caf50;
+}
+
+/* Thêm margin cho các nút điều hướng tháng */
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.calendar-header button {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.calendar-header button:hover {
+  background-color: #0056b3;
+}
+
+.calendar-header span {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.container-month {
+  display: flex;
+  align-items: center;
+}
+
+.month {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.current-month {
+  color: #888888; /* Màu xám */
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.today {
+  margin-right: 10px;
+  color: #666;
+}
+
+.tabs {
+  display: flex;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.tabs button {
+  padding: 5px 15px;
+  border: none;
+  background: none;
+  color: #666;
+  cursor: pointer;
+}
+
+.tabs button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.tabs button:not(.active):hover {
+  background-color: #f1f1f1;
+}
+
+.more {
+  margin-left: 10px;
+  color: #007bff;
+  font-size: 30px;
+  padding-bottom: 20px;
+  cursor: pointer;
+}
+
+.header-container {
+  padding: 10px 20px;
+  background-color: white;
+  border-bottom: 1px solid #ddd;
+  font-family: Arial, sans-serif;
+}
+
+.left-section .title {
+  font-weight: bold;
+  font-size: 16px;
+  margin-right: 20px;
+}
+
+.calendar-link {
+  color: blue;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.calendar-link:hover {
+  text-decoration: underline;
+}
+
+.underline {
+  margin-top: 5px;
+  width: 30px;
+  height: 2px;
+  background-color: blue;
+  border: none;
+}
+
+.right-section .add-filter-btn {
+  background-color: navy;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.right-section .add-filter-btn:hover {
+  background-color: darkblue;
+}
+
+.statistics {
+  font-size: 14px;
+  color: #555;
+  border: 1px solid #ddd; /* Thêm viền */
+  border-radius: 5px; /* Bo tròn các góc */
+  padding: 5px 10px; /* Tạo khoảng cách bên trong */
+  background-color: #f9f9f9; /* Nền sáng */
+  display: inline-block; /* Đảm bảo không chiếm hết chiều rộng */
+}
+.statistics strong {
+  font-weight: bold;
+}
+
+
+

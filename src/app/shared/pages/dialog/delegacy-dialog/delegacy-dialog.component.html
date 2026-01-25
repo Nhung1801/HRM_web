@@ -1,0 +1,97 @@
+<p-dialog header="Thiết lập ủy quyền" [(visible)]="displayModal" [modal]="true" [style]="{width: '50vw',height:'60vh'}">
+    <p-tabView>
+        <p-tabPanel header="Thông báo">
+            <!-- Nội dung thông báo -->
+        </p-tabPanel>
+        <p-tabPanel header="Ủy quyền">
+            <div>
+                <p-button label="Thêm người được giao quyền" [outlined]="true" icon="pi pi-plus"
+                    (onClick)="showDelegateDialog()"></p-button>
+                <div class="mt-2" style="font-weight: 600;">Ủy quyển cho thư ký/trợ lý giao việc cho nhân viên cấp dưới
+                </div>
+                <p-table [style]="{'margin-top':'20px'}" [value]="delegations" [paginator]="false" [rows]="10"
+                    responsiveLayout="scroll" styleClass="p-datatable-striped custom-scrollbar" [rowHover]="true"
+                    [ngStyle]="{width: 'auto','overflow-x': 'auto','table-layout': 'auto'}">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Người được ủy quyền</th>
+                            <th>Dự án</th>
+                            <th>Thời gian ủy quyền</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-delegation>
+                        <tr>
+                            <td>
+                                <span *ngFor="let employee of delegation.employees">
+                                    |{{employee.lastName}} {{employee.firstName}}|
+                                </span>
+                            </td>
+                            <td>
+                                <span *ngFor="let project of delegation.projects">
+                                    |{{project.name}}|
+                                </span>
+                            </td>
+                            <td>{{ delegation.startDate | date:'dd-MM-yyyy'  }} ==> {{ delegation.endDate | date:'dd-MM-yyyy' }}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </p-tabPanel>
+    </p-tabView>
+</p-dialog>
+
+
+<p-dialog header="Thiết lập ủy quyền" [(visible)]="displayDelegateModal" [modal]="true"
+    [style]="{width: '50vw',height:'60vh'}">
+    <form [formGroup]="createDelegacyForm" (submit)="onSubmit()">
+        <div class="flex">
+            <div class="form-group-custom" style="width: 48%;">
+                <div class="labelip">Người được ủy quyền<span class="red-asterisk">*</span></div>
+                <p-multiSelect formControlName="employeeIds" placeholder="Chọn người được ủy quyền"
+                    defaultLabel="Chọn người được ủy quyền" selectedItemsLabel="{0} người đã chọn" [options]="employees"
+                    optionLabel="fullName" optionValue="id" [style]="{ width: '100%' }"></p-multiSelect>
+                <app-validation-message [form]="createDelegacyForm" [messages]="validationMessages"
+                    field="employeeIds"></app-validation-message>
+            </div>
+            <div class="form-group-custom ml-auto" style="width: 48%;">
+                <div class="labelip">Dự án được ủy quyền<span class="red-asterisk">*</span></div>
+                <!-- <p-treeSelect [options]="departments" [(ngModel)]="selectedProjects" selectionMode="checkbox"
+                    [metaKeySelection]="false" placeholder="Chọn dự án được ủy quyền"
+                    [style]="{ width: '100%' }"></p-treeSelect> -->
+                <p-multiSelect formControlName="projectIds" placeholder="Chọn dự án được ủy quyền"
+                    defaultLabel="Chọn dự án được ủy quyền" selectedItemsLabel="{0} dự án đã chọn" [options]="projects"
+                    optionLabel="name" optionValue="id" [style]="{ width: '100%' }"></p-multiSelect>
+                <app-validation-message [form]="createDelegacyForm" [messages]="validationMessages"
+                    field="projectIds"></app-validation-message>
+            </div>
+        </div>
+        <div class="" style="width: 100%;">
+            <div class="labelip">Thời gian ủy quyền<span class="red-asterisk">*</span></div>
+            <div class="flex" style="width: 100%;">
+                <div class="form-group-custom" style="width: 48%;">
+                    <p-calendar [showIcon]="true" [icon]="calendarIcon" dateFormat="dd-mm-yy"
+                        placeholder="Chọn ngày bắt đầu" [style]="{  width: '100%'}"
+                        formControlName="startDate"></p-calendar>
+                    <app-validation-message [form]="createDelegacyForm" [messages]="validationMessages"
+                        field="startDate"></app-validation-message>
+                </div>
+                <div class="form-group-custom ml-auto" style="width: 48%;">
+                    <p-calendar class="" [showIcon]="true" [icon]="calendarIcon" dateFormat="dd-mm-yy"
+                        placeholder="Chọn ngày kết thúc" [style]="{  width: '100%'}"
+                        formControlName="endDate"></p-calendar>
+                    <app-validation-message [form]="createDelegacyForm" [messages]="validationMessages"
+                        field="endDate"></app-validation-message>
+                </div>
+            </div>
+        </div>
+        <div class="button-container danger-notice" *ngIf="createDelegacyForm.errors?.['dateRange']">
+            {{ createDelegacyForm.errors.dateRange }}
+        </div>
+        <div class="form-actions mt-5">
+            <p-button label="Hủy" icon="pi pi-times" styleClass="p-button-secondary"
+                (onClick)="displayDelegateModal=false"></p-button>
+            <p-button label="Lưu" icon="pi pi-check" styleClass="p-button-primary" type="submit"></p-button>
+        </div>
+    </form>
+
+</p-dialog>

@@ -1,0 +1,179 @@
+<div class="container-fluid mt-4" [formGroup]="attendanceForm">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5><strong>Cho phép nhân viên chấm công trên</strong></h5>
+        <div class="two-checkbox" style="margin-right: 700px">
+            <p-checkbox
+                binary="true"
+                formControlName="allowWeb"
+                inputId="web"
+            ></p-checkbox>
+            <label
+                style="font-weight: 550; font-size: 12px"
+                for="web"
+                class="me-3"
+                >Ứng dụng Web</label
+            >
+
+            <p-checkbox
+                binary="true"
+                formControlName="allowMobile"
+                inputId="mobile"
+            ></p-checkbox>
+            <label style="font-weight: 550; font-size: 12px" for="mobile"
+                >Ứng dụng Mobile</label
+            >
+        </div>
+    </div>
+
+    <!-- Buttons -->
+    <div>
+        <button
+            pButton
+            type="button"
+            label="Định vị GPS"
+            class="p-button-secondary me-2"
+            [ngClass]="{ 'button-gps-active': isGpsActive }"
+            (click)="onGpsClick()"
+        ></button>
+        <button
+            pButton
+            type="button"
+            label="Máy chấm công"
+            class="p-button-secondary"
+            [ngClass]="{ 'button-cham-cong-active': isAttendanceActive }"
+            (click)="onAttendanceClick()"
+        ></button>
+    </div>
+
+    <!-- Add buttons -->
+    <div class="d-flex justify-content-between mb-2" style="margin-top: 20px">
+        <button
+            *ngIf="permission.hasPermissions([permissionConstant.ManageUnitApplicationCreate])"
+            [routerLink]="['/timekeepingunit/create']"
+            pButton
+            type="button"
+            label="+ Thêm đơn vị áp dụng"
+            class="p-button-text button-add"
+        ></button>
+        <button
+            *ngIf="permission.hasPermissions([permissionConstant.ManageTimekeepingLocationView])"
+            [routerLink]="['/location']"
+            pButton
+            type="button"
+            label="+ Địa điểm"
+            class="p-button-text button-add"
+        ></button>
+    </div>
+
+    <!-- Table -->
+    <form [formGroup]="attendanceForm" style="margin-top: 20px" *ngIf="permission.hasPermissions([permissionConstant.ManageTimekeepingRules])">
+        <table class="table text-center table-no-border">
+            <thead class="table-light">
+                <tr>
+                    <th>
+                        <p-checkbox
+                            binary="true"
+                            inputId="all"
+                            (onChange)="toggleAllSelection($event)"
+                        >
+                        </p-checkbox>
+                    </th>
+                    <th>Đơn vị</th>
+                    <th>Nhân viên áp dụng</th>
+                    <th>Địa điểm chấm công cho phép</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody formArrayName="units">
+                <tr
+                    *ngFor="let unit of units.controls; let i = index"
+                    [formGroupName]="i"
+                >
+                    <td>
+                        <p-checkbox
+                            binary="true"
+                            formControlName="selected"
+                        ></p-checkbox>
+                    </td>
+                    <td>
+                        {{ unit.value.organizationName || "Chưa có đơn vị" }}
+                    </td>
+                    <td>
+                        {{
+                            unit.value.isForAllEmployees
+                                ? "Tất cả nhân viên"
+                                : "Không"
+                        }}
+                    </td>
+                    <td>
+                        {{
+                            unit.value.allowableRadius > 0
+                                ? unit.value.allowableRadius + " m"
+                                : "0 m"
+                        }}
+                    </td>
+                    <td>
+                        <button
+                            *ngIf="permission.hasPermissions([permissionConstant.ManageTimekeepingRulesEdit])"
+                            pButton
+                            type="button"
+                            icon="pi pi-file-edit"
+                            class="p-button-text p-button-sm"
+                            style="color: black"
+                            [routerLink]="[
+                                '/timekeepingunit/update',
+                                unit.value.id
+                            ]"
+                        ></button>
+                        <button
+                            pButton
+                            *ngIf="permission.hasPermissions([permissionConstant.ManageTimekeepingRulesDelete])"
+                            type="button"
+                            icon="pi pi-trash"
+                            style="color: black"
+                            (click)="
+                                confirmDelete(
+                                    unit.value.id,
+                                    unit.value.organizationName
+                                )
+                            "
+                            class="p-button-text p-button-danger p-button-sm"
+                        ></button>
+                    </td>
+                </tr>
+                <!-- không dữ liệu -->
+                <tr *ngIf="units.length === 0">
+                    <td colspan="5">Không có thông tin để hiển thị.</td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+
+<!-- Dialog component for delete confirmation -->
+<p-dialog header="Cảnh báo" [(visible)]="displayDialog" modal="true">
+    <p>
+        Bạn có chắc chắn muốn xóa <strong>{{ warningMessage }}</strong> này
+        không?
+    </p>
+    <div class="text-right">
+        <button
+            pButton
+            type="button"
+            label="Hủy"
+            icon="pi pi-times"
+            (click)="displayDialog = false"
+            class="p-button-secondary"
+        ></button>
+        <button
+            pButton
+            type="button"
+            label="Xóa"
+            icon="pi pi-trash"
+            (click)="deleteSelectedOrganization()"
+            class="p-button-danger"
+            style="margin-left: 10px"
+        ></button>
+    </div>
+</p-dialog>

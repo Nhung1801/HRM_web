@@ -1,0 +1,283 @@
+<p-dialog header="Cập nhập dự án" [(visible)]="displayModal" [modal]="true" [style]="{width: '50vw',height:'60vh'}">
+    <p-tabView>
+        <p-tabPanel header="Thông tin chung">
+            <form [formGroup]="updateProjectForm" (submit)="onSubmitUpdate()">
+                <div class="flex justify-content-end">
+                    <div class="input-group-depart me-3" style="width: 50%;">
+                        <span class="span-input pb-2 labelip" for="department">Tên dự án <span
+                                class="red-asterisk">*</span></span>
+                        <input formControlName="name" style="width: 100%;" pInputText type="text"
+                            placeholder="Nhập tên dự án" />
+                        <app-validation-message [form]="updateProjectForm" [messages]="validationMessages"
+                            field="name"></app-validation-message>
+                    </div>
+                    <div class="input-group-depart" style="width: 50%;">
+                        <span class="span-input pb-2 labelip" for="member">Mô tả<span
+                                class="red-asterisk">*</span></span>
+                        <textarea rows="3" cols="5" pInputTextarea placeholder="Nhập mô tả" style="width: 100%;"
+                            formControlName="description"></textarea>
+                    </div>
+                </div>
+                <div class="flex justify-content-end mt-2">
+                    <div class="input-group-depart me-3" style="width: 50%;">
+                        <span class="span-input pb-2 labelip" for="department">Chọn phòng ban<span
+                                class="red-asterisk"></span></span>
+                        <p-dropdown [options]="departments" formControlName="departmentId" optionLabel="name"
+                            optionValue="id" placeholder="Tất cả phòng ban" [style]="{'width': '100%'}">
+                        </p-dropdown>
+                    </div>
+                    <div class="input-group-depart" style="width: 50%;">
+                        <span class="span-input pb-2 labelip" for="member">Thời gian dự án <span
+                                class="red-asterisk">*</span></span>
+                        <p-calendar formControlName="dateRange" selectionMode="range" [showIcon]="true"
+                            [placeholder]="'Ngày bắt đầu → Ngày kết thúc'" [style]="{'width': '100%'}">
+                        </p-calendar>
+                        <app-validation-message [form]="updateProjectForm" [messages]="validationMessages"
+                            field="dateRange"></app-validation-message>
+                    </div>
+                </div>
+                <div class="flex justify-content-end mt-5">
+                    <p-button class="ml-2" type="submit" label="Lưu" />
+                </div>
+            </form>
+        </p-tabPanel>
+        <p-tabPanel header="Thành viên">
+            <div>
+                <p-button label="Thêm thành viên" (onClick)="onShowAddEmployee()" [outlined]="true"
+                    icon="pi pi-plus"></p-button>
+                <div class="mt-2" style="font-weight: 600;">Ủy quyển cho thư ký/trợ lý giao việc cho nhân viên cấp dưới
+                </div>
+                <div class="p-col-12 mt-4 scrollable-table-container">
+                    <p-table [style]="{'margin-top':'20px'}" [value]="employeesIn" [paginator]="false" [rows]="10"
+                        responsiveLayout="scroll" styleClass="p-datatable-striped custom-scrollbar" [rowHover]="true"
+                        [ngStyle]="{width: 'auto','overflow-x': 'auto','table-layout': 'auto'}">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Tên</th>
+                                <th>Email</th>
+                                <th>Quyền hạn</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-employee>
+                            <tr>
+                                <td>
+                                    {{employee.employee.lastName}} {{employee.employee.firstName}}
+                                </td>
+                                <td>
+                                    {{employee.employee.personalEmail}}
+                                </td>
+                                <td>
+                                    <p-dropdown [disabled]="employee.employee.id==user.employee.id" [options]="roles"
+                                        [(ngModel)]="employee.projectRoleId" optionLabel="displayName" optionValue="id"
+                                        placeholder="Chọn quyền" [showClear]="true" appendTo="body">
+                                    </p-dropdown>
+                                </td>
+                                <td>
+                                    <span class="edit-button" *ngIf="employee.employee.id==user.employee.id">
+                                        <i class="icon-i pi pi-lock"></i>
+                                    </span>
+                                    <span
+                                        (click)="handleDeleteEmployee(employee.employee.lastName,employee.employee.firstName,employee.projectId,employee.employeeId)"
+                                        class="edit-button" *ngIf="employee.employee.id!=user.employee.id">
+                                        <i class="icon-i pi pi-times-circle"></i>
+                                    </span>
+                                    <span
+                                        (click)="handleUpdateRoleEmployee(employee.projectId,employee.employeeId,employee.projectRoleId)"
+                                        class="edit-button" *ngIf="employee.employee.id!=user.employee.id">
+                                        <i class="icon-i pi pi-save"></i>
+                                    </span>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    <div class="flex align-items-center mt-3" style="justify-content: space-between">
+                        <p>
+                            <span style="font-weight: 500">{{
+                                1 + (pagingEmployeesIn.pageIndex - 1) * pagingEmployeesIn.pageSize
+                                }}</span>
+                            -
+                            <span style="font-weight: 500">{{
+                                1 + (pagingEmployeesIn.pageIndex - 1) * pagingEmployeesIn.pageSize +
+                                (pagingEmployeesIn.pageSize - 1)
+                                }}</span>
+                            trong
+                            <span style="font-weight: 500">{{ pagingEmployeesIn.totalRecords }}</span>
+                            bản ghi
+                        </p>
+                        <div *ngIf="employeesIn?.length > 0">
+                            <p-paginator appendTo="body" class="custum-paging" (onPageChange)="onPageChange($event)"
+                                [first]="(pagingEmployeesIn.pageIndex - 1) * pagingEmployeesIn.pageSize"
+                                [rows]="pagingEmployeesIn.pageSize" [totalRecords]="pagingEmployeesIn.totalRecords"
+                                [rowsPerPageOptions]="config.pageSizeOptions" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </p-tabPanel>
+    </p-tabView>
+</p-dialog>
+
+<!-- Thêm nhân viên vào dự án -->
+<p-dialog header="Thêm thành viên vào dự án" [(visible)]="displayDialogAddEmployee" [modal]="true"
+    [style]="{width: '50vw', height:'60vh'}">
+    <div class="p-grid p-fluid">
+        <div class="p-col-12 mt-4 scrollable-table-container">
+            <p-table [value]="selectedEmployees" [(selection)]="selectedEmployees" [paginator]="false" [rows]="10"
+                responsiveLayout="scroll" styleClass="p-datatable-striped custom-scrollbar" [rowHover]="true"
+                [ngStyle]="{width: 'auto','overflow-x': 'auto','table-layout': 'auto'}">
+                <ng-template pTemplate="body" let-employee let-rowIndex>
+                    <tr>
+                        <td>
+                            <img src="{{baseImageUrl+employee.avatarUrl}}" alt="Avatar" class="avatar">
+                        </td>
+                        <td>{{ employee.fullName }}</td>
+                        <td>{{ employee.organization?.organizationName }}</td>
+                        <td>{{ employee.personalEmail }}</td>
+                        <td>
+                            <p-dropdown [disabled]="employee.id==user.employee.id" [options]="roles"
+                                [(ngModel)]="employee.role" optionLabel="displayName" optionValue="id"
+                                placeholder="Chọn quyền" [showClear]="true" appendTo="body">
+                            </p-dropdown>
+                        </td>
+                        <td>
+                            <span class="edit-button" *ngIf="employee.id==user.employee.id">
+                                <i class="icon-i pi pi-lock"></i>
+                            </span>
+                            <span (click)="removeEmployee(employee)" class="edit-button"
+                                *ngIf="employee.id!=user.employee.id">
+                                <i class="icon-i pi pi-times-circle"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+    <p-footer>
+        <button style="background-color: #64748b;" pButton type="button" label="Hủy bỏ"
+            (click)="displayDialogAddEmployee=false" class=" ui-button-secondary"></button>
+        <p-button class="ml-2" (click)="onChooseEmployee()" icon="pi pi-user-plus" label="Chọn nhân viên" />
+        <button class="ml-2" style="width: 100px;" pButton type="button" label="Lưu" (click)="onAddEmployee()"></button>
+    </p-footer>
+</p-dialog>
+
+
+
+
+<p-dialog header="Chọn nhân viên theo cơ cấu tổ chức" [(visible)]="displayChooseEmployee"
+    [style]="{width: '50vw',height:'50vh'}" [modal]="true">
+    <div class="p-grid p-fluid">
+        <div class="flex justify-content-end">
+            <input pInputText [style]="{ width: '20%', height: '44px' }" placeholder="Tìm theo tên nhân viên"
+                [(ngModel)]="queryParameters.employeeName" (input)="onEmployeeSearch($event)">
+            <div class="ml-2 me-2 select-tree" style="width: 300px">
+                <p-treeSelect [attr.aria-hidden]="null" class="md:w-20rem w-full" containerStyleClass="w-full"
+                    [(ngModel)]="queryParameters.organization" [options]="organizations" placeholder="Chọn đơn vị"
+                    [showClear]="true" (onNodeSelect)="onChangeOrganization($event)" />
+            </div>
+            <div class="flex justify-content-center">
+                <p-button class="ml-2" (click)="onSearch()" label="Lọc" />
+                <p-button class="ml-2" (click)="onRefreshSearch()" icon="pi pi-sync" />
+            </div>
+        </div>
+        <div class="p-col-12 mt-4 scrollable-table-container">
+            <p-table [value]="employees" [(selection)]="selectedEmployees" [paginator]="false" [rows]="10"
+                responsiveLayout="scroll" styleClass="p-datatable-striped custom-scrollbar" [rowHover]="true"
+                [ngStyle]="{width: 'auto','overflow-x': 'auto','table-layout': 'auto'}"
+                (onHeaderCheckboxToggle)="onEmployeeSelectAll($event)" (onRowSelect)="onEmployeeSelect($event)"
+                (onRowUnselect)="onEmployeeUnselect($event)">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-center"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
+                        <th>Họ và tên</th>
+                        <th>Vị trí công việc</th>
+                        <th>Email</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-employee>
+                    <tr>
+                        <td class="text-center" *ngIf="employee.id!=this.user.employee.id"><p-tableCheckbox
+                                [value]="employee" (onChange)="onCheckboxChange(employee, $event)"></p-tableCheckbox>
+                        </td>
+                        <td class="text-center" *ngIf="employee.id==this.user.employee.id"> <i class="pi pi-lock"></i>
+                        </td>
+                        <td>{{ employee.fullName }}</td>
+                        <td>{{ employee.organization?.organizationName }}</td>
+                        <td>{{ employee.personalEmail }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <div class="flex align-items-center mt-3" style="justify-content: space-between">
+                <p>
+                    <span style="font-weight: 500">{{
+                        1 + (paging.pageIndex - 1) * paging.pageSize
+                        }}</span>
+                    -
+                    <span style="font-weight: 500">{{
+                        1 + (paging.pageIndex - 1) * paging.pageSize + (paging.pageSize - 1)
+                        }}</span>
+                    trong
+                    <span style="font-weight: 500">{{ paging.totalRecords }}</span>
+                    bản ghi
+                </p>
+                <div *ngIf="employees?.length > 0">
+                    <p-paginator class="custum-paging" (onPageChange)="onPageEmployeeNotInProjectChange($event)"
+                        [first]="(paging.pageIndex - 1) * paging.pageSize" [rows]="paging.pageSize"
+                        [totalRecords]="paging.totalRecords" [rowsPerPageOptions]="config.pageSizeOptions" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-footer>
+        <button style="background-color: #64748b;" pButton type="button" label="Hủy bỏ"
+            (click)="displayChooseEmployee=false"></button>
+        <button class="ml-2" pButton type="button" label="Tiếp tục" (click)="onContinueAssignRole()"></button>
+    </p-footer>
+</p-dialog>
+
+
+
+
+<p-dialog header="Phân vai trò" [(visible)]="displayAssignRole" [style]="{width: '50vw',height:'50vh'}" [modal]="true">
+    <div class="p-col-12 mt-4 scrollable-table-container">
+        <p-table [value]="selectedEmployees" [(selection)]="selectedEmployees" [paginator]="false" [rows]="10"
+            responsiveLayout="scroll" styleClass="p-datatable-striped custom-scrollbar" [rowHover]="true"
+            [ngStyle]="{width: 'auto','overflow-x': 'auto','table-layout': 'auto'}"> <ng-template pTemplate="header">
+                <tr>
+                    <th>Họ và tên</th>
+                    <th>Đơn vị công tác</th>
+                    <th>Email</th>
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-employee>
+                <tr>
+                    <td>{{ employee.fullName }}</td>
+                    <td>{{ employee.organization?.organizationName }}</td>
+                    <td>{{ employee.personalEmail }}</td>
+                    <td>
+                        <i (click)="removeEmployee(employee)" class="pi pi-trash"></i>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <div class="p-formgroup-inline mt-4 flex">
+        <div *ngFor="let role of roles" class="p-field-radiobutton p-3">
+            <p-radioButton (ngModelChange)="onRoleChange($event)" [name]="'role'" [value]="role.id"
+                [(ngModel)]="selectedRole" [label]="role.displayName">
+            </p-radioButton>
+        </div>
+    </div>
+
+
+    <p-footer>
+        <button style="background-color: #64748b;" pButton type="button" label="Hủy bỏ"
+            (click)="displayAssignRole=false"></button>
+        <button class="ml-2" pButton type="button" label="Tiếp tục" (click)="onContinueAdd()"></button>
+    </p-footer>
+</p-dialog>
+
+
+<app-confirm-dialog [message]="dialogMessage"></app-confirm-dialog>

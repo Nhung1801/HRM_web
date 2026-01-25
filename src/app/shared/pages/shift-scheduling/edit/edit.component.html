@@ -1,0 +1,503 @@
+<div class="grid">
+    <div class="col-12">
+        <p-toolbar styleClass="mb-2">
+            <div class="">
+                <strong class="font-size-16">Sửa phân ca</strong>
+                <p-breadcrumb
+                    [model]="items"
+                    [home]="{ icon: 'pi pi-home' }"
+                ></p-breadcrumb>
+            </div>
+            <ng-template pTemplate="right">
+                <!-- <button
+                    pButton
+                    pRipple
+                    icon="pi pi-plus"
+                    label="Thêm vị trí"
+                    (click)="show()"
+                ></button> -->
+            </ng-template>
+        </p-toolbar>
+        <div class="card flex">
+            <div class="grid p-fluid p-3">
+                <div class="col-12 md:col-6 p-0">
+                    <form
+                        [formGroup]="shiftWorkCreateForm"
+                        (ngSubmit)="updateShift()"
+                    >
+                        <div class="general-info">
+                            <h5 class="heading-title">Thông tin chung</h5>
+                            <!-- Tên ca -->
+                            <div class="col-12 md:col-12 p-0">
+                                <div class="field mb-0 flex align-items-center">
+                                    <div class="col-12 mb-2 md:col-3 md:mb-0">
+                                        <label
+                                            style="
+                                                font-weight: 600;
+                                                color: #000;
+                                            "
+                                            htmlFor="phoneNumber"
+                                            >Tên bảng phân ca<span
+                                                class="red-asterisk"
+                                                >*</span
+                                            ></label
+                                        >
+                                    </div>
+                                    <div class="col-12 mb-2 md:col-9 md:mb-0">
+                                        <input
+                                            pInputText
+                                            id="phoneNumber"
+                                            type="text"
+                                            spellcheck="false"
+                                            formControlName="ShiftTableName"
+                                            placeholder="Nhập tên ca"
+                                        />
+                                        <div
+                                            *ngIf="
+                                                shiftWorkCreateForm.get(
+                                                    'ShiftTableName'
+                                                )?.invalid &&
+                                                (shiftWorkCreateForm.get(
+                                                    'ShiftTableName'
+                                                )?.dirty ||
+                                                    shiftWorkCreateForm.get(
+                                                        'ShiftTableName'
+                                                    )?.touched)
+                                            "
+                                        >
+                                            <div
+                                                *ngIf="shiftWorkCreateForm.get('ShiftTableName')?.errors?.['required']"
+                                                class="error-message"
+                                            >
+                                                Vui lòng nhập tên bảng phân ca
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Ca -->
+                            <div class="col-12 md:col-12 p-0">
+                                <div class="field mb-0 flex align-items-center">
+                                    <div class="col-12 mb-2 md:col-3 md:mb-0">
+                                        <label
+                                            style="
+                                                font-weight: 600;
+                                                color: #000;
+                                            "
+                                            htmlFor="phoneNumber"
+                                            >Ca<span class="red-asterisk"
+                                                >*</span
+                                            ></label
+                                        >
+                                    </div>
+                                    <div class="col-12 mb-2 md:col-9 md:mb-0">
+                                        <p-dropdown
+                                            [options]="shiftDialogs"
+                                            formControlName="ShiftCatalogId"
+                                            optionLabel="name"
+                                            [showClear]="true"
+                                            placeholder="Chọn ca làm việc"
+                                        ></p-dropdown>
+                                        <div
+                                            *ngIf="
+                                                shiftWorkCreateForm.get(
+                                                    'ShiftCatalogId'
+                                                )?.invalid &&
+                                                (shiftWorkCreateForm.get(
+                                                    'ShiftCatalogId'
+                                                )?.dirty ||
+                                                    shiftWorkCreateForm.get(
+                                                        'ShiftCatalogId'
+                                                    )?.touched)
+                                            "
+                                        >
+                                            <div
+                                                *ngIf="shiftWorkCreateForm.get('ShiftCatalogId')?.errors?.['required']"
+                                                class="error-message"
+                                            >
+                                                Vui lòng chọn ca làm việc
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Đơn vị áp dụng -->
+                            <div class="col-12 md:col-12 p-0">
+                                <div class="field mb-0 flex align-items-center">
+                                    <div class="col-12 mb-2 md:col-3 md:mb-0">
+                                        <label
+                                            style="
+                                                font-weight: 600;
+                                                color: #000;
+                                            "
+                                            htmlFor="phoneNumber"
+                                            >Đơn vị áp dụng<span
+                                                class="red-asterisk"
+                                                >*</span
+                                            ></label
+                                        >
+                                    </div>
+                                    <div class="col-12 mb-2 md:col-9 md:mb-0">
+                                        <!-- <p-dropdown
+                                            [options]="companyInfos"
+                                            formControlName="OrganizationId"
+                                            optionLabel="fullName"
+                                            optionValue="id"
+                                            [showClear]="true"
+                                            placeholder="Chọn đơn vị áp dụng"
+                                        ></p-dropdown> -->
+                                        <p-treeSelect
+                                            class="w-full custom-tree-select"
+                                            formControlName="OrganizationId"
+                                            [options]="organizations"
+                                            optionValue="data"
+                                            placeholder="Chọn đơn vị"
+                                            [showClear]="true"
+                                        >
+                                        </p-treeSelect>
+                                        <div
+                                            *ngIf="
+                                                shiftWorkCreateForm.get(
+                                                    'OrganizationId'
+                                                )?.invalid &&
+                                                (shiftWorkCreateForm.get(
+                                                    'OrganizationId'
+                                                )?.dirty ||
+                                                    shiftWorkCreateForm.get(
+                                                        'OrganizationId'
+                                                    )?.touched)
+                                            "
+                                        >
+                                            <div
+                                                *ngIf="shiftWorkCreateForm.get('OrganizationId')?.errors?.['required']"
+                                                class="error-message"
+                                            >
+                                                Vui lòng chọn đơn vị áp dụng
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="general-info">
+                            <h5 class="heading-title mb-3">
+                                Thời gian áp dụng
+                            </h5>
+                            <div class="field mb-0 flex align-items-center">
+                                <div class="col-12 mb-2 md:col-3 md:mb-0">
+                                    <label
+                                        style="font-weight: 600; color: #000"
+                                        htmlFor="phoneNumber"
+                                        >Ngày bắt đầu<span class="red-asterisk"
+                                            >*</span
+                                        ></label
+                                    >
+                                </div>
+                                <div class="col-12 mb-2 md:col-9 md:mb-0">
+                                    <p-calendar
+                                        formControlName="StartDate"
+                                        (onChange)="
+                                            onDayChange('IsSaturday', $event)
+                                        "
+                                        [iconDisplay]="'input'"
+                                        [showIcon]="true"
+                                        inputId="icondisplay"
+                                        placeholder="dd/mm/yyyy"
+                                        [dateFormat]="'dd/mm/yy'"
+                                    ></p-calendar>
+                                </div>
+                            </div>
+                            <div class="field mb-0 flex align-items-center">
+                                <div class="col-12 mb-2 md:col-3 md:mb-0">
+                                    <label
+                                        style="font-weight: 600; color: #000"
+                                        htmlFor="phoneNumber"
+                                        >Ngày kết thúc<span class="red-asterisk"
+                                            >*</span
+                                        ></label
+                                    >
+                                </div>
+                                <div class="col-12 mb-2 md:col-9 md:mb-0">
+                                    <p-calendar
+                                        formControlName="EndDate"
+                                        (onChange)="
+                                            onDayChange('IsSaturday', $event)
+                                        "
+                                        [iconDisplay]="'input'"
+                                        [showIcon]="true"
+                                        inputId="icondisplay"
+                                        [dateFormat]="'dd/mm/yy'"
+                                        placeholder="dd/mm/yyyy"
+                                    ></p-calendar>
+                                </div>
+                            </div>
+                            <div class="field mb-0 flex align-items-center">
+                                <div class="col-12 mb-2 md:col-3 md:mb-0">
+                                    <label
+                                        style="font-weight: 600; color: #000"
+                                        htmlFor="phoneNumber"
+                                        >Lặp theo<span class="red-asterisk"
+                                            >*</span
+                                        ></label
+                                    >
+                                </div>
+                                <div class="col-12 mb-2 md:col-9 md:mb-0">
+                                    <div class="week p-3">
+                                        <div class="flex p-0">
+                                            <div
+                                                class="col-12 mb-2 md:col-6 p-0 md:mb-0"
+                                            >
+                                                <p-dropdown
+                                                    [options]="
+                                                        constant.dateFilters
+                                                            .dateFilters
+                                                    "
+                                                    formControlName="RecurrenceType"
+                                                    optionLabel="key"
+                                                    optionValue="value"
+                                                    [showClear]="true"
+                                                    placeholder="Chọn lặp theo"
+                                                ></p-dropdown>
+                                            </div>
+                                            <div
+                                                class="col-12 mb-2 ml-4 p-0 md:col-6 md:mb-0 flex align-items-center"
+                                            >
+                                                <label for="label" class="mr-5"
+                                                    >Chu kì lặp</label
+                                                >
+                                                <input
+                                                    class="time-input"
+                                                    type="number"
+                                                    formControlName="RecurrenceCount"
+                                                    id="start-time"
+                                                    value="08:00"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div class="dayOfWeek mt-3">
+                                            <div class="dayOfWeek-list">
+                                                <div class="dayOfWeek-item">
+                                                    <p-checkbox
+                                                        [binary]="true"
+                                                        inputId="binary"
+                                                        formControlName="IsMonday"
+                                                        (onChange)="
+                                                            onDayChange(
+                                                                'IsMonday',
+                                                                $event
+                                                            )
+                                                        "
+                                                    ></p-checkbox>
+                                                    <label>Thứ 2</label>
+                                                </div>
+                                                <div class="dayOfWeek-item">
+                                                    <p-checkbox
+                                                        [binary]="true"
+                                                        inputId="binary"
+                                                        formControlName="IsTuesday"
+                                                        (onChange)="
+                                                            onDayChange(
+                                                                'IsTuesday',
+                                                                $event
+                                                            )
+                                                        "
+                                                    ></p-checkbox>
+                                                    <label>Thứ 3</label>
+                                                </div>
+                                                <div class="dayOfWeek-item">
+                                                    <p-checkbox
+                                                        [binary]="true"
+                                                        inputId="binary"
+                                                        formControlName="IsWednesday"
+                                                        (onChange)="
+                                                            onDayChange(
+                                                                'IsWednesday',
+                                                                $event
+                                                            )
+                                                        "
+                                                    ></p-checkbox>
+                                                    <label>Thứ 4</label>
+                                                </div>
+                                                <div class="dayOfWeek-item">
+                                                    <p-checkbox
+                                                        [binary]="true"
+                                                        inputId="binary"
+                                                        formControlName="IsThursday"
+                                                        (onChange)="
+                                                            onDayChange(
+                                                                'IsThursday',
+                                                                $event
+                                                            )
+                                                        "
+                                                    ></p-checkbox>
+                                                    <label>Thứ 5</label>
+                                                </div>
+                                                <div class="dayOfWeek-item">
+                                                    <p-checkbox
+                                                        [binary]="true"
+                                                        inputId="binary"
+                                                        formControlName="IsFriday"
+                                                        (onChange)="
+                                                            onDayChange(
+                                                                'IsFriday',
+                                                                $event
+                                                            )
+                                                        "
+                                                    ></p-checkbox>
+                                                    <label>Thứ 6</label>
+                                                </div>
+                                                <div class="dayOfWeek-item">
+                                                    <p-checkbox
+                                                        [binary]="true"
+                                                        inputId="binary"
+                                                        formControlName="IsSaturday"
+                                                        (onChange)="
+                                                            onDayChange(
+                                                                'IsSaturday',
+                                                                $event
+                                                            )
+                                                        "
+                                                    ></p-checkbox>
+                                                    <label>Thứ 7</label>
+                                                </div>
+                                                <div class="dayOfWeek-item">
+                                                    <p-checkbox
+                                                        [binary]="true"
+                                                        inputId="binary"
+                                                        formControlName="IsSunday"
+                                                        (onChange)="
+                                                            onDayChange(
+                                                                'IsSunday',
+                                                                $event
+                                                            )
+                                                        "
+                                                    ></p-checkbox>
+                                                    <label>Chủ nhật</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="general-info">
+                            <h5 class="heading-title mb-3">
+                                Đối tượng áp dụng
+                            </h5>
+                            <div class="flex justify-content-between">
+                                <div class="flex flex-wrap gap-3 m-0">
+                                    <div
+                                        *ngFor="let category of listSelectTask"
+                                        class="field-checkbox"
+                                    >
+                                        <p-radioButton
+                                            [inputId]="category.value"
+                                            [value]="category.value"
+                                            formControlName="ApplyObject"
+                                        >
+                                        </p-radioButton>
+                                        <label
+                                            [for]="category.value"
+                                            class="ml-2"
+                                        >
+                                            {{ category.label }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <!-- <button
+                                    pButton
+                                    style="width: 120px"
+                                    type="submit"
+                                    label="Cập nhật"
+                                ></button> -->
+                                <div class="flex gap-2">
+                                    <button
+                                        pButton
+                                        type="submit"
+                                        style="width: 190px"
+                                        label="Cập nhật"
+                                    ></button>
+                                    <button
+                                        pButton
+                                        type="button"
+                                        label="Lưu"
+                                        (click)="handleCreateShiftScheduling()"
+                                    ></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-12 md:col-6 px-4">
+                    <h5>Xem trước phân ca</h5>
+                    <div class="mb-3 flex gap-3 mt-2">
+                        <div class="flex gap-2">
+                            <p-button
+                                [outlined]="true"
+                                (click)="decreaseMonth()"
+                                icon="pi pi-arrow-left"
+                            ></p-button>
+                            <p-button
+                                [outlined]="true"
+                                (click)="increaseMonth()"
+                                icon="pi pi-arrow-right"
+                            ></p-button>
+                        </div>
+                        <p-calendar
+                            [(ngModel)]="date"
+                            view="month"
+                            [showIcon]="true"
+                            dateFormat="mm/yy"
+                            inputId="monthpicker"
+                            [yearNavigator]="true"
+                            [monthNavigator]="true"
+                            [yearRange]="'2020:2030'"
+                        ></p-calendar>
+                        <div class="flex align-items-center">
+                            Số công chuẩn: {{ this.standardWorkingDaysCount }}
+                        </div>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th *ngFor="let day of daysOfWeek">
+                                    {{ day }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let week of weeks">
+                                <td
+                                    *ngFor="let day of week"
+                                    [class.not-current-month]="
+                                        !day.currentMonth
+                                    "
+                                >
+                                    <div [class.working-day]="day.isWorkingDay">
+                                        <div style="text-align: left">
+                                            {{ day.day }}
+                                        </div>
+                                        <div
+                                            style="text-align: left"
+                                            *ngIf="day.shiftInfo"
+                                        >
+                                            <p>{{ day.shiftInfo.shiftName }}</p>
+                                            <!-- <p>{{ day.shiftInfo.shiftTime }}</p> -->
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- <button
+                pButton
+                label="Lưu"
+                (click)="handleCreateShiftScheduling()"
+            ></button> -->
+        </div>
+    </div>
+</div>

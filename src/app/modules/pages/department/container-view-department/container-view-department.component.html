@@ -1,0 +1,9 @@
+<div class="p-grid p-fluid card-custom">
+    <div class="dashboard-content">
+        <h2 class="dashboard-header">Chưa có dự án nhóm</h2>
+        <p class="dashboard-text">Hiện chưa có d&#7921; &#225;n/nh&#243;m n&#224;o trong ph&#242;ng ban n&#224;y. Để bắt
+            đầu giao việc, quản l&#253; c&#244;ng việc, nhấn v&#224;o n&#250;t dưới đ&#226;y.</p>
+        <button (click)="createProjectComponent.showDialogAdd(departmentId)" class="create-button">Tạo dự án/nhóm</button>
+    </div>
+</div>
+<app-create-project [selectedDepartment]="departmentId"></app-create-project>

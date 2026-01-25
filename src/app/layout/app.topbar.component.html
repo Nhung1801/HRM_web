@@ -1,0 +1,538 @@
+<p-confirmDialog />
+<div class="layout-topbar">
+    <a class="layout-topbar-logo" [routerLink]="['/']">
+        <img src="assets\image\logospin.png" /> SMO HRM
+    </a>
+
+    <button
+        #menubutton
+        class="p-link layout-menu-button layout-topbar-button"
+        (click)="layoutService.onMenuToggle()"
+    >
+        <i class="pi pi-bars"></i>
+    </button>
+    <p-dropdown
+        class="ml-5"
+        [options]="departments"
+        optionLabel="label"
+        optionValue="value"
+        (onChange)="handleRedirectDepartment($event)"
+        [(ngModel)]="selectedDepartment"
+        placeholder="Chọn phòng ban"
+        [style]="{ width: '100%' }"
+    >
+    </p-dropdown>
+    <span
+        class="ml-5"
+        *ngIf="selectedDepartment"
+        (click)="establishComponent.showDialog(selectedDepartment)"
+    >
+        <i
+            class="pi pi-cog d-block text-500 hover:text-primary hover:scale-110 transition-all"
+            style="font-size: 17px"
+        ></i>
+    </span>
+    <p-dropdown
+        *ngIf="selectedDepartment"
+        class="ml-5"
+        [options]="projects"
+        optionLabel="label"
+        optionValue="value"
+        (onChange)="handleRedirectProject($event)"
+        [(ngModel)]="selectedProject"
+        placeholder="Chọn dự án"
+        [style]="{ width: '100%' }"
+    >
+    </p-dropdown>
+    <button
+        #topbarmenubutton
+        class="p-link layout-topbar-menu-button layout-topbar-button"
+        (click)="layoutService.showProfileSidebar()"
+    >
+        <i class="pi pi-ellipsis-v"></i>
+    </button>
+
+    <div
+        #topbarmenu
+        class="layout-topbar-menu"
+        [ngClass]="{
+            'layout-topbar-menu-mobile-active':
+                layoutService.state.profileSidebarVisible
+        }"
+    >
+        <div style="display: flex" class="box-user" *ngIf="userCurrent != null">
+            <div class="button-out-in">
+                <p-button
+                    label="Danh sách dự án"
+                    [outlined]="true"
+                    (click)="listProjectByEmployeeComponent.showDialog()"
+                />
+                <button class="dropdown-button" (click)="showMenu = !showMenu">
+                    <i class="pi pi-plus-circle"></i>
+                    <span class="ml-2 me-2">Thêm công việc</span>
+                    <!-- <i class="pi pi-caret-down"></i> -->
+                </button>
+                <div *ngIf="showMenu" class="dropdown-content">
+                    <div class="dropdown-job-info-header"></div>
+                    <span
+                        class="flex span-add-depart"
+                        (click)="createProjectComponent.showDialogAdd()"
+                        (click)="showMenu = false"
+                    >
+                        <i class="me-2 pi pi-briefcase"></i>
+                        <span> Thêm dự án </span>
+                    </span>
+                    <span
+                        class="flex span-add-depart"
+                        (click)="createDepartmentComponent.showDialogAdd()"
+                        (click)="showMenu = false"
+                    >
+                        <i class="me-2 pi pi-folder"></i>
+                        <span> Thêm phòng ban </span>
+                    </span>
+                </div>
+                <button
+                    class="btn cham-vao font-semibold"
+                    (click)="handleCheckInOut('chamVao', $event)"
+                    [disabled]="isDisabled('chamVao')"
+                >
+                    Chấm vào
+                </button>
+                <button
+                    class="btn cham-ra font-semibold"
+                    (click)="handleCheckInOut('chamRa', $event)"
+                    [disabled]="isDisabled('chamRa')"
+                >
+                    Chấm ra
+                </button>
+            </div>
+            <div class="flex gap-4 align-items-center mx-3">
+                <span>
+                    <i
+                        class="pi pi-search d-block text-500 hover:text-primary hover:scale-110 transition-all"
+                        style="font-size: 17px"
+                    ></i>
+                </span>
+                <span>
+                    <i
+                        class="pi pi-home d-block text-500 hover:text-primary hover:scale-110 transition-all"
+                        style="font-size: 17px"
+                    ></i>
+                </span>
+                <!-- <span>
+                    <i
+                        class="pi pi-cog d-block text-500 hover:text-primary hover:scale-110 transition-all"
+                        style="font-size: 17px"
+                    ></i>
+                </span> -->
+                <!-- <span>
+                    <i
+                        class="pi pi-question-circle d-block text-500 hover:text-primary hover:scale-110 transition-all"
+                        style="font-size: 17px"
+                    ></i>
+                </span> -->
+                <span
+                    class="user-job-header job-notify relative flex align-items-center"
+                    (click)="toggleJobInfoDropdown()"
+                    #jobInfo
+                >
+                    <i
+                        class="pi pi-bell d-block text-500 hover:text-primary hover:scale-110 transition-all"
+                        style="font-size: 17px"
+                    ></i>
+                    <span
+                        class="job-quantity absolute bg-primary text-white text-xs font-bold border-round p-1 flex align-items-center justify-content-center"
+                        style="
+                            min-width: 18px;
+                            height: 18px;
+                            top: -10px;
+                            right: -10px;
+                        "
+                    >
+                        {{ unreadCount }}
+                    </span>
+                    <div
+                        class="dropdown-job-info pt-0"
+                        *ngIf="showJobInfoDropdown"
+                    >
+                        <div
+                            class="dropdown-job-info-header"
+                            style="max-height: 400px; overflow-y: scroll"
+                        >
+                            <div class="flex justify-content-between px-2">
+                                <span class="font-semibold">Thông báo</span>
+                                <span>
+                                    <i class="pi pi-ellipsis-h"></i>
+                                </span>
+                            </div>
+
+                            <div
+                                *ngFor="let notification of notifications"
+                                class="notifications-container"
+                            >
+                                <div
+                                    (click)="
+                                        handleNotificationClick(notification)
+                                    "
+                                    class="notification"
+                                    [ngClass]="{ unread: !notification.isRead }"
+                                >
+                                    <div class="notification-avatar">
+                                        <img
+                                            [src]="
+                                                baseImageUrl +
+                                                '/Image/Avatar/AvatarDefault.png'
+                                            "
+                                            alt="User Avatar"
+                                        />
+                                    </div>
+                                    <div class="notification-content">
+                                        <p class="notification-text">
+                                            {{ notification.content }}
+                                        </p>
+                                        <span class="notification-time">{{
+                                            notification.createdAt
+                                                | date : "short"
+                                        }}</span>
+                                    </div>
+                                </div>
+
+                                <!-- More notifications... -->
+                            </div>
+                        </div>
+                        <!-- <ul class="user-info-list">
+                            <li
+                                *ngFor="let item of notifies"
+                                class="job-info-item"
+                            >
+                                <div
+                                    class="flex align-items-center gap-3 job-notify-item"
+                                >
+                                    <div class="job-info-image">
+                                        <img
+                                            src="https://tse3.mm.bing.net/th?id=OIP.qIu2wcvur-VB04HW0V0j0QHaFj&pid=Api&P=0&h=180"
+                                            alt="User Avatar"
+                                        />
+                                    </div>
+                                    <div class="job-info-content">
+                                        <p class="job-info-text">
+                                            {{ item.content }}
+                                        </p>
+                                        <span class="job-info-time"
+                                            >1 phút trước</span
+                                        >
+                                    </div>
+                                </div>
+                            </li>
+                        </ul> -->
+                    </div>
+                </span>
+            </div>
+
+            <div class="user-info-header" (click)="toggleDropdown()" #userInfo>
+                <span class="user-name-header">{{ userCurrent?.name }}</span>
+                <span class="avatar-header">
+                    <img [src]="baseImageUrl + userCurrent.avatarUrl" />
+                </span>
+            </div>
+            <div class="dropdown-user-info" *ngIf="showDropdown">
+                <div class="user-profile-info">
+                    <span class="avatar-header user-profile-initials">
+                        <img [src]="baseImageUrl + userCurrent.avatarUrl" />
+                    </span>
+                    <div class="user-details">
+                        <div class="user-name user-name-header">
+                            {{ userCurrent.name }}
+                        </div>
+                        <div class="user-email">{{ userCurrent.email }}</div>
+                    </div>
+                </div>
+                <div class="user-company-info">SMO Media</div>
+
+                <ul class="user-info-list">
+                    <li class="user-info-item" (click)="handleOpenInfoDialog()">
+                        <span class="icon-container">
+                            <i class="pi pi-id-card"></i>
+                        </span>
+                        <span class="text">Xem thông tin</span>
+                    </li>
+                    <li
+                        class="user-info-item"
+                        (click)="handleOpenChangePasswordDialog()"
+                    >
+                        <span class="icon-container">
+                            <i class="pi pi-key"></i>
+                        </span>
+                        <span class="text">Đổi mật khẩu</span>
+                    </li>
+                    <li
+                        class="user-info-item"
+                        (click)="delegacyDialogComponent.showDialog()"
+                    >
+                        <span class="icon-container">
+                            <i class="pi pi-cog"></i>
+                        </span>
+                        <span class="text">Ủy quyền</span>
+                    </li>
+                    <li class="user-info-item" (click)="handleLogOut()">
+                        <span class="icon-container">
+                            <i class="pi pi-sign-out"></i>
+                        </span>
+                        <span class="text">Đăng xuất</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-dialog
+    header="Đổi mật khẩu "
+    [(visible)]="displayChangePassword"
+    [modal]="true"
+    [closable]="true"
+    [style]="{ width: '50vw' }"
+>
+    <form
+        class="dialog-body"
+        [formGroup]="setPasswordForm"
+        (submit)="handleSaveNewPassword()"
+    >
+        <div class="col-6">
+            <div class="form-group">
+                <label for="email"
+                    >Email
+                    <span
+                        ><i class="pi pi-envelope auti-custom-input-icon"></i
+                    ></span>
+                </label>
+                <input
+                    pInputText
+                    id="email"
+                    type="text"
+                    spellcheck="false"
+                    readonly
+                    formControlName="email"
+                    placeholder="Nhập email"
+                />
+                <app-validation-message
+                    [form]="setPasswordForm"
+                    [messages]="validationMessages"
+                    field="email"
+                ></app-validation-message>
+            </div>
+            <div class="form-group">
+                <label for="email"
+                    >Mật khẩu
+                    <span><i class="pi pi-key auti-custom-input-icon"></i></span
+                ></label>
+                <input
+                    pInputText
+                    id="phoneNumber"
+                    type="text"
+                    spellcheck="false"
+                    formControlName="oldPassword"
+                    placeholder="Nhập mật khẩu"
+                />
+                <app-validation-message
+                    [form]="setPasswordForm"
+                    [messages]="validationMessages"
+                    field="oldPassword"
+                ></app-validation-message>
+            </div>
+            <div class="form-group">
+                <label for="oldPassword"
+                    >Mật khẩu mới
+                    <span><i class="pi pi-key auti-custom-input-icon"></i></span
+                ></label>
+                <input
+                    pInputText
+                    id="phoneNumber"
+                    type="text"
+                    spellcheck="false"
+                    formControlName="newPassword"
+                    placeholder="Nhập mật khẩu mới"
+                />
+                <app-validation-message
+                    [form]="setPasswordForm"
+                    [messages]="validationMessages"
+                    field="newPassword"
+                ></app-validation-message>
+            </div>
+            <div class="form-group">
+                <label for="oldPassword"
+                    >Mật khẩu mới
+                    <span><i class="pi pi-key auti-custom-input-icon"></i></span
+                ></label>
+                <input
+                    pInputText
+                    id="phoneNumber"
+                    type="text"
+                    spellcheck="false"
+                    formControlName="repeatNewPassword"
+                    placeholder="Nhập lại mật khẩu mới"
+                />
+                <app-validation-message
+                    [form]="setPasswordForm"
+                    [messages]="validationMessages"
+                    field="repeatNewPassword"
+                ></app-validation-message>
+            </div>
+            <div class="button-container-popup">
+                <p-button
+                    label="Hủy"
+                    [outlined]="true"
+                    severity="secondary"
+                    class="cancel"
+                    (onClick)="displayChangePassword = false"
+                ></p-button>
+                <p-button label="Lưu" class="pl-2" type="submit"></p-button>
+            </div>
+        </div>
+        <div class="col-6">
+            <img
+                src="https://thumbs.dreamstime.com/b/lock-sign-icon-login-symbol-colorful-geometric-shapes-gradient-lock-icon-design-vector-lock-sign-icon-login-symbol-vector-132590955.jpg"
+                class="full-width-image"
+            />
+        </div>
+    </form>
+</p-dialog>
+<p-dialog
+    header="Thông tin người dùng"
+    [(visible)]="displayInfo"
+    [modal]="true"
+    [closable]="true"
+    [style]="{ width: '50vw' }"
+    class="user-info-dialog"
+>
+    <div class="grid">
+        <div class="col-12">
+            <div class="popup-information scrollable-content">
+                <div class="user-info-card">
+                    <div class="card-body">
+                        <div class="user-info-grid">
+                            <!-- Thông tin cá nhân -->
+                            <div class="user-info-section">
+                                <h5>Thông tin cá nhân</h5>
+                                <img
+                                    [src]="
+                                        baseImageUrl + userCurrent?.avatarUrl
+                                    "
+                                    class="user-info-avatar"
+                                />
+                                <h4 class="card-title user-info-name">
+                                    {{ userCurrent?.name }}
+                                </h4>
+                                <p class="card-text user-info-text">
+                                    <strong>Email:</strong>
+                                    {{ userCurrent?.email }}
+                                </p>
+                                <p class="card-text user-info-text">
+                                    <strong>Số điện thoại:</strong>
+                                    <span
+                                        *ngIf="
+                                            userCurrent?.phoneNumber;
+                                            else noPhone
+                                        "
+                                        >{{ userCurrent?.phoneNumber }}</span
+                                    >
+                                    <ng-template #noPhone
+                                        ><span class="user-info-missing"
+                                            >Không xác định</span
+                                        ></ng-template
+                                    >
+                                </p>
+                                <p class="card-text user-info-text">
+                                    <strong>Địa chỉ:</strong>
+                                    <span
+                                        *ngIf="
+                                            userCurrent?.address;
+                                            else noAddress
+                                        "
+                                        >{{ userCurrent?.address }}</span
+                                    >
+                                    <ng-template #noAddress
+                                        ><span class="user-info-missing"
+                                            >Không xác định</span
+                                        ></ng-template
+                                    >
+                                </p>
+                                <p class="card-text user-info-text">
+                                    <strong>Vai trò:</strong>
+                                    <ng-container
+                                        *ngFor="
+                                            let role of userCurrent?.roleNames
+                                        "
+                                    >
+                                        <span class="user-info-role">{{
+                                            role
+                                        }}</span>
+                                    </ng-container>
+                                </p>
+                            </div>
+                            <!-- Thông tin nhân viên -->
+                            <div class="user-info-section">
+                                <h5>Thông tin nhân viên</h5>
+                                <p class="card-text user-info-text">
+                                    <strong>Mã nhân viên:</strong>
+                                    {{ userCurrent?.employee?.employeeCode }}
+                                </p>
+                                <p class="card-text user-info-text">
+                                    <strong>Họ và tên:</strong>
+                                    {{ userCurrent?.employee?.lastName }}
+                                    {{ userCurrent?.employee?.firstName }}
+                                </p>
+                                <p class="card-text user-info-text">
+                                    <strong>Ngày sinh:</strong>
+                                    {{
+                                        userCurrent?.employee?.dateOfBirth
+                                            | date : "dd/MM/yyyy"
+                                    }}
+                                </p>
+                                <p class="card-text user-info-text">
+                                    <strong>Địa chỉ:</strong>
+                                    {{ userCurrent?.employee?.address }}
+                                </p>
+                                <p class="card-text user-info-text">
+                                    <strong>Email công ty:</strong>
+                                    {{ userCurrent?.employee?.companyEmail }}
+                                </p>
+                                <p class="card-text user-info-text">
+                                    <strong>Số điện thoại làm việc:</strong>
+                                    {{ userCurrent?.employee?.workPhoneNumber }}
+                                </p>
+                            </div>
+                        </div>
+                        <hr />
+                        <!-- Thông tin công ty -->
+                        <h5>Thông tin công ty</h5>
+                        <p class="card-text user-info-text">
+                            <strong>Tên công ty:</strong>
+                            {{ userCurrent?.company?.fullName }}
+                        </p>
+                        <p class="card-text user-info-text">
+                            <strong>Viết tắt:</strong>
+                            {{ userCurrent?.company?.abbreviation }}
+                        </p>
+                        <img
+                            [src]="
+                                baseImageUrl + userCurrent?.company?.logoPath
+                            "
+                            class="company-logo"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="user-info-buttons">
+                <button class="user-info-button cancel">Hủy</button>
+                <button class="user-info-button save">Lưu</button>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<app-create-department></app-create-department>
+<app-create-project></app-create-project>
+<app-delegacy-dialog></app-delegacy-dialog>
+<app-establish [departmentId]="selectedDepartment"></app-establish>
+<app-list-project-by-employee></app-list-project-by-employee>

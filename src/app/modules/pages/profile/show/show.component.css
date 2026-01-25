@@ -1,0 +1,144 @@
+.dashboard {
+    display: grid;
+    grid-template-columns: 2.5fr 2.5fr 3fr 2fr 2fr;
+    grid-template-rows: 0.7fr 0.7fr 2.1fr;
+    gap: 0px 0px;
+    gap: 10px;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "working classify classify trial office_employee"
+        "working classify classify maternity other"
+        ". . . . .";
+
+    height: 330px;
+}
+
+.working {
+    grid-area: working;
+}
+
+.classify {
+    grid-area: classify;
+}
+
+.trial {
+    grid-area: trial;
+}
+
+.maternity {
+    grid-area: maternity;
+}
+
+.office_employee {
+    grid-area: office_employee;
+}
+
+.other {
+    grid-area: other;
+}
+
+.dashboard{
+    background-color: #fff;
+}
+
+.dashboard-item{
+    position: relative;
+    display: flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.dashboard-item .content{
+    font-size: 34px;
+    font-weight:700;
+}
+
+.title-heading{
+    position: absolute;
+    top: 10px;
+    left:10px;
+    color: #000;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.working {
+    height: 300px;
+    background-color: #f0f9ff;
+}
+
+.working .content {
+    color: #13acf2;
+}
+
+.trial {
+    background-color: #f5f1ff;
+}
+
+.trial .content {
+    color: #6c31ed;
+}
+
+.classify{
+    background-color: #f4feff;
+}
+
+.classify .content{
+}
+
+.maternity {
+    background-color: #ffdddc;
+}
+
+.maternity .content {
+    color: #df4442;
+}
+
+.office_employee {
+    background-color: #dedede;
+}
+
+.office_employee .content {
+    color: #766d6e;
+}
+.other {
+    background-color: #d5f4ef;
+}
+
+.other .content {
+    color: #78ccf0;
+}
+
+.setting-item svg{
+    font-size: 13px;
+    display: block;
+}
+
+.setting-item{
+    display: flex;
+    align-items: center;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.01s;
+}
+.setting-item:hover{
+    background-color: #ebe9f0;
+}
+.employee-image-img{
+    width: 40px;
+    height: 40px;
+    border-radius:50%;
+}
+
+.employee-name{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.code:hover{
+    text-decoration: underline;
+}

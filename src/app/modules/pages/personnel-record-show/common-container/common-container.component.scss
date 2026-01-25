@@ -1,0 +1,74 @@
+.sidebar-item {
+    padding: 10px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: #f4f1f1;
+}
+.sidebar-list {
+    background: #fff;
+    box-shadow: var(--card-shadow);
+    border-radius: 4px;
+    padding: 1rem;
+    height: 98.2%;
+    margin-right: 20px;
+}
+.common {
+    background: #fff;
+    margin-bottom: 2rem;
+    box-shadow: var(--card-shadow);
+    border-radius: 4px;
+    padding: 1rem;
+}
+
+.sidebar-item.active {
+    border-left: 2px solid #2a2a86;
+}
+.avatar {
+    gap: 15px;
+    align-items: center;
+
+    color: #878787;
+}
+
+// .frame-image {
+//     width: 50px;
+//     height: 50px;
+//     border-radius: 50%;
+//     background-color: #f4f1f1;
+// }
+
+.frame-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.frame-image svg {
+    font-size: 20px;
+    color: #878787;
+}
+
+.sidebar-list-header {
+    background: #fff;
+    margin-bottom: 1rem;
+    box-shadow: var(--card-shadow);
+    border-radius: 4px;
+    padding: 1rem;
+    height: 100%;
+}
+.css-header-text {
+    font-weight: 600;
+}
+
+p.css-header-text {
+    margin-bottom: 2px;
+    min-height: 40px;
+    line-height: 20px;
+    margin: 0;
+}

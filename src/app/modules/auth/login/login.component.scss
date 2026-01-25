@@ -1,0 +1,87 @@
+// // tny 
+// @import url("assets/template/css/bootstrap.css");
+// @import url("assets/template/css/app.css");
+// @import url("assets/template/css/custom.css");
+
+
+// tny 
+@import url("../../../../assets/template/css/bootstrap.css");
+@import url("../../../../assets/template/css/app.css");
+@import url("../../../../assets/template/css/custom.css");
+
+.btn-primary {
+    color: #fff;
+    background-color: #2A2A86;
+    border-color: #2A2A86;
+}
+
+.custom-control-label::after {
+    background-color: #2A2A86;
+    border-color: #2A2A86;
+    border-radius: 2px;
+}
+
+.authentication-page-content {
+    height: 70vh;
+    display: flex;
+}
+.max-vw-100 {
+    max-width: 100vw;
+}
+.ml-100{
+    margin-left: 80%;
+    margin-bottom: 20px;
+}
+
+// footer
+.icon {
+    color: #2A2A86;
+}
+
+.support-chat {
+    position: relative;
+    background-color: #2A2A86;
+    color: white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    animation: shake 1.5s infinite;
+}
+
+.support-chat:hover {
+    animation: none;
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-3px);
+    }
+
+    50% {
+        transform: translateX(3px);
+    }
+
+    75% {
+        transform: translateX(-3px);
+    }
+}
+
+.support-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.support-hotline {
+    font-weight: bold;
+    font-size: 1rem;
+} 

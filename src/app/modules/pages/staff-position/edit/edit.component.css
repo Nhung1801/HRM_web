@@ -1,0 +1,135 @@
+.position-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 10px;
+    border-bottom: 1px solid #f9f7f7;
+    padding: 11px 0px;
+    width: 100%;
+}
+
+.position__list {
+    width: 100%;
+}
+
+.position-add {
+    position: absolute;
+    bottom: 60px;
+    width: 100%;
+}
+
+.position-add-btn {
+    display: flex;
+    gap: 8px;
+    padding: 11px 0;
+    color: #579cfb;
+}
+
+.position-add-btn i {
+    font-size: 13px;
+}
+
+
+.position-tools svg {
+    display: block;
+}
+
+.red-asterisk {
+    color: red;
+}
+
+.error-message {
+    position: absolute;
+    color: red;
+    font-size: 13px;
+    margin-left: 5px;
+}
+
+.position-tools {
+    display: none;
+    position: absolute;
+    right: 0;
+    display: flex;
+    gap: 5px;
+}
+
+.position-tools span {
+    padding: 5px;
+    border-radius: 50%;
+    background-color: #eae8e8;
+    transition: all 0.1s;
+}
+
+.permissions-tree .ui-treenode-connector {
+    display: none;
+}
+
+.permission-tree {
+    list-style-type: none;
+    /* Xóa dấu bullet */
+}
+
+.permission-item {
+    cursor: pointer;
+}
+
+.permission-item ul {
+    margin-left: 20px;
+}
+
+.expanded::before {
+    content: "▼";
+    /* Biểu tượng mở */
+    padding-right: 5px;
+}
+
+.collapsed::before {
+    content: "▶";
+    /* Biểu tượng đóng */
+    padding-right: 5px;
+}
+
+
+.container-update-role {
+    padding-top: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+ul{
+    padding: 0;
+    margin: 0;
+}
+
+
+
+.position__list {
+    height: 400px;
+    overflow-y: auto;
+    padding-right: 15px;
+}
+
+/* Tùy chỉnh thanh cuộn */
+.position__list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.position__list::-webkit-scrollbar-thumb {
+    background-color: #d9d8d8;
+    border-radius: 4px;
+}
+
+.position__list::-webkit-scrollbar-thumb:hover {
+    background-color: #8d8b8b;
+    /* Màu khi hover lên thanh cuộn */
+}
+
+.position__list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    /* Màu nền của track thanh cuộn */
+    border-radius: 4px;
+    /* Góc bo tròn cho track */
+}

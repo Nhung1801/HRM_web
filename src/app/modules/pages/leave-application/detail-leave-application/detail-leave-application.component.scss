@@ -1,0 +1,168 @@
+.p-col-12.p-md-6 {
+    padding: 20px;
+}
+
+.p-md-6{
+    width: 50%;
+}
+textarea {
+    width: 100%; 
+}
+
+p-calendar,
+p-dropdown,
+p-treeSelect,
+p-multiSelect {
+    width: 100%; 
+}
+
+.sidebar-item{
+    padding: 10px ;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.sidebar-list{
+    background: #fff;
+    margin-bottom: 1rem;
+    box-shadow: var(--card-shadow);
+    border-radius: 4px;
+    padding: 1rem;
+}
+.common{
+    background: #fff;
+    margin-bottom: 2rem;
+    box-shadow: var(--card-shadow);
+    border-radius: 4px;
+    padding: 1rem;
+}
+
+.sidebar-item.active {
+    border-bottom: 2px solid #2A2A86; 
+}
+
+.button-container-popup {
+    text-align: right;
+    margin-top: 20px;
+}
+.button-container {
+    margin-left: 385px;
+    margin-top: 20px;
+    display: flex;
+}
+
+.card-custom {
+    background: #fff;
+    margin-bottom: 2rem;
+    border: none;
+    box-shadow: var(--card-shadow);
+    border-radius: 4px;
+    padding: 1rem;
+}
+
+.text-validator{
+    color: red;
+    font-size: 12px !important;
+    margin-top: 6px;
+}
+
+
+//tny
+.data-display {
+    border-bottom: 1px solid #fbeded; 
+    padding: 5px 0; 
+    display: inline-block; 
+    width: 100%; 
+}
+
+.status-span {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+}
+
+
+//form
+.leave-form {
+    font-family: 'Roboto', sans-serif;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+
+.leave-form-header,
+.leave-form-footer {
+    text-align: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.leave-form-header h1 {
+    font-size: 24px;
+    color: #333;
+    margin: 0;
+}
+
+.leave-form-body {
+    padding: 20px 0;
+}
+
+.leave-form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.leave-form-row label {
+    font-weight: 500;
+    color: #333;
+    flex-basis: 30%;
+    text-align: right;
+    margin-right: 10px;
+}
+
+.leave-form-row span,
+.leave-form-row div {
+    flex-basis: 65%;
+    text-align: left;
+}
+
+.status-span {
+    padding: 5px 10px;
+    color: white;
+    border-radius: 5px;
+    font-weight: 500;
+}
+
+.css-span {
+    padding: 5px 10px;
+    color: #4b5563;
+    border-radius: 5px;
+    font-weight: 500;
+}
+
+.signatures {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 20px;
+}
+
+.signature span {
+    display: block;
+    text-align: center;
+    margin-top: 5px;
+}
+
+.footer {
+    text-align: center;
+    padding: 10px 0;
+    font-weight: 500;
+    color: #666;
+}

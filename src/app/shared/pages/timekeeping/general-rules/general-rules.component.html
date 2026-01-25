@@ -1,0 +1,41 @@
+
+    <div class="d-flex justify-content-between ">
+    
+        <span>
+            <h4>
+    
+                Thiết lập các quy định chấm công
+            </h4>
+        </span>
+        <p-button *ngIf="this.permisionHelper.hasPermissions([permissionConstant.ManageTimekeepingRulesEdit])" (click)="handleUpdate()"  label="Sửa" />
+    </div>
+    <div class="mt-sm-n2">
+        <p>Cho phép nhân viên thực hiên các nghiệp vụ</p>
+        <div class="list-checked" *ngFor=" let lt of listSelected">
+    
+            <span  class="item-checked d-flex my-2">
+    
+                <p-checkbox   />
+                <p class="mx-3">
+    
+                    {{lt.label}}
+                </p>
+            </span>
+        </div>
+    </div>
+    <div class="mt-5">
+        <p>Tính công khi thời gian chưa đủ 1 ca</p>
+       
+        <div *ngFor="let category of listSelectTask" class="field-checkbox">
+            <p-radioButton 
+                [inputId]="category.value" 
+                name="status" 
+                [value]="category.value" 
+                [(ngModel)]="chekboxRadio">
+            </p-radioButton>
+            <label [for]="category.value" class="ml-2">
+                {{ category.label }}
+            </label>
+        </div>
+    </div>
+

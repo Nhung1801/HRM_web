@@ -1,0 +1,459 @@
+<main id="main" class="main">
+    <div class="pagetitle">
+        <header class="header">
+            <h1>{{ this.timesheet?.timekeepingSheetName }} từ {{ this.timesheet?.startDate | date: 'dd/MM/yyyy' }} - {{ this.timesheet?.endDate | date: 'dd/MM/yyyy' }}</h1>
+            <button
+              class="edit-btn"
+              (click)="showDialogEdit()"
+              [disabled]="isLocked"
+              [ngClass]="{'disabled-btn': isLocked}">
+              ✎
+            </button>
+            <span class="lock" (click)="showConfirmDialog(isLocked)">
+              <i
+                [ngClass]="isLocked ? 'pi pi-lock' : 'pi pi-unlock'"
+                [style.color]="isLocked ? 'red' : 'black'"
+                style="font-size: 16px;"
+              ></i>
+              {{ isLocked ? 'Đã khóa' : 'Chưa khóa' }}
+            </span>
+
+            <p-dialog [(visible)]="displayConfirmDialog" [modal]="true" [closable]="false" [header]="dialogTitle">
+              <p>{{ dialogMessage }}</p>
+              <div class="p-dialog-footer">
+                <button pButton label="Xác nhận" icon="pi pi-check" (click)="confirmToggleLock()"></button>
+                <button style="margin-left: 20px;" pButton label="Hủy" icon="pi pi-times" class="p-button-secondary" (click)="cancelToggleLock()"></button>
+              </div>
+            </p-dialog>
+        </header>
+    </div>
+    <div class="toast-container">
+      <p-messages [(value)]="messages" [enableService]="false"
+        [closable]="false"></p-messages>
+    </div>
+    <!-- End Page Title -->
+    <section class="section k-list-table">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card-body">
+            <div class="card mt-3">
+                <div class="filters">
+                    <div class="filter-icons">
+                      <span class="green-dot"></span> Đủ công
+                      <span class="yellow-dot"></span> Thiếu công
+                      <span class="grey-dot"></span> Nghỉ không lương
+                    </div>
+                </div>
+
+                <div class="card-container">
+                  <!-- Work Card -->
+                  <div class="card-sheet">
+                    <div class="icon work"><i class="pi pi-check-square"></i></div>
+                    <div class="label">Đi làm</div>
+                    <div class="counter">{{ timesheetData.totalWokring }}</div>
+                  </div>
+
+                  <div class="card-sheet">
+                    <div class="icon leave"><i class="pi pi-calendar-minus"></i></div>
+                    <div class="label">Nghỉ</div>
+                    <div class="counter">{{ timesheetData.totalLeaveWorking }}</div>
+                  </div>
+
+                  <!-- Late Card -->
+                  <div class="card-sheet">
+                    <div class="icon late"><i class="pi pi-clock"></i></div>
+                    <div class="label">Đi muộn, về sớm</div>
+                    <div class="counter">{{ timesheetData.totalLateEarly }}</div>
+                  </div>
+
+                  <!-- Pending Card -->
+                  <div class="card-sheet">
+                    <div class="icon pending"><i class="pi pi-times-circle"></i></div>
+                    <div class="label">Chưa chấm</div>
+                    <div class="counter">{{ timesheetData.totalNotCheck }}</div>
+                  </div>
+                </div>
+
+
+                <div class="sheet-key">
+                    <p-autoComplete
+                      [style]="{ height: '43px', width: '100%' }"
+                      [(ngModel)]="selectedEmployee"
+                      [suggestions]="filteredEmployees"
+                      (completeMethod)="searchEmployee($event)"
+                      [field]="'displayName'"
+                      [forceSelection]="true"
+                      [showClear]="true"
+                      placeholder="Tìm kiếm nhân viên"
+                      (onSelect)="getTimesheetDetails()">
+                    </p-autoComplete>
+
+                    <div style="display: flex;">
+                      <p-treeSelect
+                        [options]="treeData"
+                        [(ngModel)]="selectedNode"
+                        [placeholder]="'Chọn đơn vị'"
+                        [style]="{ width: '300px' }"
+                        [showClear]="true"
+                        (onNodeSelect)="getTimesheetDetails()"
+                      ></p-treeSelect>
+
+                      <p-button
+                          style="margin-left: 10px;"
+                          label=""
+                          [outlined]="true"
+                          severity="secondary"
+                          icon="fa fa-external-link"
+                      ></p-button>
+                    </div>
+                </div>
+
+                <p-table #dt [value]="employees" responsiveLayout="scroll" scrollable scrollHeight="500px" style="min-width: 100%;">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="position: sticky; left: 0; background: white; z-index: 1; width: 200px; min-width: 200px; height: 100px; display: flex; align-items: center; padding: 10px;">
+                                <p-checkbox></p-checkbox> <span style="padding-left: 20px;">Nhân viên</span>
+                            </th>
+                            <th *ngFor="let date of dateRange"
+                                [ngStyle]="{ 'background-color': date.isToday ? 'rgb(226, 226, 226)' : 'transparent' }">
+                                <div style="color: gray; font-size: 13px;">{{ date.dayOfWeek }}</div>
+                                <div style="padding: 0 30px;">{{ date.displayDate }}</div>
+                            </th>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="body" let-employee>
+                        <tr>
+                            <td style="position: sticky; left: 0; background: white; z-index: 1; width: 200px; min-width: 200px; height: 100px; display: flex; align-items: center; padding: 10px;">
+                                <p-checkbox style="margin-right: 10px;"></p-checkbox>
+                                <div>
+                                    <div>{{ employee.name }}</div>
+                                    <div style="font-size: 0.8em; color: gray">{{ employee.employeeCode }}</div>
+                                </div>
+                            </td>
+
+                            <td *ngFor="let day of employee.schedule" [ngStyle]="{ 'background-color': day.isToday ? '#f0f0f0' : 'transparent' }">
+                                <div *ngIf="!day.morning && !day.afternoon" style="text-align: center; padding: 5px; width: 100px;">
+                                    <div *ngIf="day.holiday" style="text-align: center; padding: 5px;">
+                                        <div [ngStyle]="{ 'background-color': '#ff9800', 'width': '10px', 'height': '10px', 'border-radius': '50%', 'margin': '0 auto 5px auto' }"></div>
+                                        <div style="color: gray; font-weight: bold; font-size: 0.8em;">{{ day.holiday }}</div>
+                                    </div>
+                                    <div *ngIf="!day.holiday">
+                                        <div [ngStyle]="{ 'background-color': 'lightgray', 'width': '10px', 'height': '10px', 'border-radius': '50%', 'margin': '0 auto 5px auto' }"></div>
+                                        <div style="color: gray; font-size: 0.8em;">---</div>
+                                        <div style="color: gray; font-size: 0.8em;">---</div>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="day.singleShift" style="text-align: center; padding: 5px; width: 115px;">
+                                    <div [ngStyle]="{ 'background-color': day.morningColor, 'width': '10px', 'height': '10px', 'border-radius': '50%', 'margin': '0 auto 5px auto' }"></div>
+                                    <div style="font-size: 0.8em; color: gray;">{{ day.morningName }}</div>
+                                    <div (click)="openDialog(day.morningshiftWorkId, day.morningtimeSheetId)">{{ day.morning }}</div>
+                                </div>
+
+                                <div *ngIf="day.morning && day.afternoon && !day.singleShift" style="display: flex; justify-content: space-between; align-items: center; width: 206px;">
+                                    <div style="flex: 1; text-align: center; padding: 5px;">
+                                        <div [ngStyle]="{ 'background-color': day.morningColor, 'width': '10px', 'height': '10px', 'border-radius': '50%', 'margin': '0 auto 5px auto' }"></div>
+                                        <div style="font-size: 0.8em; color: gray;">{{ day.morningName }}</div>
+                                        <div (click)="openDialog(day.morningshiftWorkId, day.morningtimeSheetId)" [ngStyle]="{ 'cursor': isLocked ? 'not-allowed' : 'pointer' }">{{ day.morning }}</div>
+                                    </div>
+                                    <div style="flex: 1; text-align: center; padding: 5px; border-left: 1px solid #ccc;">
+                                        <div [ngStyle]="{ 'background-color': day.afternoonColor, 'width': '10px', 'height': '10px', 'border-radius': '50%', 'margin': '0 auto 5px auto' }"></div>
+                                        <div style="font-size: 0.8em; color: gray;">{{ day.afternoonName }}</div>
+                                        <div (click)="openDialog(day.afternoonshiftWorkId, day.afternoontimeSheetId)" [ngStyle]="{ 'cursor': isLocked ? 'not-allowed' : 'pointer' }">{{ day.afternoon }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <!---->
+    </section>
+</main>
+
+<p-dialog
+    [(visible)]="displayDialog"
+    header="Cập nhật bảng chấm công chi tiết"
+    [modal]="true"
+    [style]="{ width: '600px' }"
+    [closable]="true">
+    <form [formGroup]="detailUpdateForm">
+      <div class="p-fluid">
+        <div class="p-field">
+          <label class="labelip" for="treeData">Đơn vị <span
+            class="red-asterisk">*</span></label>
+            <p-treeSelect
+              [options]="treeData"
+              formControlName="organizationId"
+              optionLabel="label"
+              [placeholder]="'Chọn đơn vị'"
+              [showClear]="true"
+              [style]="{ width: '100%' }"
+              [filter]="true"
+              filterPlaceholder="Tìm kiếm"
+              [ngClass]="{ 'disabled-class': isDisabled }"
+            ></p-treeSelect>
+            <div
+              *ngIf="
+                (detailUpdateForm.get('organizationId')?.invalid &&
+                  (detailUpdateForm.get('organizationId')?.dirty ||
+                    detailUpdateForm.get('organizationId')?.touched)) || showErrorOrganizationId"
+            >
+              <div
+                *ngIf="detailUpdateForm.get('organizationId')?.errors?.['required']"
+                class="error-message"
+              >
+                Đơn vị không được bỏ trống
+              </div>
+            </div>
+        </div>
+
+        <div class="p-field mt-3">
+          <label class="labelip" for="detailTimesheetNameStaffPositions">Vị trí <span
+            class="red-asterisk">*</span></label>
+            <p-multiSelect
+              class="custom-multiselect"
+              [options]="staffPosition"
+              formControlName="detailTimesheetNameStaffPositions"
+              placeholder="Chọn vị trí"
+              optionLabel="name"
+              display="chip"
+              [showClear]="true"
+              [style]="{ width: '100%' }"
+              [ngClass]="{ 'disabled-class': isDisabled }">
+            </p-multiSelect>
+            <div *ngIf="detailUpdateForm.get('detailTimesheetNameStaffPositions')?.invalid && (detailUpdateForm.get('detailTimesheetNameStaffPositions')?.dirty || detailUpdateForm.get('detailTimesheetNameStaffPositions')?.touched) || showErrorDetailTimesheet">
+              <div *ngIf="detailUpdateForm.get('detailTimesheetNameStaffPositions')?.errors?.['required']" class="error-message">
+                Vị trí không được bỏ trống
+              </div>
+            </div>
+        </div>
+
+        <div class="p-field mt-3">
+          <label class="labelip" for="timekeepingSheetName">Tên bảng chấm công <span
+            class="red-asterisk">*</span></label>
+          <input
+            pInputText
+            type="text"
+            formControlName="timekeepingSheetName"
+            placeholder="Nhập thông tin"/>
+            <div *ngIf="detailUpdateForm.get('timekeepingSheetName')?.invalid && (detailUpdateForm.get('timekeepingSheetName')?.dirty || detailUpdateForm.get('timekeepingSheetName')?.touched) || showErrorTimekeepingSheetName">
+              <div *ngIf="detailUpdateForm.get('timekeepingSheetName')?.errors?.['required']" class="error-message">
+                Tên không được bỏ trống
+              </div>
+            </div>
+        </div>
+
+         <div class="p-field mt-3">
+          <label class="labelip">Chọn khoảng thời gian áp dụng <span class="red-asterisk">*</span></label>
+          <div class="p-inputgroup">
+            <p-calendar
+              formControlName="startDate"
+              [iconDisplay]="'input'"
+              [showIcon]="true"
+              [style]="{ width: '90%' }"
+              placeholder="Chọn ngày bắt đầu"
+              inputId="icondisplay"
+              [locale]="'vi'"
+              [dateFormat]="'dd/mm/yy'"
+              [ngClass]="{ 'disabled-class': isDisabled }"
+            />
+
+            <p-calendar
+              formControlName="endDate"
+              [iconDisplay]="'input'"
+              [showIcon]="true"
+              [style]="{ width: '100%', 'padding-left': '20px' }"
+              placeholder="Chọn ngày kết thúc"
+              inputId="icondisplay"
+              [locale]="'vi'"
+              [dateFormat]="'dd/mm/yy'"
+              [ngClass]="{ 'disabled-class': isDisabled }"/>
+          </div>
+          <div *ngIf="detailUpdateForm.get('startDate')?.invalid && (detailUpdateForm.get('startDate')?.dirty || detailUpdateForm.get('startDate')?.touched) || showErrorStartDate">
+            <div *ngIf="detailUpdateForm.get('startDate')?.errors?.['required']" class="error-message">
+              Ngày bắt đầu không được bỏ trống
+            </div>
+          </div>
+          <div *ngIf="detailUpdateForm.get('endDate')?.invalid && (detailUpdateForm.get('endDate')?.dirty || detailUpdateForm.get('endDate')?.touched) || showErrorEndDate">
+            <div *ngIf="detailUpdateForm.get('endDate')?.errors?.['required']" class="error-message">
+              Ngày kết thúc không được bỏ trống
+            </div>
+          </div>
+          <small *ngIf="invalidDateRange" class="p-error">
+            Khoảng cách tối đa 31 ngày
+          </small>
+        </div>
+
+        <div class="p-field mt-3">
+          <label class="labelip" for="timekeepingMethod">Hình thức chấm công <span
+            class="red-asterisk">*</span></label>
+          <p-dropdown
+            [options]="timekeepingMethodOption"
+            formControlName="timekeepingMethod"
+            [style]="{ width: '100%' }"
+            [showClear]="true"
+            placeholder="Chọn hình thức">
+          </p-dropdown>
+          <div *ngIf="detailUpdateForm.get('timekeepingMethod')?.invalid && (detailUpdateForm.get('timekeepingMethod')?.dirty || detailUpdateForm.get('timekeepingMethod')?.touched) || showErrorTimekeepingMethod">
+            <div *ngIf="detailUpdateForm.get('timekeepingMethod')?.errors?.['required']" class="error-message">
+              Hình thức chấm công không được bỏ trống
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <p-footer>
+      <button
+
+        pButton
+        label="Hủy"
+        class="p-button-secondary"
+        (click)="closeDialogEdit()">
+      </button>
+
+      <button
+        style="margin-left: 10px;"
+        pButton
+        label="Lưu"
+        class="p-button-primary"
+        (click)="onSubmitUpdate()">
+      </button>
+
+    </p-footer>
+</p-dialog>
+
+<p-dialog
+  header="Chấm công ngày {{ selectedDate }}"
+  [(visible)]="isDialogVisible"
+  [closable]="true"
+  [modal]="true"
+  [style]="{ width: '600px' }"
+  (onHide)="closeDialog()">
+
+  <!-- Header -->
+  <div>
+    <span style="color: gray; font-size: 12px;">{{ this.selectedShiftData?.name }} ({{ this.selectedShiftData?.startTime }}-{{ this.selectedShiftData?.endTime }})</span>
+  </div>
+
+  <!-- Table-like layout -->
+  <form [formGroup]="timeTrackingForm">
+    <div class="p-fluid">
+      <div class="grid">
+        <!-- Header Row -->
+        <div class="col-6"><strong>Thông tin</strong></div>
+        <div class="col-6 text-right"><strong>Giá trị</strong></div>
+      </div>
+      <hr />
+
+      <!-- Rows for Time Tracking -->
+      <div class="grid">
+        <div class="col-6">Số giờ</div>
+        <div class="col-6">
+          <input pInputText formControlName="numberOfWorkingHour" disabled />
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-6">Giờ vào</div>
+        <div class="col-6">
+          <p-calendar
+            formControlName="startTime"
+            [iconDisplay]="'input'"
+            [showIcon]="true"
+            [timeOnly]="true"
+            inputId="startTime"
+            (onChange)="updateWorkingHours()"
+          >
+          <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
+            <i class="pi pi-clock pointer-events-none pointer-events-none"  (click)="clickCallBack($event)"></i>
+          </ng-template>
+        </p-calendar>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-6">Giờ nghỉ</div>
+        <div class="col-6">
+          <!-- Two calendar inputs for selecting break start and end time -->
+          <div style="display: flex;" class="p-grid">
+            <div style="margin-right: 10px;" class="p-col-5">
+              <p-calendar
+                formControlName="startTakeABreak"
+                [iconDisplay]="'input'"
+                [showIcon]="true"
+                [timeOnly]="true"
+                inputId="startTakeABreak">
+                <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
+                  <i  class="pi pi-clock pointer-events-none pointer-events-none" (click)="clickCallBack($event)"></i>
+                </ng-template>
+              </p-calendar>
+            </div>
+            <div class="p-col-5">
+              <p-calendar
+                formControlName="endTakeABreak"
+                [iconDisplay]="'input'"
+                [showIcon]="true"
+                [timeOnly]="true"
+                inputId="endTakeABreak">
+                <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
+                  <i  class="pi pi-clock pointer-events-none pointer-events-none" (click)="clickCallBack($event)"></i>
+                </ng-template>
+              </p-calendar>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-6">Giờ ra</div>
+        <div class="col-6">
+          <p-calendar
+            formControlName="endTime"
+            [iconDisplay]="'input'"
+            [showIcon]="true"
+            [timeOnly]="true"
+            inputId="endTime"
+          >
+            <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
+              <i  class="pi pi-clock pointer-events-none pointer-events-none" (click)="clickCallBack($event)"></i>
+            </ng-template>
+          </p-calendar>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-6">Đi muộn (phút)</div>
+        <div class="col-6">
+          <input pInputText formControlName="lateDuration" />
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-6">Về sớm (phút)</div>
+        <div class="col-6">
+          <input pInputText formControlName="earlyLeaveDuration" />
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-6">Tổng thời gian làm thêm giờ</div>
+        <div class="col-6">
+          <input pInputText formControlName="overtimeHours" disabled />
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- Footer -->
+  <ng-template pTemplate="footer">
+    <button pButton type="button" label="Hủy" icon="pi pi-times" (click)="closeDialog()" class="p-button-text"></button>
+    <button pButton type="button" label="Lưu" icon="pi pi-check" (click)="sendTimeTrackingToAPI()" class="p-button-primary"></button>
+  </ng-template>
+
+</p-dialog>
+
+
+
+
+

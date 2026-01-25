@@ -1,0 +1,146 @@
+<div class="row p-3 pb-0 pt-0">
+    <p-toolbar styleClass="mb-2">
+        <div class="">
+            <strong class="font-size-16">Bảng chấm công</strong>
+            <p-breadcrumb [model]="breadcrumbs" [home]="{ icon: 'pi pi-home' }"></p-breadcrumb>
+        </div>
+    </p-toolbar>
+</div>
+
+<div class="flex justify-content-between mb-2 card-custom">
+    <div class="flex">
+        <div *ngIf="selectedtimeSheets.length>0" class="flex justify-content-center">
+            <p-button class="ml-5" label="Xác nhận tất cả"
+                (click)="handleUpdateStatusMultiple(leaveApplicationStatus.Approved)" />
+        </div>
+        <div *ngIf="selectedtimeSheets.length>0" class="flex justify-content-center">
+            <button type="button" pButton label="Từ chối tất cả"
+                (click)="handleUpdateStatusMultiple(leaveApplicationStatus.Rejected)"
+                class="ml-2  custom-cancle-red"></button>
+        </div>
+    </div>
+    <div class="flex">
+        <div class="ml-2 me-2 select-tree " style="width: 300px">
+            <p-calendar [(ngModel)]="queryParameters.startDate" id="startDate" placeholder="Chọn tháng và năm bắt đầu"
+                [view]="'month'" [dataType]="'string'" [dateFormat]="'mm-yy'" [showIcon]="true" [yearNavigator]="true"
+                [monthNavigator]="true" [locale]="viLocale" (onSelect)="{}" (onInput)="{}">
+            </p-calendar>
+        </div>
+        <div  class="ml-2 me-2 select-tree flex align-items-center justify-content-center" >
+            <i class="pi pi-arrow-circle-right" style="color: #2A2986; font-size: 1.5rem; "></i>
+        </div>
+        <div class="ml-2 me-2 select-tree " style="width: 300px">
+            <p-calendar [(ngModel)]="queryParameters.endDate" id="endDate" placeholder="Chọn tháng và năm kết thúc"
+                [view]="'month'" [dataType]="'string'" [dateFormat]="'mm-yy'" [showIcon]="true" [yearNavigator]="true"
+                [monthNavigator]="true" [locale]="viLocale" (onSelect)="{}" (onInput)="{}">
+            </p-calendar>
+
+        </div>
+        <div class="p-10 rounded border icon-settings cursor-pointer ml-2 me-2" style="position: relative">
+            <i class="pi pi-spin pi-cog" style="font-size: 1rem"></i>
+        </div>
+        <div class="flex justify-content-center">
+            <p-button class="ml-2" (click)="onSearch()" label="Lọc" />
+        </div>
+    </div>
+</div>
+
+<p-table [value]="timeSheets" [(selection)]="	selectedtimeSheets" [paginator]="false" [rows]="10"
+    responsiveLayout="scroll" styleClass="p-datatable-striped custom-scrollbar" [rowHover]="true" [ngStyle]="{
+    width: 'auto',
+    'overflow-x': 'auto',
+    'table-layout': 'auto'}">
+    <ng-template pTemplate="header">
+        <tr>
+            <th class="text-center"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
+            <th *ngFor="let col of columns" [hidden]="!col.selected" class="text-center">
+                {{ col.header }}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-timeSheet>
+        <tr>
+            <td class="text-center"><p-tableCheckbox [value]="timeSheet"></p-tableCheckbox></td>
+            <td *ngFor="let col of columns" [hidden]="!col.selected" class="text-center"
+                [style]="{ minWidth: '150px' }">
+                <span *ngIf="col.field.includes('action')">
+                    <div class="" style="display: flex; align-items: center; justify-content: center;">
+                        <div *ngIf="timeSheet.summaryTimesheetNameEmployeeConfirm.status==summaryTimesheetNameEmployeeConfirmStatus.Pending"
+                            (click)="handleUpdateStatus(timeSheet,summaryTimesheetNameEmployeeConfirmStatus.Confirm)"
+                            class="font-size-16 ml-2" style="padding: 3px; border-radius: 50%">
+                            <i class="pi pi-check-circle"></i>
+                        </div>
+                        <div *ngIf="timeSheet.summaryTimesheetNameEmployeeConfirm.status==summaryTimesheetNameEmployeeConfirmStatus.Pending"
+                            (click)="handleUpdateStatus(timeSheet,summaryTimesheetNameEmployeeConfirmStatus.Reject)"
+                            class="font-size-16 ml-2" style="padding: 3px; border-radius: 50%">
+                            <i class="pi pi-thumbs-down-fill
+                        "></i>
+                        </div>
+                        <div class="font-size-16 ml-2" style="padding: 3px; border-radius: 50%"
+                            [routerLink]="['/time-sheet/detail', timeSheet.id]"
+                            [queryParams]="{ startDate: timeSheet.startDate, endDate: timeSheet.endDate}">
+                            <i class="pi pi-eye "></i>
+                        </div>
+                    </div>
+                </span>
+                <span *ngIf="col.field.includes('status')">
+                    <span class="status-span"
+                        [ngStyle]="{'color': getTimeSheetStatus(timeSheet.summaryTimesheetNameEmployeeConfirm.status).color, 'background-color': getTimeSheetStatus(timeSheet.summaryTimesheetNameEmployeeConfirm.status).bgColor}">
+                        {{ getTimeSheetStatus(timeSheet.summaryTimesheetNameEmployeeConfirm.status).text }}
+                    </span>
+                </span>
+                <span *ngIf="col.field.includes('applyObject')">
+                    {{ user.organization.organizationName}}
+                </span>
+                <span *ngIf="col.field.includes('position')">
+                    {{ user.employee.staffPosition.positionName}}
+                </span>
+                <span
+                    *ngIf="!col.field.includes('status') && !col.field.includes('applyObject')  && !col.field.includes('position')">
+                    {{ timeSheet[col.field] }}
+                </span>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+<div class="flex align-items-center mt-3" style="justify-content: space-between">
+    <p>
+        <span style="font-weight: 500">{{
+            1 + (paging.pageIndex - 1) * paging.pageSize
+            }}</span>
+        -
+        <span style="font-weight: 500">{{
+            1 +
+            (paging.pageIndex - 1) * paging.pageSize +
+            (paging.pageSize - 1)
+            }}</span>
+        trong
+        <span style="font-weight: 500">{{
+            paging.totalRecords
+            }}</span>
+        bản ghi
+    </p>
+    <div *ngIf="timeSheets?.length > 0">
+        <p-paginator class="custum-paging" (onPageChange)="onPageChange($event)"
+            [first]="(paging.pageIndex - 1) * paging.pageSize" [rows]="paging.pageSize"
+            [totalRecords]="paging.totalRecords" [rowsPerPageOptions]="config.pageSizeOptions" />
+    </div>
+</div>
+
+<app-confirm-dialog [message]="dialogMessage">
+</app-confirm-dialog>
+
+<p-dialog header="Lý do từ chối" [(visible)]="showRejectTimeSheet" [modal]="true" [style]="{width: '400px'}">
+    <div class="p-field p-grid">
+        <div class="p-col">
+            <textarea [(ngModel)]="note" placeholder="Nhập ghi chú" rows="5" cols="30" pInputTextarea
+                style="width:100%"></textarea>
+        </div>
+    </div>
+    <p-footer>
+        <button type="button" pButton label="Hủy" (click)="showRejectTimeSheet=false"
+            class="ui-button-danger  cutsom-cancel me-2"></button>
+        <button type="button" pButton label="Gửi" (click)="handleUpdateStatusRejectConfirm()"
+            class="ui-button-success"></button>
+    </p-footer>
+</p-dialog>

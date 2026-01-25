@@ -1,0 +1,273 @@
+/* tny add */
+.status-span {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.text-success {
+    color: green;
+}
+
+.text-danger {
+    color: red;
+}
+
+.text-warning {
+    color: orange;
+}
+
+.p-input-icon-left .p-inputtext {
+    width: 100%;
+}
+
+.text-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.p-grid {
+    margin-bottom: 20px;
+}
+
+.icon-settings {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: auto 0px auto 5px;
+}
+
+.custom-checkbox-list li {
+    list-style-type: none;
+    padding: 8px 0;
+}
+
+.custom-checkbox-list .p-checkbox {
+    margin: 0;
+}
+
+.button-right {
+    margin-left: 100px;
+}
+
+.card-custom {
+    background: #fff;
+    margin-bottom: 2rem;
+    border: none;
+    box-shadow: var(--card-shadow);
+    border-radius: 4px;
+    padding: 1rem;
+}
+
+
+.custom-cancle-red {
+    background-color: #AA0000;
+    border-color: #AA0000;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.field-group {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.checkbox-group {
+    display: flex;
+    gap: 15px;
+}
+
+.checkbox-group p-checkbox {
+    display: flex;
+    align-items: center;
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.button-container button {
+    min-width: 80px;
+}
+
+.cancel-button {
+    background-color: #ccc;
+    color: black;
+    border: none;
+}
+
+.submit-button {
+    background-color: #2a2986;
+    color: white;
+}
+
+/* Container tổng */
+.description-container {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 5px;
+    /* background-color: #f9f9f9; */
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* Thanh công cụ */
+.toolbar {
+    display: flex;
+    gap: 8px;
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+}
+
+.toolbar button {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.toolbar button:hover {
+    color: #2a2986;
+}
+
+/* Ô nhập mô tả */
+.description-container textarea {
+    width: 100%;
+    height: 70px;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 5px;
+    resize: none;
+}
+
+/* Placeholder */
+.description-container textarea::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+/* Container Emoji */
+.emoji-container {
+    position: relative;
+}
+
+/* Danh sách Emoji */
+.emoji-picker {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    background: white;
+    border: 1px solid #ddd;
+    padding: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    width: 150px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.emoji-picker span {
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.emoji-picker span:hover {
+    /* background: #f0f0f0; */
+    border-radius: 5px;
+}
+
+textarea {
+    width: 100%;
+    height: 120px;
+}
+
+.birthday-notify {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: #4a4a4a;
+    line-height: 1.4;
+}
+
+.birthday-notify .highlight {
+    color: #e74c3c; 
+    font-weight: 600;
+}
+
+
+.birthday-notification {
+    background-color: #f5f6fa;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 14px;
+    color: #333;
+    border: 1px solid #f2d7d5;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .highlight-name {
+    color: #ff5e5e;
+    font-weight: bold;
+  }
+  
+  .toggle-icon {
+    margin-left: 10px;
+    cursor: pointer;
+    color: #888;
+    font-size: 16px;
+  }
+  
+  .toggle-icon:hover {
+    color: #555;
+  }
+  
+  .birthday-list {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    width: 300px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+  }
+  
+  .birthday-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .birthday-list li {
+    padding: 5px 0;
+    font-size: 14px;
+  }
+  

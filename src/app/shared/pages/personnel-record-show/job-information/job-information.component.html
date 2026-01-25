@@ -1,0 +1,1373 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="flex gap-5">
+            <div class="card">
+                <!-- <div class="avatar">
+                    <div class="frame-image">
+                        <span>
+                            <svg
+                                stroke="currentColor"
+                                fill="currentColor"
+                                stroke-width="0"
+                                viewBox="0 0 512 512"
+                                height="1em"
+                                width="1em"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    fill="none"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="32"
+                                    d="m350.54 148.68-26.62-42.06C318.31 100.08 310.62 96 302 96h-92c-8.62 0-16.31 4.08-21.92 10.62l-26.62 42.06C155.85 155.23 148.62 160 140 160H80a32 32 0 0 0-32 32v192a32 32 0 0 0 32 32h352a32 32 0 0 0 32-32V192a32 32 0 0 0-32-32h-59c-8.65 0-16.85-4.77-22.46-11.32z"
+                                ></path>
+                                <circle
+                                    cx="256"
+                                    cy="272"
+                                    r="80"
+                                    fill="none"
+                                    stroke-miterlimit="10"
+                                    stroke-width="32"
+                                ></circle>
+                                <path
+                                    fill="none"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="32"
+                                    d="M124 158v-22h-24v22"
+                                ></path>
+                            </svg>
+                        </span>
+                    </div>
+                    <label>Ảnh đại diện</label>
+                </div> -->
+                <div class="profile">
+                    <form [formGroup]="createJobInfo">
+                        <div class="employee-info">
+                            <h5 class="title__heading">THÔNG TIN NHÂN VIÊN</h5>
+                            <div class="grid p-fluid p-3">
+                                <!-- Đơn vị công tác -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Đơn vị công tác<span
+                                                    class="red-asterisk"
+                                                    >*</span
+                                                ></label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <input
+                                                readonly
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                spellcheck="false"
+                                                formControlName="organizationId"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Loại hợp đồng  -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="name1"
+                                                >Loại hợp đồng</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                                            style="
+                                                justify-content: space-between;
+                                                gap: 7px;
+                                            "
+                                        >
+                                            <p-dropdown
+                                                [options]="contractTypes"
+                                                formControlName="contractTypeId"
+                                                optionLabel="name"
+                                                optionValue="id"
+                                                [showClear]="true"
+                                            ></p-dropdown>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Vị trí công việc -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Vị trí công việc<span
+                                                    class="red-asterisk"
+                                                    >*</span
+                                                ></label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <input
+                                                readonly
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                spellcheck="false"
+                                                formControlName="staffPositionId"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Mã chấm công -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="name1"
+                                                >Mã chấm công</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                                            style="
+                                                justify-content: space-between;
+                                                gap: 7px;
+                                            "
+                                        >
+                                            <input
+                                                readonly
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                spellcheck="false"
+                                                formControlName="timeKeepingId"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Chức danh -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Chức danh<span
+                                                    class="red-asterisk"
+                                                    >*</span
+                                                ></label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                                            style="
+                                                justify-content: space-between;
+                                                gap: 7px;
+                                            "
+                                        >
+                                            <input
+                                                readonly
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                spellcheck="false"
+                                                formControlName="staffTitleId"
+                                            />
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        ></div>
+                                    </div>
+                                </div>
+                                <!-- Ngày học việc -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Ngày học việc</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <p-calendar
+                                                formControlName="internshipStartDate"
+                                                [showIcon]="true"
+                                                dateFormat="dd/mm/yy"
+                                                placeholder="dd/mm/yy"
+                                            ></p-calendar>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Cấp -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Cấp<span class="red-asterisk"
+                                                    >*</span
+                                                ></label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <input
+                                                readonly
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                spellcheck="false"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Ngày thử việc -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Ngày thử việc</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <p-calendar
+                                                formControlName="probationStartDate"
+                                                [showIcon]="true"
+                                                dateFormat="dd/mm/yy"
+                                                placeholder="dd/mm/yy"
+                                            ></p-calendar>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Bậc  -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="name1"
+                                                >Bậc</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                                            style="
+                                                justify-content: space-between;
+                                                gap: 7px;
+                                            "
+                                        >
+                                            <input
+                                                readonly
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                spellcheck="false"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Ngày chính thức -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Ngày chính thức</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <p-calendar
+                                                formControlName="officialStartDate"
+                                                [showIcon]="true"
+                                                dateFormat="dd/mm/yy"
+                                                placeholder="dd/mm/yy"
+                                            ></p-calendar>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Trạng thái lao động -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Trạng thái lao động<span
+                                                    class="red-asterisk"
+                                                    >*</span
+                                                ></label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <p-dropdown
+                                                [options]="workstatus"
+                                                optionLabel="Title"
+                                                optionValue="code"
+                                                formControlName="workingStatus"
+                                                [showClear]="true"
+                                            ></p-dropdown>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Thâm niên -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="name1"
+                                                >Thâm niên</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                                            style="
+                                                justify-content: space-between;
+                                                gap: 7px;
+                                            "
+                                        >
+                                            <input
+                                                readonly
+                                                pInputText
+                                                id="name1"
+                                                formControlName="seniority"
+                                                type="text"
+                                                spellcheck="false"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Tính chất lao động  -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="name1"
+                                                >Tính chất lao động</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                                            style="
+                                                justify-content: space-between;
+                                                gap: 7px;
+                                            "
+                                        >
+                                            <input
+                                                readonly
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                formControlName="jobTypeName"
+                                                spellcheck="false"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Ngày nghỉ hưu dự kiến -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Ngày nghỉ hưu dự kiến</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <p-calendar
+                                                formControlName="retiredDate"
+                                                [showIcon]="true"
+                                                dateFormat="dd/mm/yy"
+                                                placeholder="dd/mm/yy"
+                                            ></p-calendar>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Khu vực làm việc  -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="name1"
+                                                >Khu vực làm việc</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                                            style="
+                                                justify-content: space-between;
+                                                gap: 7px;
+                                            "
+                                        >
+                                            <input
+                                                readonly
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                formControlName="workingArea"
+                                                spellcheck="false"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Địa điểm làm việc -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="name1"
+                                                >Địa điểm làm việc</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                                            style="
+                                                justify-content: space-between;
+                                                gap: 7px;
+                                            "
+                                        >
+                                            <input
+                                                readonly
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                formControlName="workingLocation"
+                                                spellcheck="false"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resignation-info">
+                            <h5 class="title__heading">THÔNG TIN NGHỈ VIỆC</h5>
+                            <div class="grid p-fluid p-3">
+                                <!-- Nhóm lí do nghỉ -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Nhóm lí do nghỉ</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <p-dropdown
+                                                [options]="reasonsForLeaving"
+                                                optionLabel="label"
+                                                optionValue="value"
+                                                formControlName="reasonGroupQuitJob"
+                                                [showClear]="true"
+                                            ></p-dropdown>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Lí do nghỉ -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Lí do nghỉ</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <input
+                                                readonly
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                formControlName="reasonQuitJob"
+                                                spellcheck="false"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Người duyệt -->
+                                <!-- <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Người duyệt</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                           
+                                            <input
+                                                readonly
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                spellcheck="false"
+                                            />
+                                        </div>
+                                    </div>
+                                </div> -->
+
+                                <!-- Ngày nghỉ việc -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Ngày nghỉ việc</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <p-calendar
+                                                formControlName="quitJobDate"
+                                                dateFormat="dd/mm/yy"
+                                            ></p-calendar>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Ngày nghỉ việc -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Ý kiến đóng góp</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <textarea
+                                                formControlName="opinionContribute"
+                                                rows="5"
+                                                cols="30"
+                                                pInputTextarea
+                                                readonly
+                                            ></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="resignation-info">
+                            <h5 class="title__heading">THÔNG TIN LƯƠNG</h5>
+                            <div class="grid p-fluid p-3">
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Bậc lương</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <input
+                                                readonly
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                formControlName="salaryLevel"
+                                                spellcheck="false"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Tổng lương</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <input
+                                                readonly
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                formControlName="totalSalary"
+                                                spellcheck="false"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Lương cơ bản
+                                            </label>
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <input
+                                                readonly
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                formControlName="basicSalary"
+                                                spellcheck="false"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >TK ngân hàng</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <input
+                                                readonly
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                formControlName="bankAccountNumber"
+                                                spellcheck="false"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Lương đóng BH</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <input
+                                                readonly
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                formControlName="insuranceSalary"
+                                                spellcheck="false"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Ngân hàng</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <input
+                                                readonly
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                formControlName="bankName"
+                                                spellcheck="false"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Chi nhánh</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <input
+                                                readonly
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                spellcheck="false"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                    </form>
+
+                    <!-- Phụ cấp  -->
+                    <div class="allowance-info" style="width: 100%">
+                        <div class="flex justify-content-between">
+                            <h5 class="title__heading">CÁC KHOẢN PHỤ CẤP</h5>
+                            <div class="allowance-add">
+                                <!-- <span class="allowance-add-icon">
+                                    <i class="pi pi-plus"></i>
+                                </span> -->
+                                <!-- <span
+                                    class="allowance-add-text"
+                                    (click)="allowanceVisible = true"
+                                    >Thêm mới</span
+                                > -->
+                            </div>
+                        </div>
+                        <div class="allowance-list">
+                            <div
+                                *ngIf="foreginmoney?.length === 0"
+                                class="allowance-none"
+                            >
+                                <p class="allowance-add-text-none">
+                                    Chưa có dữ liệu
+                                </p>
+                            </div>
+                            <p-table
+                                *ngIf="foreginmoney?.length > 0"
+                                [value]="foreginmoney"
+                                [scrollable]="true"
+                                scrollHeight="400px"
+                            >
+                                <!-- Header -->
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th
+                                            class="text-center"
+                                            style="min-width: 100px"
+                                        >
+                                            #
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            style="min-width: 100px"
+                                        >
+                                            Mã hợp đồng
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            style="min-width: 100px"
+                                        >
+                                            Tên phụ cấp
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            style="min-width: 100px"
+                                        >
+                                            Cấp độ phụ cấp
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            style="min-width: 200px"
+                                        >
+                                            Định mức
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            style="min-width: 200px"
+                                        >
+                                            Giá trị
+                                        </th>
+                                    </tr>
+                                </ng-template>
+
+                                <!-- Body -->
+                                <ng-template
+                                    pTemplate="body"
+                                    let-item
+                                    let-index="rowIndex"
+                                >
+                                    <tr>
+                                        <td class="text-center">
+                                            {{ index + 1 }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ item?.contractId }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ item?.allowanceName }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ item?.standardType }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{
+                                                item?.standardValue?.toLocaleString(
+                                                    "vi-VN",
+                                                    {
+                                                        style: "currency",
+                                                        currency: "VND"
+                                                    } || " "
+                                                )
+                                            }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{
+                                                item?.value?.toLocaleString(
+                                                    "vi-VN",
+                                                    {
+                                                        style: "currency",
+                                                        currency: "VND"
+                                                    } || " "
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+
+                                <!-- Footer -->
+                                <ng-template pTemplate="footer">
+                                    <tr>
+                                        <td colspan="5" class="text-right">
+                                            <span
+                                                [style]="{
+                                                    paddingRight: '80px'
+                                                }"
+                                            >
+                                                Tổng phụ cấp
+                                            </span>
+                                        </td>
+
+                                        <td class="text-center">
+                                            {{
+                                                totalMoney?.toLocaleString(
+                                                    "vi-VN",
+                                                    {
+                                                        style: "currency",
+                                                        currency: "VND"
+                                                    } || " "
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                    <!-- Các khoản khấu trừ  -->
+                    <div class="allowance-info" style="width: 100%">
+                        <div class="flex justify-content-between">
+                            <h5 class="title__heading">CÁC KHOẢN KHẤU TRỪ</h5>
+                            <div class="allowance-add"></div>
+                        </div>
+                        <div class="allowance-list">
+                            <div
+                                *ngIf="listDeductions?.length === 0"
+                                class="allowance-none"
+                            >
+                                <p class="allowance-add-text-none">
+                                    Chưa có dữ liệu
+                                </p>
+                            </div>
+                            <p-table
+                                *ngIf="listDeductions?.length > 0"
+                                [value]="listDeductions"
+                                [scrollable]="true"
+                                scrollHeight="400px"
+                            >
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th
+                                            class="text-center"
+                                            style="min-width: 100px"
+                                        >
+                                            #
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            style="min-width: 100px"
+                                        >
+                                            Tên khấu trừ
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            style="min-width: 100px"
+                                        >
+                                            Loại khấu trừ
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            style="min-width: 100px"
+                                        >
+                                            Loại giá trị
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            style="min-width: 200px"
+                                        >
+                                            Định mức
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            style="min-width: 200px"
+                                        >
+                                            Giá trị
+                                        </th>
+                                    </tr>
+                                </ng-template>
+
+                                <ng-template
+                                    pTemplate="body"
+                                    let-item
+                                    let-index="rowIndex"
+                                >
+                                    <tr>
+                                        <td class="text-center">
+                                            {{ index + 1 }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ item?.deducationName }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ item?.standardType }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ item?.typeValue }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{
+                                                item?.standardValue?.toLocaleString(
+                                                    "vi-VN",
+                                                    {
+                                                        style: "currency",
+                                                        currency: "VND"
+                                                    } || " "
+                                                )
+                                            }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{
+                                                item?.value?.toLocaleString(
+                                                    "vi-VN",
+                                                    {
+                                                        style: "currency",
+                                                        currency: "VND"
+                                                    } || " "
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+
+                                <ng-template pTemplate="footer">
+                                    <tr>
+                                        <td colspan="5" class="text-right">
+                                            <span
+                                                [style]="{
+                                                    paddingRight: '80px'
+                                                }"
+                                            >
+                                                Tổng khấu trừ
+                                            </span>
+                                        </td>
+
+                                        <td class="text-center">
+                                            {{
+                                                totalDeductions?.toLocaleString(
+                                                    "vi-VN",
+                                                    {
+                                                        style: "currency",
+                                                        currency: "VND"
+                                                    } || " "
+                                                )
+                                            }}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-dialog
+    header="Các khoản khấu trừ"
+    [modal]="true"
+    [(visible)]="deductionsVisible"
+    [style]="{ width: '45vw' }"
+>
+    <div class="card" style="position: sticky; top: 97px">
+        <form [formGroup]="contractTypeCreateForm">
+            <div class="grid p-fluid">
+                <!-- Tên khoản -->
+                <div class="col-12 md:col-12 p-0">
+                    <div class="field mb-0 flex align-items-center">
+                        <div class="col-12 mb-2 md:col-3 md:mb-0">
+                            <label
+                                style="font-weight: 600; color: #000"
+                                htmlFor="phoneNumber"
+                                >Tên khoản<span class="red-asterisk"
+                                    >*</span
+                                ></label
+                            >
+                        </div>
+                        <div class="col-12 mb-2 md:col-9 md:mb-0">
+                            <p-dropdown
+                                [options]="allowanceAccount"
+                                formControlName="deducationName"
+                                optionLabel="label"
+                                optionValue="labe"
+                                [showClear]="true"
+                            ></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Định mức -->
+                <div class="col-12 md:col-12 p-0">
+                    <div class="field mb-0 flex align-items-center">
+                        <div class="col-12 mb-2 md:col-3 md:mb-0">
+                            <label
+                                style="font-weight: 600; color: #000"
+                                htmlFor="phoneNumber"
+                                >Định mức</label
+                            >
+                        </div>
+                        <div class="col-12 mb-2 md:col-4 md:mb-0">
+                            <p-dropdown
+                                [options]="allowanceStandard"
+                                formControlName="standardType"
+                                optionLabel="label"
+                                optionValue="label"
+                                [showClear]="true"
+                            ></p-dropdown>
+                        </div>
+                        <div class="col-12 mb-2 md:col-5 md:mb-0">
+                            <input
+                                readonly
+                                type="text"
+                                pInputText
+                                formControlName="standardValue"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Giá trị -->
+                <div class="col-12 md:col-12 p-0">
+                    <div class="field mb-0 flex align-items-center">
+                        <div class="col-12 mb-2 md:col-3 md:mb-0">
+                            <label
+                                style="font-weight: 600; color: #000"
+                                htmlFor="phoneNumber"
+                                >Giá trị</label
+                            >
+                        </div>
+                        <div class="col-12 mb-2 md:col-4 md:mb-0">
+                            <p-dropdown
+                                [options]="allowanceStandard"
+                                formControlName="standardType"
+                                optionLabel="label"
+                                optionValue="label"
+                                [showClear]="true"
+                            ></p-dropdown>
+                        </div>
+                        <div class="col-12 mb-2 md:col-5 md:mb-0">
+                            <input
+                                readonly
+                                type="text"
+                                pInputText
+                                formControlName="standardValue"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ghi chú -->
+                <div class="col-12 md:col-12 p-0">
+                    <div class="field mb-0 flex align-items-center">
+                        <div class="col-12 mb-2 md:col-3 md:mb-0">
+                            <label
+                                style="font-weight: 600; color: #000"
+                                htmlFor="phoneNumber"
+                                >Ghi chú</label
+                            >
+                        </div>
+                        <div class="col-12 mb-2 md:col-9 md:mb-0">
+                            <textarea
+                                pKeyFilter="int"
+                                rows="4"
+                                cols="30"
+                                formControlName="note"
+                                pInputTextarea
+                            ></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="flex gap-2 col-12 md:col-12 p-0"
+                    style="justify-content: flex-end"
+                >
+                    <div class="field mb-0 flex align-items-center gap-2">
+                        <p-button label="Hủy" severity="secondary"></p-button>
+                        <p-button label="Lưu"></p-button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</p-dialog>

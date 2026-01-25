@@ -1,0 +1,207 @@
+<p-confirmPopup></p-confirmPopup>
+
+<div class="grid">
+    <div class="col-12">
+        <p-toolbar styleClass="mb-2">
+            <div class="">
+                <strong class="font-size-16">Danh sách ca</strong>
+                <p-breadcrumb
+                    [model]="items"
+                    [home]="{ icon: 'pi pi-home' }"
+                ></p-breadcrumb>
+            </div>
+            <ng-template pTemplate="right">
+                <div class="flex gap-2">
+                    <button
+                        [routerLink]="['/shift/create']"
+                        pButton
+                        pRipple
+                        icon="pi pi-plus"
+                        label="Thêm mới ca"
+                        *ngIf="
+                            hasPermissionHelper.hasPermissions([
+                                permissionConstant.ManageShiftSetupCreate
+                            ])
+                        "
+                        (click)="show()"
+                    ></button>
+                    <p-button
+                        *ngIf="
+                            hasPermissionHelper.hasPermissions([
+                                permissionConstant.ManageShiftSetupDelete
+                            ])
+                        "
+                        label="Xóa"
+                        [disabled]="
+                            this.selectedShift.length > 0 ? false : true
+                        "
+                        (click)="handleOnDeleteMultiple($event)"
+                        severity="danger"
+                    ></p-button>
+                </div>
+            </ng-template>
+        </p-toolbar>
+        <div class="card">
+            <div class="flex gap-3">
+                <div class="flex flex-column">
+                    <span class="block mt-2 md:mt-0 p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input
+                            pInputText
+                            type="text"
+                            placeholder="Tìm theo tên ca"
+                            [(ngModel)]="queryParameters.name"
+                            style="width: 300px"
+                        />
+                    </span>
+                </div>
+                <div class="flex flex-column">
+                    <button
+                        pButton
+                        type="button"
+                        (click)="handleSearchStaffPostion()"
+                    >
+                        Lọc
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-section" style="margin-top: 20px">
+                <div class="table-wrapper">
+                    <p-table
+                        responsiveLayout="scroll"
+                        styleClass="p-datatable-striped"
+                        [rowHover]="true"
+                        [paginator]="false"
+                        [value]="shifts"
+                        [(selection)]="selectedShift"
+                        dataKey="id"
+                    >
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th class="sticky-column" [style]="{ 'min-width': '150px' }">Mã ca</th>
+                                <th class="sticky-column" [style]="{ 'min-width': '150px' }">Tên ca</th>
+                                <th [style]="{ 'min-width': '150px' }">
+                                    Giờ bắt đầu
+                                </th>
+                                <th [style]="{ 'min-width': '150px' }">
+                                    Giờ kết thúc
+                                </th>
+                                <th [style]="{ 'min-width': '150px' }">
+                                    Giờ bắt đầu nghỉ
+                                </th>
+                                <th [style]="{ 'min-width': '150px' }">
+                                    Giờ kết thúc nghỉ
+                                </th>
+                                <th [style]="{ 'min-width': '150px' }">Giờ công</th>
+                                <th [style]="{ 'min-width': '150px' }">
+                                    Tổng thời gian nghỉ
+                                </th>
+                                <th [style]="{ 'min-width': '150px' }">
+                                    Ngày công
+                                </th>
+                                <th [style]="{ 'min-width': '150px' }">
+                                    Hệ số ngày thường
+                                </th>
+                                <th [style]="{ 'min-width': '150px' }">
+                                    Hệ số ngày nghỉ
+                                </th>
+                                <th [style]="{ 'min-width': '150px' }">
+                                    Hệ số ngày lễ
+                                </th>
+                                <th
+                                    [style]="{
+                                        'min-width': '150px',
+                                        'text-align': 'center'
+                                    }"
+                                >
+                                    Hành động
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowData let-i="rowIndex">
+                            <tr>
+                                <td class="sticky-column">
+                                    {{ rowData.code }}
+                                </td>
+                                <td class="sticky-column">{{ rowData.name }}</td>
+                                <td>
+                                    {{ rowData.startTime }}
+                                </td>
+                                <td>{{ rowData.endTime }}</td>
+                                <td>
+                                    {{ rowData.startTakeABreak }}
+                                </td>
+                                <td>
+                                    {{ rowData.endTakeABreak }}
+                                </td>
+                                <td>
+                                    {{ rowData.workingHours }}
+                                </td>
+                                <td>
+                                    {{ rowData.totalRestTime }}
+                                </td>
+                                <td>
+                                    {{ rowData.workingDays }}
+                                </td>
+                                <td>
+                                    {{ rowData.regularMultiplier }}
+                                </td>
+                                <td>
+                                    {{ rowData.leaveDaysMultiplier }}
+                                </td>
+                                <td>
+                                    {{ rowData.holidayMultiplier }}
+                                </td>
+                                <td style="text-align: center">
+                                    <span
+                                        class="icon-edit"
+                                        [routerLink]="['/shift/edit', rowData?.id]"
+                                        *ngIf="
+                                            hasPermissionHelper.hasPermissions([
+                                                permissionConstant.ManageShiftSetupEdit
+                                            ])
+                                        "
+                                    >
+                                        <i class="pi pi-file-edit"></i>
+                                    </span>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+                <div
+                    class="flex align-items-center mt-3"
+                    style="justify-content: space-between"
+                >
+                    <p>
+                        <span style="font-weight: 500">{{
+                            1 + (paging.pageIndex - 1) * paging.pageSize
+                        }}</span>
+                        -
+                        <span style="font-weight: 500">{{
+                            1 +
+                                (paging.pageIndex - 1) * paging.pageSize +
+                                (paging.pageSize - 1)
+                        }}</span>
+                        trong
+                        <span style="font-weight: 500">{{
+                            paging.totalRecords
+                        }}</span>
+                        bản ghi
+                    </p>
+                    <div *ngIf="shifts?.length > 0">
+                        <p-paginator
+                            class="custum-paging"
+                            (onPageChange)="onPageChange($event)"
+                            [first]="(paging.pageIndex - 1) * paging.pageSize"
+                            [rows]="paging.pageSize"
+                            [totalRecords]="paging.totalRecords"
+                            [rowsPerPageOptions]="config.pageSizeOptions"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

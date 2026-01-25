@@ -1,0 +1,472 @@
+<p-confirmPopup></p-confirmPopup>
+
+<div class="grid">
+    <div class="col-12">
+        <p-toolbar styleClass="mb-2">
+            <div class="">
+                <strong class="font-size-16">Danh sách hồ sơ</strong>
+                <p-breadcrumb
+                    [model]="items"
+                    [home]="{ icon: 'pi pi-home' }"
+                ></p-breadcrumb>
+            </div>
+            <ng-template pTemplate="right">
+                <!-- <button
+                    pButton
+                    pRipple
+                    [routerLink]="['/personnel-record']"
+                    icon="pi pi-plus"
+                    label="Thêm hồ sơ"
+                    (click)="staffPositionVisible = true"
+                ></button> -->
+            </ng-template>
+        </p-toolbar>
+        <div class="card">
+            <p-table
+                responsiveLayout="scroll"
+                styleClass="p-datatable-striped"
+                [rowHover]="true"
+                [paginator]="false"
+                [value]="profiles"
+                [(selection)]="selectedProfile"
+                dataKey="id"
+            >
+                <ng-template pTemplate="caption">
+                    <div
+                        class="flex justify-content-end gap-3 align-items-end md:flex-row"
+                    >
+                        <div class="flex flex-column">
+                            <p-dropdown
+                                [options]="
+                                    constant.profileConstant.workingStatus
+                                "
+                                optionLabel="label"
+                                optionValue="value"
+                                [(ngModel)]="queryParameters.workingStatus"
+                                [showClear]="true"
+                                placeholder="Chọn trạng thái"
+                            />
+                        </div>
+                        <div class="flex flex-column">
+                            <span class="block mt-2 md:mt-0 p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <p-autoComplete
+                                    [suggestions]="employees"
+                                    (completeMethod)="
+                                        filterEmployeeSuggestions($event)
+                                    "
+                                    field="name"
+                                    [(ngModel)]="queryParameters.employeeObject"
+                                    (ngModelChange)="onEmployeeSelected($event)"
+                                    [style]="{
+                                        width: '20%',
+                                        height: '44px'
+                                    }"
+                                    placeholder="Chọn người dùng"
+                                >
+                                    <ng-template let-item pTemplate="item">
+                                        <div>
+                                            <span>{{ item.name }}</span>
+                                            <span
+                                                style="
+                                                    color: rgb(64, 0, 255);
+                                                    font-weight: 600;
+                                                "
+                                            >
+                                                -
+                                                {{ item.phoneNumber }}</span
+                                            >
+                                        </div>
+                                    </ng-template>
+                                </p-autoComplete>
+                            </span>
+                        </div>
+                        <div class="flex flex-column">
+                            <p-treeSelect
+                                class="w-full custom-tree-select"
+                                [(ngModel)]="queryParameters.organizationObject"
+                                [options]="organizations"
+                                optionValue="data"
+                                placeholder="Chọn đơn vị"
+                                [showClear]="true"
+                            >
+                            </p-treeSelect>
+                        </div>
+                        <div class="flex flex-column">
+                            <button
+                                pButton
+                                pRipple
+                                label="Lọc"
+                                (click)="handleSearchProfile()"
+                            ></button>
+                        </div>
+                        <div class="flex flex-column">
+                            <p-button
+                                label=""
+                                [outlined]="true"
+                                severity="secondary"
+                                icon="pi pi-cloud-download"
+                            ></p-button>
+                        </div>
+                        <div class="flex flex-column">
+                            <p-overlayPanel #op>
+                                <ng-template pTemplate="content">
+                                    <div class="setting-list">
+                                        <div class="setting-item">
+                                            <span>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    fill="currentColor"
+                                                    class="bi bi-pencil"
+                                                    viewBox="0 0 16 16"
+                                                >
+                                                    <path
+                                                        d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"
+                                                    />
+                                                </svg>
+                                            </span>
+                                            <span>Sửa</span>
+                                        </div>
+                                        <div class="setting-item">
+                                            <span>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    fill="currentColor"
+                                                    class="bi bi-pencil"
+                                                    viewBox="0 0 16 16"
+                                                >
+                                                    <path
+                                                        d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"
+                                                    />
+                                                </svg>
+                                            </span>
+                                            <span>Gửi Email</span>
+                                        </div>
+                                        <div class="setting-item">
+                                            <span>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    fill="currentColor"
+                                                    class="bi bi-pencil"
+                                                    viewBox="0 0 16 16"
+                                                >
+                                                    <path
+                                                        d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"
+                                                    />
+                                                </svg>
+                                            </span>
+                                            <span>Thêm hợp đồng</span>
+                                        </div>
+                                        <div class="setting-item">
+                                            <span>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    fill="currentColor"
+                                                    class="bi bi-pencil"
+                                                    viewBox="0 0 16 16"
+                                                >
+                                                    <path
+                                                        d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"
+                                                    />
+                                                </svg>
+                                            </span>
+                                            <span
+                                                >Ngừng kích hoạt tài khoản</span
+                                            >
+                                        </div>
+                                        <div class="setting-item">
+                                            <span>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    fill="currentColor"
+                                                    class="bi bi-pencil"
+                                                    viewBox="0 0 16 16"
+                                                >
+                                                    <path
+                                                        d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"
+                                                    />
+                                                </svg>
+                                            </span>
+                                            <span>Gửi Email</span>
+                                        </div>
+                                        <div class="setting-item">
+                                            <span>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    fill="currentColor"
+                                                    class="bi bi-pencil"
+                                                    viewBox="0 0 16 16"
+                                                >
+                                                    <path
+                                                        d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"
+                                                    />
+                                                </svg>
+                                            </span>
+                                            <span>Xóa tài khoản</span>
+                                        </div>
+                                        <div class="setting-item">
+                                            <span>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    fill="currentColor"
+                                                    class="bi bi-pencil"
+                                                    viewBox="0 0 16 16"
+                                                >
+                                                    <path
+                                                        d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"
+                                                    />
+                                                </svg>
+                                            </span>
+                                            <span>Tạo thủ tục</span>
+                                        </div>
+                                        <div class="setting-item">
+                                            <span>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    fill="currentColor"
+                                                    class="bi bi-pencil"
+                                                    viewBox="0 0 16 16"
+                                                >
+                                                    <path
+                                                        d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"
+                                                    />
+                                                </svg>
+                                            </span>
+                                            <span>Xuất file</span>
+                                        </div>
+                                        <div class="setting-item">
+                                            <span>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="16"
+                                                    height="16"
+                                                    fill="currentColor"
+                                                    class="bi bi-pencil"
+                                                    viewBox="0 0 16 16"
+                                                >
+                                                    <path
+                                                        d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"
+                                                    />
+                                                </svg>
+                                            </span>
+                                            <span>Xóa</span>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </p-overlayPanel>
+                            <p-button
+                                (click)="op.toggle($event)"
+                                label=""
+                                icon="pi pi-spin pi-cog"
+                                [outlined]="true"
+                                severity="secondary"
+                            ></p-button>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 4rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th style="white-space: nowrap">Mã nhân viên</th>
+                        <th style="white-space: nowrap">Họ và tên</th>
+                        <th style="white-space: nowrap">Giới tính</th>
+                        <th style="white-space: nowrap">Ngày sinh</th>
+                        <th style="white-space: nowrap">Số điện thoại</th>
+                        <th style="white-space: nowrap">Email công việc</th>
+                        <th style="white-space: nowrap">Cấp bậc</th>
+                        <th style="white-space: nowrap">Vị trí công việc</th>
+                        <th style="white-space: nowrap">Đơn vị</th>
+                        <th style="white-space: nowrap">Hành động</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="item"></p-tableCheckbox>
+                        </td>
+                        <td>
+                            <span
+                                class="code"
+                                [routerLink]="['/show-record', item.id]"
+                                >{{ item?.employeeCode }}</span
+                            >
+                        </td>
+                        <td>
+                            <div class="employee-name">
+                                <div class="employee-image">
+                                    <img
+                                        class="employee-image-img"
+                                        [src]="this.imgUrl + item?.avatarUrl"
+                                        alt="Hình ảnh từ Bing"
+                                    />
+                                </div>
+                                <div style="white-space: nowrap">
+                                    {{ item?.lastName + " " + item?.firstName }}
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ item?.sex }}</td>
+                        <td>{{ item?.dateOfBirth | date : "dd/MM/yyyy" }}</td>
+                        <td>{{ item?.phoneNumber }}</td>
+                        <td>{{ item?.companyEmail }}</td>
+                        <td>{{ item?.staffTitle?.staffTitleName }}</td>
+                        <td>{{ item?.staffPosition?.positionName }}</td>
+                        <td>
+                            {{ item?.organization?.organizationName }}
+                        </td>
+
+                        <td class="text-center">
+                            <div class="flex gap-1 justify-content-center">
+                                <!-- <span class="mr-2 icon-tool"
+                                    ><svg
+                                        stroke="currentColor"
+                                        fill="currentColor"
+                                        stroke-width="0"
+                                        viewBox="0 0 576 512"
+                                        height="1em"
+                                        width="1em"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                            d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144 143.93 143.93 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79 47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z"
+                                        ></path></svg
+                                ></span> -->
+                                <span
+                                    class="mr-2 icon-tool"
+                                    (click)="handleWarn(item)"
+                                >
+                                    <svg
+                                        style="display: block"
+                                        stroke="currentColor"
+                                        fill="currentColor"
+                                        stroke-width="0"
+                                        viewBox="0 0 512 512"
+                                        height="1em"
+                                        width="1em"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                            d="M32 464h448L256 48 32 464zm248-64h-48v-48h48v48zm0-80h-48v-96h48v96z"
+                                        ></path>
+                                    </svg>
+                                </span>
+                                <span
+                                    class="mr-2 icon-tool"
+                                    [routerLink]="['/contract/create']"
+                                    ><i
+                                        style="display: block"
+                                        class="pi pi-plus"
+                                    ></i
+                                ></span>
+                                <span
+                                    class="mr-2 icon-tool"
+                                    [routerLink]="[
+                                        '/update-personal-record',
+                                        item.id
+                                    ]"
+                                    ><i
+                                        style="display: block"
+                                        class="pi pi-file-edit"
+                                    ></i
+                                ></span>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <div
+                class="flex align-items-center mt-3"
+                style="justify-content: space-between"
+            >
+                <p>
+                    <span style="font-weight: 500">{{
+                        1 + (paging.pageIndex - 1) * paging.pageSize
+                    }}</span>
+                    -
+                    <span style="font-weight: 500">{{
+                        1 +
+                            (paging.pageIndex - 1) * paging.pageSize +
+                            (paging.pageSize - 1)
+                    }}</span>
+                    trong
+                    <span style="font-weight: 500">{{
+                        paging.totalRecords
+                    }}</span>
+                    bản ghi
+                </p>
+                <div *ngIf="profiles?.length > 0">
+                    <p-paginator
+                        class="custum-paging"
+                        (onPageChange)="onPageChange($event)"
+                        [first]="(paging.pageIndex - 1) * paging.pageSize"
+                        [rows]="paging.pageSize"
+                        [totalRecords]="paging.totalRecords"
+                        [rowsPerPageOptions]="config.pageSizeOptions"
+                    />
+                </div>
+            </div>
+            <div class="dashboard p-3">
+                <div class="dashboard-item working">
+                    <div class="content">1000</div>
+                    <span class="title-heading">Đang làm việc</span>
+                </div>
+                <div class="dashboard-item classify">
+                    <div class="classify-left" style="width: 250px">
+                        <p-chart
+                            type="doughnut"
+                            [data]="data"
+                            [options]="options"
+                        ></p-chart>
+                    </div>
+                    <div class="classify-dropdown">
+                        <p-dropdown
+                            [options]="classifyOptions"
+                            optionLabel="label"
+                            optionValue="value"
+                            placeholder="Chọn loại"
+                        >
+                        </p-dropdown>
+                    </div>
+                    <span class="title-heading">Phân loại:</span>
+                </div>
+                <div class="dashboard-item trial">
+                    <div class="content">1000</div>
+
+                    <span class="title-heading">Thử việc</span>
+                </div>
+                <div class="dashboard-item maternity">
+                    <div class="content">1000</div>
+
+                    <span class="title-heading">Chính thức</span>
+                </div>
+                <div class="dashboard-item office_employee">
+                    <div class="content">1000</div>
+
+                    <span class="title-heading">Nghỉ thai sản</span>
+                </div>
+                <div class="dashboard-item other">
+                    <div class="content">1000</div>
+                    <span class="title-heading">Khác</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

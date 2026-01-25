@@ -1,0 +1,394 @@
+<p-dialog header="Thiết lập phòng ban" [(visible)]="visible" [style]="{width: '50vw'}">
+    <p-tabView>
+        <p-tabPanel header="Thông tin chung">
+            <form [formGroup]="updateDepartmentForm" (submit)="onSubmitUpdateBaseInfo()">
+                <div class="flex justify-content-end">
+                    <div class="input-group-depart me-3" style="width: 50%;">
+                        <span class="span-input pb-2 labelip" for="department">Tên phòng ban <span
+                                class="red-asterisk">*</span></span>
+                        <input formControlName="name" style="width: 100%;" pInputText type="text"
+                            placeholder="Nhập tên phòng ban" />
+                        <app-validation-message [form]="updateDepartmentForm" [messages]="validationMessages"
+                            field="name"></app-validation-message>
+                    </div>
+                    <div class="input-group-depart" style="width: 50%;">
+                        <span class="span-input pb-2 labelip" for="member">Mô tả<span
+                                class="red-asterisk">*</span></span>
+                        <textarea rows="3" cols="5" pInputTextarea placeholder="Nhập mô tả" style="width: 100%;"
+                            formControlName="description"></textarea>
+                    </div>
+                </div>
+                <div class="flex justify-content-end mt-5">
+                    <p-button class="ml-2" type="submit" label="Lưu" />
+                </div>
+            </form>
+        </p-tabPanel>
+        <p-tabPanel header="Thành viên">
+            <div class="row">
+                <div class="col-lg-3">
+                    <p-button label="Thêm thành viên" [outlined]="true" icon="pi pi-plus" (click)="showDialogEmp()" />
+                </div>
+                <div class="col-lg-5 text-right">
+                    <p-dropdown optionLabel="Vai trò" [showClear]="true" placeholder="Tất cả vai trò"></p-dropdown>
+                </div>
+                <div class="col-lg-4">
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input type="text" pInputText placeholder="Tìm kiếm nhân viên"
+                            [(ngModel)]="queryParameters.employeeName" (input)="onEmployeeSearch($event)" />
+                    </span>
+                </div>
+            </div>
+
+            <div class="p-grid p-fluid">
+                <!-- <div class="flex justify-content-end">
+                    <p-autoComplete [suggestions]="employees" (completeMethod)="onEmployeeSearch($event)" field="displayLabel"
+                        [(ngModel)]="queryParameters.employee" [style]="{ width: '20%', height: '44px' }"
+                        placeholder="Tìm theo tên nhân viên" (onClear)="onEmployeeSearchClear()">
+                        <ng-template let-employee pTemplate="item">
+                            <div>
+                                <span>{{ employee.fullName }}</span>
+                                <span style="color: rgb(64, 0, 255); font-weight: 600">
+                                    - {{ employee.accountEmail }}</span>
+                            </div>
+                        </ng-template>
+                    </p-autoComplete>
+                    <input pInputText [style]="{ width: '20%', height: '44px' }" placeholder="Tìm theo tên nhân viên"
+                        [(ngModel)]="queryParameters.employeeName" (input)="onEmployeeSearch($event)">
+                    <div class="ml-2 me-2 select-tree" style="width: 300px">
+                        <p-treeSelect [attr.aria-hidden]="null" class="md:w-20rem w-full" containerStyleClass="w-full"
+                            [(ngModel)]="queryParameters.organization" [options]="organizations" placeholder="Chọn đơn vị"
+                            [showClear]="true" (onNodeSelect)="onChangeOrganization($event)" />
+                    </div>
+                    <div class="flex justify-content-center">
+                        <p-button class="ml-2" (click)="onSearch()" label="Lọc" />
+                        <p-button class="ml-2" (click)="onRefreshSearch()" icon="pi pi-sync" />
+                    </div>
+                </div> -->
+                <div class="p-col-12 mt-4 scrollable-table-container">
+                    <p-table [value]="employees" [(selection)]="selectedEmployees" [paginator]="false" [rows]="10"
+                        responsiveLayout="scroll" styleClass="p-datatable-striped custom-scrollbar" [rowHover]="true"
+                        [ngStyle]="{width: 'auto','overflow-x': 'auto','table-layout': 'auto'}">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th class="text-center"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
+                                <th>Họ và tên</th>
+                                <th>Vị trí công việc</th>
+                                <th>Email</th>
+                                <th>Quyền hạn</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-employee>
+                            <tr>
+                                <td class="text-center" *ngIf="employee.id!=this.user.employee.id"><p-tableCheckbox
+                                        [value]="employee"
+                                        (onChange)="onCheckboxChange(employee, $event)"></p-tableCheckbox>
+                                </td>
+                                <td class="text-center" *ngIf="employee.id==this.user.employee.id"> <i
+                                        class="pi pi-lock"></i>
+                                </td>
+                                <td>{{ employee.fullName }}</td>
+                                <td>{{ employee.organization?.organizationName || '' }}</td>
+                                <td>{{ employee.personalEmail }}</td>
+                                <td>Quyền</td>
+                                <td>
+                                    <i class="pi pi-file-edit" style="font-size: 1rem"></i>
+                                    <i class="pi pi-clone" style="font-size: 1rem; margin-left: 10px;"></i>
+                                    <i class="pi pi-trash" style="font-size: 1rem; margin-left: 10px;"></i>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    <div class="flex align-items-center mt-3" style="justify-content: space-between">
+                        <p>
+                            <span style="font-weight: 500">{{
+                                1 + (paging.pageIndex - 1) * paging.pageSize
+                                }}</span>
+                            -
+                            <span style="font-weight: 500">{{
+                                1 + (paging.pageIndex - 1) * paging.pageSize + (paging.pageSize - 1)
+                                }}</span>
+                            trong
+                            <span style="font-weight: 500">{{ paging.totalRecords }}</span>
+                            bản ghi
+                        </p>
+                        <div *ngIf="employees?.length > 0">
+                            <p-paginator class="custum-paging" (onPageChange)="onPageChange($event)"
+                                [first]="(paging.pageIndex - 1) * paging.pageSize" [rows]="paging.pageSize"
+                                [totalRecords]="paging.totalRecords" [rowsPerPageOptions]="config.pageSizeOptions" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </p-tabPanel>
+        <p-tabPanel header="Vai trò">
+            <div class="row">
+                <div class="col-lg-3">
+                    <p-button label="Thêm vai trò" [outlined]="true" icon="pi pi-plus" (click)="visibleRole=true" />
+                </div>
+                <div class="p-grid p-fluid">
+                    <!-- <div class="flex justify-content-end">
+                        <p-autoComplete [suggestions]="employees" (completeMethod)="onEmployeeSearch($event)" field="displayLabel"
+                            [(ngModel)]="queryParameters.employee" [style]="{ width: '20%', height: '44px' }"
+                            placeholder="Tìm theo tên nhân viên" (onClear)="onEmployeeSearchClear()">
+                            <ng-template let-employee pTemplate="item">
+                                <div>
+                                    <span>{{ employee.fullName }}</span>
+                                    <span style="color: rgb(64, 0, 255); font-weight: 600">
+                                        - {{ employee.accountEmail }}</span>
+                                </div>
+                            </ng-template>
+                        </p-autoComplete>
+                        <input pInputText [style]="{ width: '20%', height: '44px' }" placeholder="Tìm theo tên nhân viên"
+                            [(ngModel)]="queryParameters.employeeName" (input)="onEmployeeSearch($event)">
+                        <div class="ml-2 me-2 select-tree" style="width: 300px">
+                            <p-treeSelect [attr.aria-hidden]="null" class="md:w-20rem w-full" containerStyleClass="w-full"
+                                [(ngModel)]="queryParameters.organization" [options]="organizations" placeholder="Chọn đơn vị"
+                                [showClear]="true" (onNodeSelect)="onChangeOrganization($event)" />
+                        </div>
+                        <div class="flex justify-content-center">
+                            <p-button class="ml-2" (click)="onSearch()" label="Lọc" />
+                            <p-button class="ml-2" (click)="onRefreshSearch()" icon="pi pi-sync" />
+                        </div>
+                    </div> -->
+                    <div class="p-col-12 mt-4 scrollable-table-container">
+                        <p-table [value]="employees" [(selection)]="selectedEmployees" [paginator]="false" [rows]="10"
+                            responsiveLayout="scroll" styleClass="p-datatable-striped custom-scrollbar"
+                            [rowHover]="true" [ngStyle]="{width: 'auto','overflow-x': 'auto','table-layout': 'auto'}">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Tên vai trò</th>
+                                    <th>Mô tả</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-employee>
+                                <tr>
+                                    <td>
+                                        abc
+                                    </td>
+                                    <td>Abc</td>
+                                    <td>
+                                        <i class="pi pi-file-edit" style="font-size: 1rem"></i>
+                                        <i class="pi pi-clone" style="font-size: 1rem; margin-left: 10px;"></i>
+                                        <i class="pi pi-trash" style="font-size: 1rem; margin-left: 10px;"></i>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <div class="flex align-items-center mt-3" style="justify-content: space-between">
+                            <p>
+                                <span style="font-weight: 500">{{
+                                    1 + (paging.pageIndex - 1) * paging.pageSize
+                                    }}</span>
+                                -
+                                <span style="font-weight: 500">{{
+                                    1 + (paging.pageIndex - 1) * paging.pageSize + (paging.pageSize - 1)
+                                    }}</span>
+                                trong
+                                <span style="font-weight: 500">{{ paging.totalRecords }}</span>
+                                bản ghi
+                            </p>
+                            <div *ngIf="employees?.length > 0">
+                                <p-paginator class="custum-paging" (onPageChange)="onPageChange($event)"
+                                    [first]="(paging.pageIndex - 1) * paging.pageSize" [rows]="paging.pageSize"
+                                    [totalRecords]="paging.totalRecords"
+                                    [rowsPerPageOptions]="config.pageSizeOptions" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </p-tabPanel>
+        <!-- <div class="text-right mt-2">
+            <p-button label="Đóng" (click)="closeDialog()" />
+        </div> -->
+    </p-tabView>
+</p-dialog>
+
+
+
+<p-dialog header="Chọn nhân viên theo cơ cấu tổ chức" [(visible)]="displayChooseEmployee"
+    [style]="{width: '50vw',height:'50vh'}" [modal]="true">
+    <div class="p-grid p-fluid">
+        <div class="flex justify-content-end">
+            <!-- <p-autoComplete [suggestions]="employees" (completeMethod)="onEmployeeSearch($event)" field="displayLabel"
+                [(ngModel)]="queryParameters.employee" [style]="{ width: '20%', height: '44px' }"
+                placeholder="Tìm theo tên nhân viên" (onClear)="onEmployeeSearchClear()">
+                <ng-template let-employee pTemplate="item">
+                    <div>
+                        <span>{{ employee.fullName }}</span>
+                        <span style="color: rgb(64, 0, 255); font-weight: 600">
+                            - {{ employee.accountEmail }}</span>
+                    </div>
+                </ng-template>
+            </p-autoComplete> -->
+            <input pInputText [style]="{ width: '20%', height: '44px' }" placeholder="Tìm theo tên nhân viên"
+                [(ngModel)]="queryParameters.employeeName" (input)="onEmployeeSearch($event)">
+            <div class="ml-2 me-2 select-tree" style="width: 300px">
+                <p-treeSelect [attr.aria-hidden]="null" class="md:w-20rem w-full" containerStyleClass="w-full"
+                    [(ngModel)]="queryParameters.organization" [options]="organizations" placeholder="Chọn đơn vị"
+                    [showClear]="true" (onNodeSelect)="onChangeOrganization($event)" />
+            </div>
+            <div class="flex justify-content-center">
+                <p-button class="ml-2" (click)="onSearch()" label="Lọc" />
+                <p-button class="ml-2" (click)="onRefreshSearch()" icon="pi pi-sync" />
+            </div>
+        </div>
+        <div class="p-col-12 mt-4 scrollable-table-container">
+            <p-table [value]="employees" [(selection)]="selectedEmployees" [paginator]="false" [rows]="10"
+                responsiveLayout="scroll" styleClass="p-datatable-striped custom-scrollbar" [rowHover]="true"
+                [ngStyle]="{width: 'auto','overflow-x': 'auto','table-layout': 'auto'}">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-center"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
+                        <th>Họ và tên</th>
+                        <th>Vị trí công việc</th>
+                        <th>Email</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-employee>
+                    <tr>
+                        <td class="text-center" *ngIf="employee.id!=this.user.employee.id"><p-tableCheckbox
+                                [value]="employee" (onChange)="onCheckboxChange(employee, $event)"></p-tableCheckbox>
+                        </td>
+                        <td class="text-center" *ngIf="employee.id==this.user.employee.id"> <i class="pi pi-lock"></i>
+                        </td>
+                        <td>{{ employee.fullName }}</td>
+                        <td>{{ employee.organization?.organizationName }}</td>
+                        <td>{{ employee.personalEmail }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <div class="flex align-items-center mt-3" style="justify-content: space-between">
+                <p>
+                    <span style="font-weight: 500">{{
+                        1 + (paging.pageIndex - 1) * paging.pageSize
+                        }}</span>
+                    -
+                    <span style="font-weight: 500">{{
+                        1 + (paging.pageIndex - 1) * paging.pageSize + (paging.pageSize - 1)
+                        }}</span>
+                    trong
+                    <span style="font-weight: 500">{{ paging.totalRecords }}</span>
+                    bản ghi
+                </p>
+                <div *ngIf="employees?.length > 0">
+                    <p-paginator class="custum-paging" (onPageChange)="onPageChange($event)"
+                        [first]="(paging.pageIndex - 1) * paging.pageSize" [rows]="paging.pageSize"
+                        [totalRecords]="paging.totalRecords" [rowsPerPageOptions]="config.pageSizeOptions" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-footer>
+        <button style="background-color: #64748b;" pButton type="button" label="Hủy bỏ"
+            (click)="displayChooseEmployee=false"></button>
+        <button class="ml-2" pButton type="button" label="Tiếp tục" (click)="onContinueAssignRole()"></button>
+    </p-footer>
+</p-dialog>
+<p-dialog header="Chọn nhân viên theo cơ cấu tổ chức" [(visible)]="visibleEmp" [style]="{width: '50vw',height:'50vh'}"
+    [modal]="true">
+    <div class="p-grid p-fluid">
+        <div class="flex justify-content-end">
+            <!-- <p-autoComplete [suggestions]="employees" (completeMethod)="onEmployeeSearch($event)" field="displayLabel"
+                [(ngModel)]="queryParameters.employee" [style]="{ width: '20%', height: '44px' }"
+                placeholder="Tìm theo tên nhân viên" (onClear)="onEmployeeSearchClear()">
+                <ng-template let-employee pTemplate="item">
+                    <div>
+                        <span>{{ employee.fullName }}</span>
+                        <span style="color: rgb(64, 0, 255); font-weight: 600">
+                            - {{ employee.accountEmail }}</span>
+                    </div>
+                </ng-template>
+            </p-autoComplete> -->
+            <input pInputText [style]="{ width: '20%', height: '44px' }" placeholder="Tìm theo tên nhân viên"
+                [(ngModel)]="queryParameters.employeeName" (input)="onEmployeeSearch($event)">
+            <div class="ml-2 me-2 select-tree" style="width: 300px">
+                <p-treeSelect [attr.aria-hidden]="null" class="md:w-20rem w-full" containerStyleClass="w-full"
+                    [(ngModel)]="queryParameters.organization" [options]="organizations" placeholder="Chọn đơn vị"
+                    [showClear]="true" (onNodeSelect)="onChangeOrganization($event)" />
+            </div>
+            <div class="flex justify-content-center">
+                <p-button class="ml-2" (click)="onSearch()" label="Lọc" />
+                <p-button class="ml-2" (click)="onRefreshSearch()" icon="pi pi-sync" />
+            </div>
+        </div>
+        <div class="p-col-12 mt-4 scrollable-table-container">
+            <p-table [value]="employees" [(selection)]="selectedEmployees" [paginator]="false" [rows]="10"
+                responsiveLayout="scroll" styleClass="p-datatable-striped custom-scrollbar" [rowHover]="true"
+                [ngStyle]="{width: 'auto','overflow-x': 'auto','table-layout': 'auto'}">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-center"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
+                        <th>Họ và tên</th>
+                        <th>Vị trí công việc</th>
+                        <th>Email</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-employee>
+                    <tr>
+                        <td class="text-center" *ngIf="employee.id!=this.user.employee.id"><p-tableCheckbox
+                                [value]="employee" (onChange)="onCheckboxChange(employee, $event)"></p-tableCheckbox>
+                        </td>
+                        <td class="text-center" *ngIf="employee.id==this.user.employee.id"> <i class="pi pi-lock"></i>
+                        </td>
+                        <td>{{ employee.fullName }}</td>
+                        <td>{{ employee.organization?.organizationName }}</td>
+                        <td>{{ employee.personalEmail }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <div class="flex align-items-center mt-3" style="justify-content: space-between">
+                <p>
+                    <span style="font-weight: 500">{{
+                        1 + (paging.pageIndex - 1) * paging.pageSize
+                        }}</span>
+                    -
+                    <span style="font-weight: 500">{{
+                        1 + (paging.pageIndex - 1) * paging.pageSize + (paging.pageSize - 1)
+                        }}</span>
+                    trong
+                    <span style="font-weight: 500">{{ paging.totalRecords }}</span>
+                    bản ghi
+                </p>
+                <div *ngIf="employees?.length > 0">
+                    <p-paginator class="custum-paging" (onPageChange)="onPageChange($event)"
+                        [first]="(paging.pageIndex - 1) * paging.pageSize" [rows]="paging.pageSize"
+                        [totalRecords]="paging.totalRecords" [rowsPerPageOptions]="config.pageSizeOptions" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-footer>
+        <button style="background-color: #64748b;" pButton type="button" label="Hủy bỏ"
+            (click)="closeDialogEmp()"></button>
+        <button class="ml-2" pButton type="button" label="Tiếp tục" (click)="onContinueAssignRole()"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Thêm vai trò" [(visible)]="visibleRole" [style]="{width: '30vw',height:'50vh'}" [modal]="true">
+    <div class="row">
+        <div class="col-12">
+            <label class="lable">Tên vai trò</label>
+            <input type="text" class="form-control input" pInputText placeholder="Nhập tên vai trò" />
+        </div>
+        <div class="col-12">
+            <label class="lable">Mô tả</label>
+            <textarea class="textarea" rows="5" cols="30" pInputTextarea placeholder="Nhập mô tả"></textarea>
+        </div>
+        <div class="col-12">
+            <label class="lable">Phân quyền</label>
+            <div *ngFor="let category of categories" class="field-checkbox">
+                <p-checkbox name="group" [value]="category" [(ngModel)]="selectedCategories"
+                    [inputId]="category.key"></p-checkbox>
+                <label [for]="category.key">{{ category.name }}</label>
+            </div>
+        </div>
+    </div>
+    <div class="text-right mt-2">
+        <p-button label="Đóng" (click)="visibleRole=false" />
+    </div>
+</p-dialog>

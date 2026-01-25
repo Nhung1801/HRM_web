@@ -1,0 +1,221 @@
+<main id="main" class="main">
+    <div class="pagetitle">
+        <div>
+            <h3>
+                <i
+                    [routerLink]="['/location']"
+                    class="pi pi-arrow-left cursor-pointer"
+                ></i>
+                Cập nhật địa điểm
+            </h3>
+        </div>
+
+        <div class="btn-add-wrapper"></div>
+    </div>
+    <div class="toast-container"></div>
+    <!-- End Page Title -->
+    <section class="section k-list-table">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card-body">
+                    <div class="card">
+                        <form [formGroup]="updateForm" (ngSubmit)="handleUpdate()" >
+                            <div
+                                class="btn-footer"
+                                style="display: flex; justify-content: end"
+                            >
+                                <p-button
+                                [disabled]="updateForm.invalid"
+                                    type="submit"
+                                   
+                                    label="Cập nhật"
+                                />
+                                <span
+                                [routerLink]="['/location']"
+                                    style="
+                                        padding: 10px 10px;
+                                        background-color: #fff;
+                                        color: #000;
+                                        border-radius: 6px;
+                                        border: 1px solid #ccc;
+                                        margin-left: 10px;
+                                        cursor: pointer;
+                                    "
+                                    >Hủy</span
+                                >
+                            </div>
+                            <div class="">
+                                <div
+                                    class="d-flex justify-content-between mb-10"
+                                >
+                                    <div class="">
+                                        <!-- Tên địa điểm -->
+                                        <div class="row mt-4">
+                                            <label
+                                                for="placeName"
+                                                class="col-sm-3 col-form-label"
+                                                >Tên địa điểm
+                                                <span class="text-danger"
+                                                    >*</span
+                                                ></label
+                                            >
+                                            <div class="col-sm-9">
+                                                <input
+                                                    placeholder="Nhập tên địa điểm"
+                                                    type="text"
+                                                    id="placeName"
+                                                    class="form-control"
+                                                    pInputText
+                                                    [style]="{
+                                                        width: '300px',
+                                                        height: '45px'
+                                                    }"
+                                                    formControlName="name"
+                                                />
+                                                <div
+                                                    *ngIf="
+                                                        updateForm.get('name')
+                                                            .touched &&
+                                                        updateForm.get('name')
+                                                            .invalid
+                                                    "
+                                                    class="text-danger"
+                                                >
+                                                    Tên địa điểm là bắt buộc.
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Vĩ độ -->
+                                        <div class="row mt-4">
+                                            <label
+                                                for="latitude"
+                                                class="col-sm-3 col-form-label"
+                                                >Vĩ độ
+                                                <span class="text-danger"
+                                                    >*</span
+                                                ></label
+                                            >
+                                            <div class="col-sm-9">
+                                                <input
+                                                    placeholder="Nhập vĩ độ"
+                                                    type="text"
+                                                    id="latitude"
+                                                    class="form-control"
+                                                    pInputText
+                                                    [style]="{
+                                                        width: '300px',
+                                                        height: '45px'
+                                                    }"
+                                                    formControlName="latitude"
+                                                />
+                                                <div
+                                                    *ngIf="
+                                                        updateForm.get(
+                                                            'latitude'
+                                                        ).touched &&
+                                                        updateForm.get(
+                                                            'latitude'
+                                                        ).invalid
+                                                    "
+                                                    class="text-danger"
+                                                >
+                                                    Vĩ độ không hợp lệ.
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Kinh độ -->
+                                        <div class="row mt-4">
+                                            <label
+                                                for="longitude"
+                                                class="col-sm-3 col-form-label"
+                                                >Kinh độ
+                                                <span class="text-danger"
+                                                    >*</span
+                                                ></label
+                                            >
+                                            <div class="col-sm-9">
+                                                <input
+                                                    placeholder="Nhập kinh độ"
+                                                    type="text"
+                                                    id="longitude"
+                                                    class="form-control"
+                                                    pInputText
+                                                    [style]="{
+                                                        width: '300px',
+                                                        height: '45px'
+                                                    }"
+                                                    formControlName="longitude"
+                                                />
+                                                <div
+                                                    *ngIf="
+                                                        updateForm.get(
+                                                            'longitude'
+                                                        ).touched &&
+                                                        updateForm.get(
+                                                            'longitude'
+                                                        ).invalid
+                                                    "
+                                                    class="text-danger"
+                                                >
+                                                    Kinh độ không hợp lệ.
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Bán kính cho phép -->
+                                        <div class="row mt-4">
+                                            <label
+                                                for="radius"
+                                                class="col-sm-3 col-form-label"
+                                                >Bán kính cho phép
+                                                <span class="text-danger"
+                                                    >*</span
+                                                ></label
+                                            >
+                                            <div class="col-sm-9">
+                                                <input
+                                                    placeholder="Nhập bán kính"
+                                                    type="text"
+                                                    id="radius"
+                                                    class="form-control"
+                                                    pInputText
+                                                    [style]="{
+                                                        width: '300px',
+                                                        height: '45px'
+                                                    }"
+                                                    formControlName="allowableRadius"
+                                                />
+                                                <div
+                                                    *ngIf="
+                                                        updateForm.get(
+                                                            'allowableRadius'
+                                                        ).touched &&
+                                                        updateForm.get(
+                                                            'allowableRadius'
+                                                        ).invalid
+                                                    "
+                                                    class="text-danger"
+                                                >
+                                                    Bán kính không hợp lệ.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="ggmap">
+                                        <h4>Trực quan trên bản đồ</h4>
+                                        <span>
+                                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d421.48754063818683!2d106.05123233775117!3d20.902007250285298!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135a5002ea279c7%3A0xb06f455da198a20b!2sSMO%20MEDIA!5e1!3m2!1sen!2s!4v1734942417614!5m2!1sen!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

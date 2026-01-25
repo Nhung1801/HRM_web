@@ -1,0 +1,120 @@
+<div class="app-container">
+    <div class="main-content">
+        <div class="topbar">
+            <button
+                pButton
+                type="button"
+                icon="pi pi-plus"
+                class="add-button"
+                (click)="openJobDialog()"
+            ></button>
+            <ul class="navigation-list">
+                <li><button pButton type="button" label="Bảng" icon="pi pi-fw pi-table"></button></li>
+                <li><button pButton type="button" label="Lịch" icon="pi pi-fw pi-calendar-plus"></button></li>
+                <li><button pButton type="button" label="Báo cáo" icon="pi pi-fw pi-chart-bar"></button></li>
+            </ul>
+            <div style="margin-left: auto;" >
+                <button pButton type="button" label="Dự án : {{project.name}}"   style="background-color: transparent; border: none;"></button>
+                <button (click)="updateProjectComponent.showModal()" pButton type="button"  icon="pi pi-fw pi-cog" style="background-color: transparent; border: none;"></button>
+            </div>
+        </div>
+        <div class="content">
+            <!-- Content here -->
+            <app-work-group-list></app-work-group-list>
+        </div>
+    </div>
+    <div class="sidebar">
+        <ul class="navigation-list-sidebar">
+            <li>
+                <button
+                    pButton
+                    pRipple
+                    type="button"
+                    class="p-button-rounded p-button-text"
+                    icon="pi pi-plus-circle"
+                ></button>
+            </li>
+            <li>
+                <button
+                    pButton
+                    pRipple
+                    type="button"
+                    class="p-button-rounded p-button-text"
+                >
+                    <img
+                        src="https://khoinguonsangtao.vn/wp-content/uploads/2022/02/anh-dai-dien-fb-dep.jpg"
+                        alt="Home"
+                    />
+                </button>
+            </li>
+            <li>
+                <button
+                    pButton
+                    pRipple
+                    type="button"
+                    class="p-button-rounded p-button-text"
+                >
+                    <img
+                        src="https://khoinguonsangtao.vn/wp-content/uploads/2022/02/anh-dai-dien-fb-dep.jpg"
+                        alt="Calendar"
+                    />
+                </button>
+            </li>
+            <li>
+                <button
+                    pButton
+                    pRipple
+                    type="button"
+                    class="p-button-rounded p-button-text"
+                >
+                    <img
+                        src="https://khoinguonsangtao.vn/wp-content/uploads/2022/02/anh-dai-dien-fb-dep.jpg"
+                        alt="File"
+                    />
+                </button>
+            </li>
+            <li>
+                <button
+                    pButton
+                    pRipple
+                    type="button"
+                    class="p-button-rounded p-button-text"
+                >
+                    <img
+                        src="https://khoinguonsangtao.vn/wp-content/uploads/2022/02/anh-dai-dien-fb-dep.jpg"
+                        alt="Settings"
+                    />
+                </button>
+            </li>
+            <li>
+                <button
+                    pButton
+                    pRipple
+                    type="button"
+                    class="p-button-rounded p-button-text"
+                >
+                    <img
+                        src="https://khoinguonsangtao.vn/wp-content/uploads/2022/02/anh-dai-dien-fb-dep.jpg"
+                        alt="Users"
+                    />
+                </button>
+            </li>
+            <li>
+                <button
+                    pButton
+                    pRipple
+                    type="button"
+                    class="p-button-rounded p-button-text"
+                >
+                    <img
+                        src="https://khoinguonsangtao.vn/wp-content/uploads/2022/02/anh-dai-dien-fb-dep.jpg"
+                        alt="Logout"
+                    />
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<app-update-project [project]="project"></app-update-project>
+<!-- <app-create-work [(isVisible)]="createJobVisible"></app-create-work> -->

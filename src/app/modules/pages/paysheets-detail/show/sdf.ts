@@ -1,0 +1,26 @@
+const tesst = {
+    id: 140,
+    organizationId: 1,
+    payrollId: 16,
+    employeeId: 2,
+    contractId: 1,
+    employeeCode: 'SMO0002',
+    fullName: 'Đỗ Đắc Tùng',
+    department: null,
+    contractTypeStatus: 1, //0: Thử việc, 1:Chính thức
+
+    baseSalary: 5000000,
+    standardWorkDays: 25,
+    actualWorkDays: 2,
+    receivedSalary: 400000,
+    kpi: 0,
+    kpiPercentage: 70,
+    kpiSalary: 0,
+    bonus: 0,
+    socialInsurance: 0,
+    unionFund: 0,
+    salaryRate: 100,
+    totalSalary: 400000,
+    totalReceivedSalary: 400000,
+    confirmationStatus: 0,
+};

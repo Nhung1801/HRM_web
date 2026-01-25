@@ -1,0 +1,45 @@
+<div class="row p-3 pb-0 pt-0">
+    <p-toolbar styleClass="mb-2">
+        <div class="">
+            <h3>Quy định nghỉ</h3>
+        </div>
+    </p-toolbar>
+</div>
+<div class="row p-3 pt-0">
+    <div class="col-12 p-0">
+        
+        
+        <div class="common">
+            <div class="sidebar-list flex">
+                <div class="sidebar-item" [ngClass]="{'active': pageFlag === Page.General}"
+                    (click)="handleChangePage(Page.General)">
+                    Chung
+                </div>
+               
+                <div class="sidebar-item" [ngClass]="{'active': pageFlag === Page.Tracking}"
+                    (click)="handleChangePage(Page.Tracking)">
+                    Loại nghỉ
+                </div>
+
+                <div class="sidebar-item" [ngClass]="{'active': pageFlag === Page.Checking}"
+                    (click)="handleChangePage(Page.Checking)">
+                    Nghỉ lễ
+                </div>
+        
+        
+            </div>
+            <div class="general-information" *ngIf="pageFlag==Page.General">
+                <app-all></app-all>
+             
+            </div>
+           
+            <div class="tracking-information" *ngIf="pageFlag==Page.Tracking">
+                <app-type-of-vacation></app-type-of-vacation>
+            </div>
+
+            <div class="tracking-information" *ngIf="pageFlag==Page.Checking">
+                <app-holiday></app-holiday>
+            </div>
+        </div>
+    </div>
+</div>

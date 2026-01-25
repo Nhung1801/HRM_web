@@ -1,0 +1,188 @@
+<main id="main" class="main">
+  <div class="pagetitle">
+    <div>
+      <strong class="font-size-16">Cơ cấu tổ chức</strong>
+      <p-breadcrumb [model]="items">
+      </p-breadcrumb>
+    </div>
+
+    <div class="btn-add-wrapper">
+      <button pButton pRipple label="Thêm mới" style="height: 40px; width: 130px; border-radius: 10px;"
+        [routerLink]="['/organizational-structure/create']"></button>
+    </div>
+  </div>
+  <div class="toast-container">
+    <p-messages [(value)]="messages" [enableService]="false" [closable]="false"></p-messages>
+  </div>
+  <!-- End Page Title -->
+  <section class="section k-list-table">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-4 mt-3">
+              <span class="p-input-icon-left" style="width: 100%;">
+                <i class="pi pi-search"></i>
+                <input type="text" pInputText class="form-control" [(ngModel)]="keyWord"
+                  placeholder="Tìm theo Mã/tên đơn vị, tên viết tắt"
+                  style="padding-left: 30px; height: 37px; width: 100%;" />
+              </span>
+            </div>
+            <div class="col-lg-4 mt-3">
+              <button pButton pRipple label="Lọc" class="buttonfilter" (click)="loadOrganizationData()"></button>
+            </div>
+          </div>
+          <div class="card mt-3">
+            <table class="table text-center table-no-border">
+              <thead>
+                <tr>
+                  <th style="width: 18%;">Tên đơn vị</th>
+                  <th style="width: 10%;">Mã đơn vị</th>
+                  <th style="width: 10%;">Tên viết tắt</th>
+                  <th style="width: 8%;">Số nhân viên</th>
+                  <th style="width: 8%;">Độ ưu tiên</th>
+                  <th style="width: 10%;">Cấp tổ chức</th>
+                  <th style="width: 13%;">Trưởng đơn vị</th>
+                  <th style="width: 10%;">Trạng thái</th>
+                  <th style="width: 9%;">Hành động</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let unit of organizationUnits">
+                  <tr>
+                    <td [ngStyle]="{'padding-left': (unit.level - 1) * 10 + 'px'}">
+                      <button class="bt-plus" *ngIf="unit.children && unit.children.length > 0"
+                        (click)="toggleExpand(unit)">
+                        {{ unit.expanded ? '-' : '+' }}
+                      </button>
+                      <span style="padding-left: 10px;">{{ unit.organizationName }}</span>
+                    </td>
+                    <td>{{ unit.organizationCode }}</td>
+                    <td>{{ unit.abbreviation }}</td>
+                    <td>{{ unit.employees }}</td>
+                    <td>{{ unit.rank }}</td>
+                    <td>{{ unit.organizational }}</td>
+                    <td>{{ unit.unithead }}</td>
+                    <!-- <td
+                    [ngClass]="{'status-active': unit.status === 'Đang theo dõi', 'status-inactive': unit.status === 'Ngừng theo dõi'}">
+                    {{ unit.status }} -->
+                    <td>
+                      <!-- {{ unit.status }} -->
+                      <span class="work-status-span"
+                        [ngStyle]="{'color': getWorkStatus(unit.status).color, 'background-color': getWorkStatus(unit.status).bgcolor}">
+                        {{ getWorkStatus(unit.status).text }}
+                      </span>
+                    </td>
+                    <td>
+                      <a *ngIf="this.permisionHelper.hasPermissions([permissionConstant.ManageOrganizationalStructureEdit]) && (unit.employeeId === this.userCurrent.employee.id || this.userCurrent.employee.id === 1)" [routerLink]="['/organizational-structure/update', unit.id]">
+                        <i class="pi pi-pencil"></i>
+                      </a>
+                      <i class="pi pi-minus-circle"></i>
+                      <!-- <i class="pi pi-database"></i> -->
+                      <i *ngIf="this.permisionHelper.hasPermissions([permissionConstant.ManageOrganizationalStructureDelete])" class="pi pi-trash" (click)="openDiaLogDelete(unit)"></i>
+                    </td>
+                  </tr>
+                  <ng-container *ngIf="unit.expanded">
+                    <ng-container *ngFor="let child of unit.children">
+                      <tr>
+                        <td [ngStyle]="{'padding-left': (child.level - 1) * 20 + 'px'}">
+                          <button class="bt-plus" *ngIf="child.children && child.children.length > 0"
+                            (click)="toggleExpand(child)">
+                            {{ child.expanded ? '-' : '+' }}
+                          </button>
+                          {{ child.organizationName }}
+                        </td>
+                        <td>{{ child.organizationCode }}</td>
+                        <td>{{ child.abbreviation }}</td>
+                        <td>{{ child.employees }}</td>
+                        <td>{{ child.rank }}</td>
+                        <td>{{ child.organizational }}</td>
+                        <td>{{ child.unithead }}</td>
+                        <!-- <td
+                          [ngClass]="{'status-active': unit.status === 'Đang theo dõi', 'status-inactive': unit.status === 'Ngừng theo dõi'}">
+                          {{ unit.status }}
+                        </td> -->
+                        <td>
+                          <span class="work-status-span"
+                            [ngStyle]="{'color': getWorkStatus(child.status).color, 'background-color': getWorkStatus(child.status).bgcolor}">
+                            {{ getWorkStatus(child.status).text }}
+                          </span>
+                        </td>
+                        <td>
+                          <a *ngIf="this.permisionHelper.hasPermissions([permissionConstant.ManageOrganizationalStructureEdit]) && (child.employeeId === this.userCurrent.employee.id || this.userCurrent.employee.id === 1)" [routerLink]="['/organizational-structure/update', child.id]">
+                            <i class="pi pi-pencil"></i>
+                          </a>
+                          <i class="pi pi-minus-circle"></i>
+                          <!-- <i class="pi pi-database"></i> -->
+                          <i *ngIf="this.permisionHelper.hasPermissions([permissionConstant.ManageOrganizationalStructureDelete])" class="pi pi-trash" (click)="openDiaLogDelete(child)"></i>
+                        </td>
+                      </tr>
+                      <ng-container *ngIf="child.expanded">
+                        <tr *ngFor="let grandChild of child.children">
+                          <td [ngStyle]="{'padding-left': (grandChild.level - 1) * 30 + 'px'}">
+                            {{ grandChild.organizationName }}
+                          </td>
+                          <td>{{ grandChild.organizationCode }}</td>
+                          <td>{{ grandChild.abbreviation }}</td>
+                          <td>{{ grandChild.employees }}</td>
+                          <td>{{ grandChild.rank }}</td>
+                          <td>{{ grandChild.organizational }}</td>
+                          <td>{{ grandChild.unithead }}</td>
+                          <!-- <td
+                            [ngClass]="{'status-active': unit.status === 'Đang theo dõi', 'status-inactive': unit.status === 'Ngừng theo dõi'}">
+                            {{ unit.status }}
+                          </td> -->
+                          <td>
+                            <span class="work-status-span"
+                              [ngStyle]="{'color': getWorkStatus(grandChild.status).color, 'background-color': getWorkStatus(grandChild.status).bgcolor}">
+                              {{ getWorkStatus(grandChild.status).text }}
+                            </span>
+                          </td>
+                          <td>
+                            <a *ngIf="this.permisionHelper.hasPermissions([permissionConstant.ManageOrganizationalStructureEdit]) && (grandChild.employeeId === this.userCurrent.employee.id || this.userCurrent.employee.id === 1)" [routerLink]="['/organizational-structure/update', grandChild.id]">
+                              <i class="pi pi-pencil"></i>
+                            </a>
+                            <i class="pi pi-minus-circle"></i>
+                            <!-- <i class="pi pi-database"></i> -->
+                            <i *ngIf="this.permisionHelper.hasPermissions([permissionConstant.ManageOrganizationalStructureDelete])" class="pi pi-trash" (click)="openDiaLogDelete(grandChild)"></i>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </tbody>
+            </table>
+
+            <div class="paging-bot dg-fix">
+              <div class="paging-info">
+                <div [innerHTML]="currentPageReport"></div>
+              </div>
+              <p-paginator [rows]="this.pageSize" (onPageChange)="onPageChange($event)"
+                [totalRecords]="totalRecords > 0 ? totalRecords : 1" [rowsPerPageOptions]="[10, 20, 30]" [first]="
+                          (this.pageIndex - 1) *
+                          this.pageSize
+                        "></p-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p-dialog [(visible)]="showDiaLogDelete" [modal]="true" [header]="'Xóa cơ cấu tổ chức'" [style]="{ width: '450px' }"
+      [closable]="false">
+      <div *ngIf="unitDelete">
+        <p>
+          Bạn có chắc muốn xóa đơn vị cơ cấu này? Lưu ý: Sau khi xóa bạn không
+          thể hoàn tác hay khôi phục.
+        </p>
+        <strong class="name-delete">{{ unitDelete.organizationCode }}</strong>
+      </div>
+      <div class="d-flex justify-content-end mt-4">
+        <button pButton pRipple label="Hủy" class="p-button-secondary me-2" (click)="closeDiaLogDelete()"></button>
+        <button pButton pRipple label="Đồng ý" class="p-button-danger" (click)="ClickDelete()"></button>
+      </div>
+    </p-dialog>
+
+    <!---->
+  </section>
+</main><!-- End #main -->

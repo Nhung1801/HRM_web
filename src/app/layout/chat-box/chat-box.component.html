@@ -1,0 +1,21 @@
+<div class="chat-container" *ngIf="user">
+    <div class="chat-header">
+        <span>💬 Chat với {{ user.firstName }} {{ user.lastName }}</span>
+        <button (click)="closeChat()">❌</button>
+    </div>
+
+    <div class="chat-messages">
+        <div *ngFor="let msg of messages" class="message">
+            <strong>{{ msg.sender }}:</strong> {{ msg.text }}
+        </div>
+    </div>
+
+    <div class="chat-input">
+        <input
+            [(ngModel)]="newMessage"
+            (keydown.enter)="sendMessage()"
+            placeholder="Nhập tin nhắn..."
+        />
+        <button (click)="sendMessage()">📩</button>
+    </div>
+</div>

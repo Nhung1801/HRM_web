@@ -1,0 +1,276 @@
+<main id="main" class="main">
+    <div class="pagetitle">
+        <div>
+            <h3>
+                <i
+                    [routerLink]="['/timekeeping']"
+                    [queryParams]="{ page: 'tracking' }"
+                    class="pi pi-arrow-left"
+                ></i>
+
+                Danh sách địa điểm
+            </h3>
+        </div>
+
+        <div class="btn-add-wrapper">
+            <button
+                *ngIf="this.permisionHelper.hasPermissions([[permissionConstant.ManageTimekeepingLocationCreate]])"
+                [routerLink]="['/location/create']"
+                pButton
+                pRipple
+                label="Thêm mới"
+                style="height: 40px; width: 130px; border-radius: 10px"
+            ></button>
+        </div>
+    </div>
+    <div class="toast-container"></div>
+    <!-- End Page Title -->
+    <section class="section k-list-table">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card-body">
+                    <div class="card">
+                        <div class="table-section" style="margin-top: 20px">
+                            <p-table
+                                responsiveLayout="scroll"
+                                styleClass="p-datatable-striped"
+                                [rowHover]="true"
+                                [paginator]="false"
+                                [value]="listLocation"
+                                [ngStyle]="{
+                                    width: 'auto',
+                                    'overflow-x': 'auto',
+                                    'table-layout': 'auto'
+                                }"
+                            >
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th>
+                                            <p-checkbox
+                                                [(ngModel)]="checked"
+                                                [binary]="true"
+                                                inputId="binary"
+                                                (onChange)="onSelectAllChange()"
+                                            />
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            [style]="{ minWidth: '200px' }"
+                                        >
+                                            Tên địa điểm
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            [style]="{ minWidth: '200px' }"
+                                        >
+                                            Vĩ độ
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            [style]="{ minWidth: '200px' }"
+                                        >
+                                            Kinh độ
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            [style]="{ minWidth: '200px' }"
+                                        >
+                                            Bán kính cho phép(m)
+                                        </th>
+
+                                        <th
+                                            class="text-center"
+                                            [style]="{ minWidth: '200px' }"
+                                        >
+                                            Hành động
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template
+                                    pTemplate="body"
+                                    let-rowData
+                                    let-i="rowIndex"
+                                >
+                                    <tr style="cursor: pointer">
+                                        <td>
+                                            <p-checkbox
+                                                [(ngModel)]="rowData.checked"
+                                                [binary]="true"
+                                                inputId="binary{{ i }}"
+                                                (onChange)="onCheckboxChange()"
+                                            />
+                                        </td>
+                                        <td
+                                            [style]="{ textAlign: 'center' }"
+                                            class="min-w-200"
+                                        >
+                                            {{ rowData?.name }}
+                                        </td>
+                                        <td
+                                            [style]="{ textAlign: 'center' }"
+                                            class="min-w-200"
+                                        >
+                                            {{ rowData?.latitude }}
+                                        </td>
+                                        <td
+                                            [style]="{ textAlign: 'center' }"
+                                            class="min-w-200"
+                                        >
+                                            {{ rowData?.longitude }}
+                                        </td>
+                                        <td
+                                            [style]="{ textAlign: 'center' }"
+                                            class="min-w-200"
+                                        >
+                                            {{ rowData?.allowableRadius }}
+                                        </td>
+
+                                        <td
+                                            [style]="{ textAlign: 'center' }"
+                                            class="text-center"
+                                            class="cursor-pointer"
+                                        >
+                                            <div
+                                                class=""
+                                                [style]="{
+                                                    display: 'flex',
+                                                    justifyContent: 'center'
+                                                }"
+                                            >
+                                            <div
+                                             *ngIf="this.permisionHelper.hasPermissions([permissionConstant.ManageTimekeepingLocationEdit])"
+                                                    class="font-size-16 ml-2"
+                                                    style="
+                                                        padding: 3px;
+                                                        border-radius: 50%;
+                                                    "
+                                                    [routerLink]="[
+                                                        '/location/update',
+                                                        rowData.id
+                                                    ]"
+                                                >
+                                                    <i
+                                                        class="pi pi-file-edit"
+                                                    ></i>
+                                                </div>
+
+                                                <div
+                                                *ngIf="this.permisionHelper.hasPermissions([permissionConstant.ManageTimekeepingLocationDelete])"
+                                                    class="font-size-16"
+                                                    style="
+                                                        padding: 3px;
+                                                        border-radius: 50%;
+                                                    "
+                                                >
+                                                    <i
+                                                        (click)="
+                                                            showDialogDeleteLocation(
+                                                                rowData
+                                                            )
+                                                        "
+                                                        class="pi pi-trash"
+                                                    ></i>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+
+                                <ng-template pTemplate="empty">
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="8" class="text-center">
+                                                Không có dữ liệu
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </ng-template>
+                            </p-table>
+
+                            <div>
+                                <div
+                                    class="flex justify-content-between"
+                                    *ngIf="totalItems > 0"
+                                >
+                                    <div class="paging-info"></div>
+                                    <p-paginator
+                                        [rows]="pageSize"
+                                        [totalRecords]="totalItems"
+                                        [rowsPerPageOptions]="[10, 20, 30]"
+                                        (onPageChange)="onPageChange($event)"
+                                        (onRowsPerPageChange)="
+                                            onPageSizeChange($event)
+                                        "
+                                        [first]="(pageIndex - 1) * pageSize"
+                                        [pageLinkSize]="3"
+                                    ></p-paginator>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<p-dialog
+    header="Cảnh báo"
+    [modal]="true"
+    [(visible)]="deleteLocation"
+    [style]="{ width: '25rem' }"
+>
+    <div *ngIf="nameorganization.length > 0">
+        <p>
+            Vui lòng thay đổi địa điểm áp dụng chấm công của các đơn vị:
+            <span *ngIf="!statusDeleteLocation">
+                <span *ngFor="let location of nameorganization"
+                    >{{ location }},
+                </span>
+            </span>
+        </p>
+        <div class="flex justify-content-end gap-2 py-3">
+            <p-button
+                label="Hủy"
+                severity="secondary"
+                class="btn-cancel"
+                (click)="deleteLocation = false"
+                [style]="{
+                    backgroundColor: '#2a2986',
+                    borderColor: '#2a2986',
+                    borderRadius: '5px !important',
+                    color: 'white'
+                }"
+            />
+        </div>
+    </div>
+    <div *ngIf="nameorganization.length === 0">
+        <p>
+            Bạn có chắc chắn muốn xóa địa điểm chấm công
+            {{ nameLocation }} không?
+        </p>
+        <div class="flex justify-content-end gap-2 py-3">
+            <p-button
+                label="Xóa"
+                class="btn-delete"
+                (click)="handleDeleteLocation()"
+                [style]="{
+                    backgroundColor: 'red',
+                    borderColor: 'red',
+                    borderRadius: '5px !important'
+                }"
+            />
+            <p-button
+                label="Hủy"
+                severity="secondary"
+                class="btn-cancel"
+                (click)="deleteLocation = false"
+                [style]="{
+                    backgroundColor: '#2a2986',
+                    borderColor: '#2a2986',
+                    borderRadius: '5px !important',
+                    color: 'white'
+                }"
+            />
+        </div>
+    </div>
+</p-dialog>

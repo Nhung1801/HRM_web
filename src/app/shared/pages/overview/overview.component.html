@@ -1,0 +1,117 @@
+<div class="overview-main">
+  <div class="task-list">
+      <h3>Danh sách công việc</h3>
+      <div
+        class="task-item"
+        *ngFor="let task of tasks"
+        [ngClass]="{
+          overdue: task.status === 'overdue',
+          incomplete: task.status === 'incomplete',
+          completed: task.status === 'completed',
+          
+        }"
+      >
+        <div class="status">
+          <i class="pi pi-calendar"></i>
+          {{ task.statusText }}
+        </div>
+        <div class="task-content">
+          <p>{{ task.title }}</p>
+          <div class="time">
+            <i class="pi pi-user"></i>
+            <i class="pi pi-calendar"></i>
+            {{ task.time }}
+          </div>
+        </div>
+      </div>
+  </div>
+  
+  <div class="dashboard">
+    <div class="chart-section">
+      <h3>Việc tôi giao - tuần này</h3>
+      <div class="chart">
+        <div class="chart1">
+          <canvas id="chart1"></canvas>
+          <div class="chart-label">
+            <p>27</p>
+            <p>Công việc</p>
+          </div>
+        </div>
+        <ul class="chart-legend">
+          <li><span class="legend-color blue"></span>Hoàn thành trước hạn</li>
+          <li><span class="legend-color green"></span>Hoàn thành đúng hạn</li>
+          <li><span class="legend-color yellow"></span>Hoàn thành trễ hạn</li>
+          <li><span class="legend-color gray"></span>Chờ duyệt</li>
+          <li><span class="legend-color red"></span>Chưa hoàn thành</li>
+          <li><span class="legend-color orange"></span>Quá hạn</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="chart-section">
+      <h3>Phòng hành chính</h3>
+      <div class="tiltle-chart">
+        <p>Hôm nay</p>
+      </div>
+      <div class="chart">
+        <div class="chart3">
+          <canvas id="chart3"></canvas>
+          <div class="chart-label">
+            <p>27</p>
+            <p>Công việc</p>
+          </div>
+        </div>
+        <ul class="chart-legend">
+          <li><span class="legend-color blue"></span>Hoàn thành trước hạn</li>
+          <li><span class="legend-color green"></span>Hoàn thành đúng hạn</li>
+          <li><span class="legend-color yellow"></span>Hoàn thành trễ hạn</li>
+          <li><span class="legend-color gray"></span>Chờ duyệt</li>
+          <li><span class="legend-color red"></span>Chưa hoàn thành</li>
+          <li><span class="legend-color orange"></span>Quá hạn</li>
+        </ul>
+      </div>
+    </div>
+  
+    <div class="chart-section">
+      <h3>Việc của tôi - tuần này</h3>
+      <div class="chart">
+        <div class="chart2">
+          <canvas id="chart2"></canvas>
+          <div class="chart-label">
+            <p>17</p>
+            <p>Công việc</p>
+          </div>
+        </div>
+        <ul class="chart-legend">
+          <li><span class="legend-color blue"></span>Hoàn thành trước hạn</li>
+          <li><span class="legend-color red"></span>Chưa hoàn thành</li>
+          <li><span class="legend-color orange"></span>Quá hạn</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="chart-section">
+      <h3>Phòng marketing</h3>
+      <div class="tiltle-chart">
+        <p>Hôm nay</p>
+      </div>
+      <div class="chart">
+        <div class="chart4">
+          <canvas id="chart4"></canvas>
+          <div class="chart-label">
+            <p>17</p>
+            <p>Công việc</p>
+          </div>
+        </div>
+        <ul class="chart-legend">
+          <li><span class="legend-color blue"></span>Hoàn thành trước hạn</li>
+          <li><span class="legend-color red"></span>Chưa hoàn thành</li>
+          <li><span class="legend-color orange"></span>Quá hạn</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  

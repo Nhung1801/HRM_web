@@ -1,0 +1,82 @@
+/* dashboard.component.css */
+.slider-container {
+    // width: 80%;
+    margin: 0 auto;
+    overflow: hidden; /* Ẩn các phần ảnh vượt quá */
+  }
+  
+  .slider {
+    display: flex;
+    animation: slide 15s infinite linear; /* Chạy vòng lặp trượt */
+  }
+  
+  .slide {
+    min-width: 100%; /* Chiều rộng mỗi ảnh bằng với chiều rộng container */
+    // transition: transform 1s ease;
+  }
+  
+  .slide img {
+    width: auto;
+    display: block;
+    border-radius: 10px;
+    transition: transform 0.5s ease;
+  }
+  
+  .slider-container:hover .slide img {
+    transform: scale(1.05); /* Tăng kích thước ảnh khi hover */
+  }
+  
+  /* Hiệu ứng trượt ảnh */
+//   @keyframes slide {
+//     0% {
+//       transform: translateX(0);
+//     }
+//     20% {
+//       transform: translateX(-100%);
+//     }
+//     40% {
+//       transform: translateX(-200%);
+//     }
+//     60% {
+//       transform: translateX(-300%);
+//     }
+//     80% {
+//       transform: translateX(-400%);
+//     }
+//     100% {
+//       transform: translateX(0);
+//     }
+//   }
+  
+// @keyframes slide {
+//     0% {
+//       transform: translateX(0);
+//     }
+//     20% {
+//       transform: translateX(-400%);
+//     }
+//     40% {
+//       transform: translateX(-300%);
+//     }
+//     60% {
+//       transform: translateX(-200%);
+//     }
+//     80% {
+//       transform: translateX(-100%);
+//     }
+//     100% {
+//       transform: translateX(0);
+//     }
+//   }
+
+@keyframes slide {
+    0% {
+      transform: translateX(-10); /* Bắt đầu từ vị trí ban đầu */
+    }
+    60% {
+      transform: translateX(50%);
+    }
+    100% {
+      transform: translateX(100%); /* Di chuyển hoàn toàn ra ngoài */
+    }
+  }

@@ -1,0 +1,476 @@
+.border-manager {
+    // top: 20px;
+    border-bottom: 1px solid #ccc;
+    border-radius: 0;
+    padding: 20px;
+}
+
+.card-body {
+    padding: 10px 40px;
+}
+
+.processing {
+    display: flex;
+    padding: 10px 20px;
+}
+
+span {
+    font-weight: 600;
+}
+
+.line-height {
+    margin-top: 10px;
+}
+
+.card-body label {
+    font-weight: 500;
+    padding: 10px 0;
+    font-size: 1rem;
+}
+
+.image-product {
+    border: 1px solid #dfdfdf;
+    width: 105px;
+    height: 100px;
+    font-size: 22px;
+    position: relative;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.image-container {
+    display: flex;
+    flex-direction: row;
+    margin-top: 15px;
+    color: rgb(160, 151, 151);
+}
+
+.img-ch {
+    width: 100px;
+}
+
+.ct-ad {
+    margin: 0 0 10px 10px;
+}
+
+
+.preview {
+    border: 2px dashed #dfdfdf;
+    width: 100%;
+    height: 100px;
+    font-size: 22px;
+    position: relative;
+    border-radius: 6px;
+    margin-left: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.preview i {
+    font-size: 25px;
+    margin: 12px 0 0 0;
+}
+
+.preview span {
+    font-size: 15px;
+    margin: 5px 13px;
+    text-align: center;
+}
+
+.flex-wrap {
+    margin: 20px;
+}
+
+.card-body-1 {
+    margin: 15px 20px;
+    padding: 30px 40px;
+    border-radius: 10px;
+    background-color: #f4f4f4;
+}
+
+.table-products p-table table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table-products p-table th,
+.table-products p-table td {
+    border: 1px solid #f2f2f2;
+    padding: 8px;
+    text-align: center;
+}
+
+.table-products p-table th {
+    background-color: white;
+}
+
+.box-content {
+    background: #fff;
+    border-radius: 4px;
+    padding: 10px 0 !important;
+}
+
+/* Tăng kích thước của radio button */
+input[type="radio"] {
+    width: 20px;
+    /* Đặt chiều rộng */
+    height: 20px;
+    /* Đặt chiều cao */
+    border: 2px solid #007bff;
+    /* Đặt màu viền */
+    border-radius: 50%;
+    /* Tạo hình tròn */
+    /* Loại bỏ viền khi được chọn */
+    cursor: pointer;
+    /* Đổi con trỏ khi di chuột */
+    position: relative;
+    /* Đặt vị trí tương đối cho pseudo-element */
+}
+
+/* Tạo hiệu ứng khi radio button được chọn */
+input[type="radio"]:checked {
+    background-color: #007bff;
+    /* Đặt màu nền khi được chọn */
+}
+
+/* Tạo hiệu ứng hover */
+input[type="radio"]:hover {
+    border-color: #0056b3;
+    /* Đổi màu viền khi hover */
+}
+
+.text-danger {
+    font-size: 12px;
+}
+
+/* Đặt kích thước và căn chỉnh container */
+.icon-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    /* Đặt kích thước ô vuông */
+    height: 30px;
+    border: 2px solid #adb5bd;
+    /* Màu viền */
+    border-radius: 8px;
+    /* Bo góc nhẹ cho viền */
+    background-color: #ffffff;
+    /* Màu nền */
+    cursor: pointer;
+    /* Thêm hiệu ứng trỏ chuột */
+    transition: all 0.3s ease;
+    /* Hiệu ứng chuyển động */
+    margin-left: 55%;
+    margin-top: 5px;
+}
+
+/* Định dạng icon bên trong */
+.icon-container .pi {
+    font-size: 12px;
+    /* Kích thước icon */
+    color: #adb5bd;
+    /* Màu icon */
+}
+
+/* Hiệu ứng hover */
+.icon-container:hover {
+    background-color: #adb5bd;
+    border-color: #adb5bd;
+}
+
+.icon-container:hover .pi {
+    color: #ffffff;
+}
+
+.file-upload-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.file-upload-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    cursor: pointer;
+}
+
+.file-label-text {
+    font-size: 14px;
+    color: #888;
+}
+
+.file-name {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    position: relative;
+}
+
+.clear-icon {
+    margin-left: 10px;
+    color: #888;
+    cursor: pointer;
+    opacity: 0;
+    /* Ban đầu ẩn */
+    transition: opacity 0.2s ease-in-out;
+    /* Hiệu ứng chuyển đổi */
+}
+
+.file-name:hover .clear-icon {
+    opacity: 1;
+    /* Hiển thị khi hover */
+}
+
+.clear-icon:hover {
+    color: #ff4d4d;
+    /* Đổi màu khi hover */
+}
+
+
+.file-upload-input {
+    display: none;
+}
+
+.upload-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background-color: #e0e0e0;
+    border-radius: 50%;
+    color: #555;
+}
+
+.upload-icon:hover {
+    background-color: #ccc;
+}
+
+
+/* CSS cho dialog */
+p-dialog {
+    --dialog-header-bg: #007bff;
+    /* Màu nền tiêu đề */
+    --dialog-header-color: #fff;
+    /* Màu chữ tiêu đề */
+    --dialog-border-radius: 8px;
+    /* Bo góc cho dialog */
+}
+
+.dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.dialog-actions button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dialog-actions button:first-child {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.dialog-actions button:first-child:hover {
+    background-color: #ddd;
+}
+
+.dialog-actions button:last-child {
+    background-color: #2a2986;
+    color: #fff;
+}
+
+.dialog-actions button:last-child:hover {
+    background-color: #2a2986;
+}
+
+/* CSS cho input tìm kiếm */
+.search-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* CSS cho danh sách checkbox */
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+ul li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border: 1px solid #f0f0f0;
+    border-radius: 5px;
+    margin-bottom: 8px;
+    transition: all 0.2s ease;
+}
+
+ul li:hover {
+    background-color: #f9f9f9;
+    border-color: #ddd;
+}
+
+ul li span {
+    flex: 1;
+    margin-left: 10px;
+    font-size: 14px;
+    color: #333;
+}
+
+ul li i {
+    cursor: pointer;
+    color: #999;
+    transition: all 0.3s ease;
+}
+
+ul li i:hover {
+    color: #555;
+}
+
+/* CSS cho nút "Thêm dòng" */
+.btn-add {
+    display: inline-block;
+    background-color: #2881a7;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-add:hover {
+    background-color: #2881a7;
+}
+
+/* CSS cho tiêu đề và khoảng cách tổng thể */
+p-dialog header {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+p-dialog .ui-dialog-content {
+    padding: 20px;
+}
+
+/* CSS cho ô nhập liệu */
+.edit-input {
+    width: 80%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Hiệu ứng hover và icon xóa */
+ul li i {
+    cursor: pointer;
+    margin-left: 8px;
+    color: #007bff;
+    transition: color 0.3s ease;
+}
+
+ul li i:hover {
+    color: #0056b3;
+}
+
+ul li i.pi-trash:hover {
+    color: red;
+}
+
+
+/* Responsive cho thiết bị nhỏ */
+@media (max-width: 768px) {
+    p-dialog {
+        --dialog-width: 90%;
+        /* Chiều rộng nhỏ hơn */
+    }
+
+    .dialog-actions button {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+
+    .btn-add {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+}
+
+.allowances {
+    margin-top: 20px;
+}
+
+.button-allowances {
+    width: 110px;
+    background-color: #2a2986;
+    color: white;
+}
+
+/* Tăng kích thước checkbox */
+ul li input[type="checkbox"] {
+    width: 12px;
+    height: 12px;
+    transform: scale(1.5);
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+/* Căn chỉnh checkbox với text */
+ul li {
+    display: flex;
+    align-items: center;
+}
+
+/* Tùy chỉnh thêm cho giao diện */
+ul li input[type="checkbox"]:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

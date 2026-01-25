@@ -1,0 +1,756 @@
+<main id="main" class="main">
+    <div class="pagetitle">
+        <div>
+            <strong class="font-size-16">Danh sách hợp đồng</strong>
+            <p-breadcrumb [model]="items"> </p-breadcrumb>
+        </div>
+
+        <div
+            class="btn-add-wrapper"
+            *ngIf="
+                this.permisionHelper.hasPermissions([
+                    permissionConstant.ManageContractCreate
+                ])
+            "
+        >
+            <button
+                pButton
+                pRipple
+                label="Thêm mới"
+                icon="pi pi-plus"
+                style="height: 40px; width: 130px; border-radius: 10px"
+                [routerLink]="['/contract/create']"
+            ></button>
+        </div>
+    </div>
+    <div class="toast-container">
+        <p-messages
+            [(value)]="messages"
+            [enableService]="false"
+            [closable]="false"
+        ></p-messages>
+    </div>
+    <!-- End Page Title -->
+    <section class="section k-list-table">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-3 mt-3">
+                            <p-autoComplete
+                                [style]="{ height: '43px', width: '100%' }"
+                                [(ngModel)]="selectedEmployee"
+                                [suggestions]="filteredEmployees"
+                                (completeMethod)="searchEmployee($event)"
+                                [field]="'displayName'"
+                                [forceSelection]="true"
+                                [showClear]="true"
+                                placeholder="Tìm kiếm nhân viên"
+                            >
+                            </p-autoComplete>
+                        </div>
+
+                        <div class="col-lg-3 mt-3">
+                            <p-dropdown
+                                [(ngModel)]="selectedContractStatus"
+                                [options]="contractOption"
+                                optionLabel="name"
+                                [showClear]="true"
+                                placeholder="Tất cả hợp đồng"
+                                (onChange)="onContractStatusChange($event)"
+                                [style]="{ height: '43px', width: '100%' }"
+                            ></p-dropdown>
+                        </div>
+                        <div class="col-lg-3 mt-3">
+                            <p-treeSelect
+                                [options]="treeData"
+                                [(ngModel)]="selectedNode"
+                                [placeholder]="'Tất cả đơn vị'"
+                                [style]="{ width: '100%' }"
+                            ></p-treeSelect>
+                        </div>
+                        <div class="col-lg-1 mt-3">
+                            <button
+                                style="height: 43px"
+                                pButton
+                                pRipple
+                                label="Lọc"
+                                class="buttonfilter"
+                                (click)="getPagingContract()"
+                            ></button>
+                        </div>
+                        <div class="col-lg-1 mt-3">
+                            <div style="display: flex">
+                                <p-button
+                                    label=""
+                                    [outlined]="true"
+                                    severity="secondary"
+                                    icon="pi pi-filter"
+                                ></p-button>
+
+                                <p-button
+                                    style="margin-left: 10px"
+                                    label=""
+                                    [outlined]="true"
+                                    severity="secondary"
+                                    icon="pi pi-file-export"
+                                ></p-button>
+
+                                <p-button
+                                    style="margin-left: 10px"
+                                    label=""
+                                    [outlined]="true"
+                                    severity="secondary"
+                                    icon="pi pi-spin pi-cog"
+                                ></p-button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mt-3">
+                        <p-table
+                            [value]="contracts"
+                            [paginator]="true"
+                            [rows]="pageSize"
+                            [totalRecords]="totalRecords"
+                            [paginator]="false"
+                            (onPage)="onPageChange($event)"
+                            styleClass="p-datatable-striped"
+                        >
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width: 1%">
+                                        <p-checkbox
+                                            [binary]="true"
+                                            inputId="binary"
+                                        ></p-checkbox>
+                                    </th>
+                                    <th style="width: 2%">Ngày ký HĐ</th>
+                                    <th style="width: 1%">Số hợp đồng</th>
+                                    <th style="width: 6%">Họ và Tên NLĐ</th>
+                                    <th style="width: 5%">Vị trí công việc</th>
+                                    <th style="width: 6%">Đơn vị</th>
+                                    <th style="width: 5%">Loại hợp đồng</th>
+                                    <th style="width: 4%">Thời hạn HĐ</th>
+                                    <th style="width: 4%">Ngày có hiệu lực</th>
+                                    <th style="width: 2%">Ngày hết</th>
+                                    <th style="width: 2%">Thao tác</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-contract>
+                                <tr>
+                                    <td>
+                                        <p-checkbox
+                                            [binary]="true"
+                                            inputId="binary"
+                                        ></p-checkbox>
+                                    </td>
+                                    <td>
+                                        {{
+                                            contract.signingDate
+                                                | date : "dd/MM/yyyy"
+                                        }}
+                                    </td>
+                                    <td>{{ contract.code ?? "N/A" }}</td>
+                                    <td>{{ contract.nameEmployee }}</td>
+                                    <td>{{ contract.position }}</td>
+                                    <td>
+                                        {{ contract.unit?.organizationName }}
+                                    </td>
+                                    <td>{{ contract.contractType?.name }}</td>
+                                    <td>
+                                        {{
+                                            contract.contractDuration?.duration
+                                        }}
+                                    </td>
+                                    <td>
+                                        {{
+                                            contract.effectiveDate
+                                                | date : "dd/MM/yyyy"
+                                        }}
+                                    </td>
+                                    <td>
+                                        {{
+                                            contract.expiryDate
+                                                | date : "dd/MM/yyyy"
+                                        }}
+                                    </td>
+                                    <td style="text-align: center">
+                                        <i
+                                            class="pi pi-ellipsis-v"
+                                            (click)="menu.toggle($event)"
+                                        ></i>
+                                        <p-overlayPanel #menu>
+                                            <div class="menu-items">
+                                                <button
+                                                    *ngIf="
+                                                        this.permisionHelper.hasPermissions(
+                                                            [
+                                                                permissionConstant.ManageContractEdit
+                                                            ]
+                                                        )
+                                                    "
+                                                    class="menu-btn"
+                                                    [routerLink]="[
+                                                        '/contract/update',
+                                                        contract.id
+                                                    ]"
+                                                >
+                                                    <i class="pi pi-pencil"></i>
+                                                    Sửa
+                                                </button>
+                                                <!-- <button (click)="onDuplicate(contract)" class="menu-btn"><i class="pi pi-copy"></i> Nhân bản</button> -->
+                                                <button
+                                                    *ngIf="
+                                                        this.permisionHelper.hasPermissions(
+                                                            [
+                                                                permissionConstant.ManageContractTerminate
+                                                            ]
+                                                        )
+                                                    "
+                                                    (click)="
+                                                        onTerminate(contract)
+                                                    "
+                                                    class="menu-btn"
+                                                >
+                                                    <i class="pi pi-times"></i>
+                                                    Chấm dứt hợp đồng
+                                                </button>
+                                                <!-- <button (click)="onSendEmail(contract)" class="menu-btn"><i class="pi pi-envelope"></i> Gửi email</button> -->
+                                                <!-- <button (click)="onCreateDocument(contract)" class="menu-btn"><i class="pi pi-file"></i> Tạo văn bản</button> -->
+                                                <button
+                                                    *ngIf="
+                                                        this.permisionHelper.hasPermissions(
+                                                            [
+                                                                permissionConstant.ManageContractExport
+                                                            ]
+                                                        )
+                                                    "
+                                                    (click)="
+                                                        generatePDF(contract)
+                                                    "
+                                                    class="menu-btn"
+                                                >
+                                                    <i class="pi pi-print"></i>
+                                                    In hợp đồng
+                                                </button>
+                                                <button
+                                                    *ngIf="
+                                                        this.permisionHelper.hasPermissions(
+                                                            [
+                                                                permissionConstant.ManageContractDelete
+                                                            ]
+                                                        )
+                                                    "
+                                                    (click)="
+                                                        openDiaLogDelete(
+                                                            contract
+                                                        )
+                                                    "
+                                                    class="menu-btn"
+                                                >
+                                                    <i class="pi pi-trash"></i>
+                                                    Xóa
+                                                </button>
+                                            </div>
+                                        </p-overlayPanel>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+
+                        <p-dialog
+                            [(visible)]="isTerminateDialogVisible"
+                            [header]="'Chấm dứt hợp đồng'"
+                            [modal]="true"
+                            [closable]="false"
+                            [style]="{ width: '500px' }"
+                        >
+                            <div>
+                                <p>
+                                    Sau khi chấm dứt, hợp đồng sẽ chuyển sang
+                                    trạng thái <b>Hết hiệu lực</b>.
+                                </p>
+                                <p>
+                                    Bạn có muốn cập nhật <b>Ngày hết hạn</b> của
+                                    hợp đồng không?
+                                </p>
+
+                                <div
+                                    style="margin-top: 10px; font-weight: bold"
+                                >
+                                    <span>Ngày có hiệu lực: </span>
+                                    <span>{{
+                                        effectiveDate | date : "dd/MM/yyyy"
+                                    }}</span>
+                                </div>
+
+                                <div
+                                    class="form-group"
+                                    style="margin-top: 20px"
+                                >
+                                    <div style="display: flex">
+                                        <div style="margin-top: 10px">
+                                            <p-radioButton
+                                                name="updateExpiryDate"
+                                                value="yes"
+                                                [(ngModel)]="updateExpiryDate"
+                                            ></p-radioButton>
+                                            <span style="padding-left: 10px"
+                                                >Có</span
+                                            >
+                                        </div>
+                                        <div style="margin-left: 40px">
+                                            <p-calendar
+                                                [(ngModel)]="expiryDate"
+                                                [iconDisplay]="'input'"
+                                                [showIcon]="true"
+                                                dateFormat="dd/mm/yy"
+                                                [disabled]="
+                                                    updateExpiryDate !== 'yes'
+                                                "
+                                                (onSelect)="
+                                                    onExpiryDateSelect()
+                                                "
+                                                [style]="{
+                                                    height: '40px',
+                                                    width: '100%'
+                                                }"
+                                                inputId="icondisplay"
+                                                [class.disabled-calendar]="
+                                                    updateExpiryDate !== 'yes'
+                                                "
+                                            >
+                                            </p-calendar>
+                                        </div>
+                                    </div>
+                                    <div style="margin-top: 10px">
+                                        <p-radioButton
+                                            name="updateExpiryDate"
+                                            value="no"
+                                            [(ngModel)]="updateExpiryDate"
+                                        ></p-radioButton>
+                                        <span style="padding-left: 10px"
+                                            >Không</span
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p-footer>
+                                <button
+                                    style="margin-right: 10px"
+                                    pButton
+                                    pRipple
+                                    type="button"
+                                    label="Hủy"
+                                    (click)="onCancelTerminate()"
+                                    class="p-button-outlined"
+                                ></button>
+                                <button
+                                    pButton
+                                    type="button"
+                                    label="Chấm dứt"
+                                    (click)="onConfirmTerminate()"
+                                    class="p-button-danger"
+                                ></button>
+                            </p-footer>
+                        </p-dialog>
+
+                        <div
+                            *ngIf="totalRecords === 0"
+                            style="text-align: center; margin-top: 20px"
+                        >
+                            <strong style="text-align: center; width: 100%"
+                                >Không tìm thấy kết quả phù hợp</strong
+                            >
+                        </div>
+
+                        <div class="paging-bot dg-fix">
+                            <div class="paging-info">
+                                <div [innerHTML]="currentPageReport"></div>
+                            </div>
+                            <p-paginator
+                                [rows]="this.pageSize"
+                                (onPageChange)="onPageChange($event)"
+                                [totalRecords]="
+                                    totalRecords > 0 ? totalRecords : 1
+                                "
+                                [rowsPerPageOptions]="[10, 20, 30]"
+                                [first]="(this.pageIndex - 1) * this.pageSize"
+                            ></p-paginator>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!---->
+    </section>
+</main>
+<!-- End #main -->
+
+<div id="contract-content" class="contract" style="display: none">
+    <div style="display: flex; justify-content: space-around">
+        <div class="image-contract">
+            <img
+                style="margin: 0 30px"
+                src="assets/image/logospin.png"
+                width="40"
+                height="40"
+                alt="logo"
+            />
+            <p style="font-size: 20px; font-weight: 600; color: #476ea9">
+                SMO MEDIA
+            </p>
+            <p class="contract-id" style="margin: 40px 20px">Số …/2024</p>
+        </div>
+        <div class="title-contract">
+            <h1 class="header">CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM</h1>
+            <p class="sub-header">Độc lập – Tự do – Hạnh phúc</p>
+            <p class="contract-number">——————o0o——————</p>
+        </div>
+    </div>
+
+    <h2 class="title">HỢP ĐỒNG LAO ĐỘNG</h2>
+    <div class="contract-container">
+        <p class="intro1">- Căn cứ Bộ luật Lao động 2019;</p>
+
+        <p class="section1 signDate">
+            Hôm nay, ngày … tháng … năm 20…, tại Công ty Cổ phần Công nghệ và
+            Truyền thông SMO, chúng tôi gồm:
+        </p>
+        <h3 class="section-title">
+            <u style="padding-bottom: 10px">Bên A: Người sử dụng lao động</u>
+        </h3>
+        <p class="section1 address">
+            Công ty: Cổ phần Công nghệ và Truyền thông SMO – SMO MEDIA JSC<br />
+            Địa chỉ: Thôn Liêu Hạ, xã Tân Lập, huyện Yên Mỹ, tỉnh Hưng Yên<br />
+            Điện thoại: 094 817 83 86<br />
+            Mã số thuế: 0901064979<br />
+        </p>
+        <div style="display: flex">
+            <p class="section1 legalRepresentative">
+                Đại diện: (Ông) Đỗ Văn Tùng
+            </p>
+            <p
+                style="padding: 0 60px"
+                class="section1 legalRepresentativeTitle"
+            >
+                Chức vụ: Giám Đốc
+            </p>
+            <p class="section1">Quốc tịch: Việt Nam</p>
+        </div>
+
+        <h3 class="section-title"><u>Bên B: Người lao động</u></h3>
+        <table class="tab-worker">
+            <tr>
+                <td>Ông/bà:</td>
+                <td colspan="2" class="lastFirtName"></td>
+                <td class="small-cell">Quốc tịch: Việt Nam</td>
+            </tr>
+            <tr>
+                <td>Ngày sinh:</td>
+                <td colspan="2" class="dateOfBirth"></td>
+                <td class="small-cell addresEmployee">Tại:</td>
+            </tr>
+            <tr>
+                <td class="label">Nghề nghiệp:</td>
+                <td colspan="2"></td>
+                <td class="label small-cell">Giới tính:</td>
+            </tr>
+            <tr>
+                <td class="label">Địa chỉ thường trú:</td>
+                <td colspan="3"></td>
+            </tr>
+            <tr>
+                <td class="label">Địa chỉ cư trú:</td>
+                <td colspan="3"></td>
+            </tr>
+            <tr>
+                <td class="label">Số CMND/CCCD:</td>
+                <td></td>
+                <td class="label">Cấp ngày:</td>
+                <td class="label small-cell">Tại:</td>
+            </tr>
+        </table>
+        <p class="intro1">
+            Cùng thỏa thuận ký kết hợp đồng lao động và cam kết làm đúng những
+            điều khoản sau đây:
+        </p>
+
+        <h3 class="section-title">
+            <u>Điều 1: </u>Công việc, địa điểm làm việc và thời hạn của hợp đồng
+        </h3>
+        <table class="tab-worker">
+            <tr>
+                <td style="width: 30%" class="contractTypeName">
+                    Loại hợp đồng:
+                </td>
+                <td colspan="3" class="signingDate">… tháng – Ký lần thứ …</td>
+            </tr>
+            <tr>
+                <td style="width: 30%">Từ ngày:</td>
+                <td style="width: 20%" class="effectiveDate"></td>
+                <td>Đến ngày:</td>
+                <td class="expiryDate"></td>
+            </tr>
+        </table>
+        <p class="section1">
+            - Địa điểm làm việc: Công ty cổ phần Công nghệ và Truyền thông SMO –
+            SMO MEDIA JSC<br />
+            - Bộ phận công tác: ……………………………………………………………………………………<br />
+            <span class="section1 organizationName"
+                >+ Phòng: ………………………………………………………………………………………</span
+            >
+            <br />
+            <span class="section1 positionName"
+                >+ + Chức danh chuyên môn (vị trí công tác):
+                …………………………………………………..</span
+            >
+            <br />
+            - Nhiệm vụ công việc như sau:<br />
+            + Thực hiện công việc theo đúng chức danh chuyên môn của mình dưới
+            sự quản lý, điều hành của Ban Giám đốc (và các cá nhân được bổ nhiệm
+            hoặc ủy quyền phụ trách).<br />
+            + Phối hợp cùng với các bộ phận, phòng ban khác trong Người sử dụng
+            lao động để phát huy tối đa hiệu quả công việc.<br />
+            + Hoàn thành những công việc khác tùy thuộc theo yêu cầu kinh doanh
+            của Người sử dụng lao động và theo quyết định của Ban Giám đốc (và
+            các cá nhân được bổ nhiệm hoặc ủy quyền phụ trách).<br />
+        </p>
+
+        <h3 class="section-title">
+            <u>Điều 2: </u>Lương, phụ cấp, các khoản bổ sung khác
+        </h3>
+        <table class="tab-worker">
+            <tr>
+                <td>Lương căn bản:</td>
+                <td class="salaryAmount">… đồng/tháng</td>
+                <td>Phụ cấp:</td>
+                <td class="totalAllowance">… đồng/tháng</td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    Các khoản bổ sung khác: Tùy quy định cụ thể của Công ty
+                </td>
+            </tr>
+        </table>
+        <p class="section1">
+            - Hình thức trả lương: Tiền mặt hoặc chuyển khoản. <br />
+            - Thời hạn trả lương: Được trả lương vào ngày 10 của tháng. <br />
+            - Chế độ nâng bậc, nâng lương: Người lao động được xét nâng bậc,
+            nâng lương theo kết quả làm việc và theo quy định của Người sử dụng
+            lao động.
+        </p>
+
+        <h3 class="section-title">
+            <u>Điều 3: </u>Thời giờ làm việc, nghỉ ngơi, bảo hộ lao động, BHXH,
+            BHYT, BHTN
+        </h3>
+        <p class="section1">
+            - Thời giờ làm việc: 08 giờ/ngày, Nghỉ hàng tuần: ngày Chủ nhật.
+            <br />
+            - Từ ngày Thứ 2 đến ngày Thứ 6 hàng tuần (và ngày Thứ 7 cách tuần):
+            <br />
+            + Buổi sáng : 8h00 - 12h00. <br />
+            + Buổi chiều: 13h15 - 17h15. <br />
+            - Chế độ nghỉ ngơi các ngày lễ, tết, phép năm: <br />
+            + Người lao động được nghỉ lễ, tết theo luật định; các ngày nghỉ lễ
+            nếu trùng với ngày Chủ nhật thì sẽ được nghỉ bù vào ngày trước hoặc
+            ngày kế tiếp tùy theo tình hình cụ thể mà Ban lãnh đạo Công ty sẽ
+            chỉ đạo trực tiếp. <br />
+            + Người lao động đã ký HĐLĐ chính thức và có thâm niên công tác 12
+            tháng thì sẽ được nghỉ phép năm có hưởng lương (01 ngày phép/01
+            tháng, 12 ngày phép/01 năm); trường hợp có thâm niên làm việc dưới
+            12 tháng thì thời gian nghỉ hằng năm được tính theo tỷ lệ tương ứng
+            với số thời gian làm việc. <br />
+            - Thiết bị và công cụ làm việc sẽ được Công ty cấp phát tùy theo nhu
+            cầu của công việc. <br />
+            - Điều kiện an toàn và vệ sinh lao động tại nơi làm việc theo quy
+            định của pháp luật hiện hành. <br />
+            - Bảo hiểm xã hội, bảo hiểm y tế và bảo hiểm thất nghiệp: Theo quy
+            định của pháp luật.
+        </p>
+
+        <h3 class="section-title">
+            <u>Điều 4: </u>Đào tạo, bồi dưỡng, các quyền lợi và nghĩa vụ liên
+            quan của người lao động
+        </h3>
+        <p class="section1">
+            - Đào tạo, bồi dưỡng: Người lao động được đào tạo, bồi dưỡng, huấn
+            luyện tại nơi làm việc hoặc được gửi đi đào tạo theo quy định của
+            Công ty và yêu cầu công việc. <br />
+            - Khen thưởng: Người lao động được khuyến khích bằng vật chất và
+            tinh thần khi có thành tích trong công tác hoặc theo quy định của
+            Công ty. <br />
+            - Nghĩa vụ liên quan của người lao động: <br />
+            + Tuân thủ hợp đồng lao động. <br />
+            + Thực hiện công việc với sự tận tâm, tận lực và mẫn cán, đảm bảo
+            hoàn thành công việc với hiệu quả cao nhất theo sự phân công, điều
+            hành (bằng văn bản hoặc bằng miệng) của Ban Giám đốc (và các cá nhân
+            được Ban Giám đốc bổ nhiệm hoặc ủy quyền phụ trách). <br />
+            + Hoàn thành công việc được giao và sẵn sàng chấp nhận mọi sự điều
+            động khi có yêu cầu. <br />
+            + Nắm rõ và chấp hành nghiêm túc kỷ luật lao động, an toàn lao động,
+            vệ sinh lao động, phòng cháy chữa cháy, văn hóa Công ty, nội quy lao
+            động và các chủ trương, chính sách của Công ty. <br />
+            + Trong trường hợp được cử đi đào tạo thì nhân viên phải hoàn thành
+            khóa học đúng thời hạn, phải cam kết sẽ phục vụ lâu dài cho Công ty
+            sau khi kết thúc khoá học và được hưởng nguyên lương, các quyền lợi
+            khác được hưởng như người đi làm. <br />
+            Nếu sau khi kết thúc khóa đào tạo mà nhân viên không tiếp tục hợp
+            tác với Công ty thì nhân viên phải hoàn trả lại 100% phí đào tạo và
+            các khoản chế độ đã được nhận trong thời gian đào tạo.. <br />
+            + Bồi thường vi phạm vật chất: Theo quy định nội bộ của Công ty và
+            quy định của pháp luật hiện hành; <br />
+            + Có trách nhiệm đề xuất các giải pháp nâng cao hiệu quả công việc,
+            giảm thiểu các rủi ro. Khuyến khích các đóng góp này được thực hiện
+            bằng văn bản. <br />
+            + Thuế TNCN (nếu có): Do người lao động đóng. Công ty sẽ tạm khấu
+            trừ trước khi chi trả cho người lao động theo quy định.
+        </p>
+
+        <h3 class="section-title">
+            <u>Điều 5: </u>Nghĩa vụ và quyền lợi của Người sử dụng lao động
+        </h3>
+        <p class="section1">
+            <b><i>1. Nghĩa vụ:</i></b> <br />
+            - Thực hiện đầy đủ những điều kiện cần thiết đã cam kết trong HĐLĐ
+            để Người lao động đạt hiệu quả công việc cao. Bảo đảm việc làm cho
+            Người lao động theo HĐLĐ đã ký. <br />
+            - Thanh toán đầy đủ, đúng hạn các chế độ và quyền lợi cho người lao
+            động theo hợp đồng lao động, thỏa ước lao động tập thể (nếu có);
+            <br />
+            <b><i>2. Quyền lợi:</i></b> <br />
+            - Điều hành Người lao động hoàn thành công việc theo HĐLĐ (bố trí,
+            điều chuyển công việc cho Người lao động theo đúng chức năng chuyên
+            môn). <br />
+            - Có quyền chuyển tạm thời lao động, ngừng việc, thay đổi, tạm hoãn,
+            chấm dứt HĐLĐ và áp dụng các biện pháp kỷ luật theo quy định của
+            Pháp luật hiện hành và theo nội quy của Công ty trong thời gian HĐLĐ
+            còn giá trị. <br />
+            - Có quyền đòi bồi thường, khiếu nại với cơ quan liên đới để bảo vệ
+            quyền lợi của mình nếu Người lao động vi phạm Pháp luật hay các điều
+            khoản của HĐLĐ.
+        </p>
+
+        <h3 class="section-title"><u>Điều 6: </u>Những thỏa thuận khác</h3>
+        <p class="section1">
+            <b><i>1. Tài liệu/Thông tin bảo mật:</i></b> <br />
+            <b
+                ><i>● <span style="padding-left: 35px">Tài liệu:</span></i></b
+            >
+            <br />
+            1.1. Bí mật kinh doanh và tài sản trí tuệ: được hiểu là các thông
+            tin, tài liệu thể hiện hoặc lưu trữ dưới các dạng như: văn bản, file
+            máy tính, thư điện tử, hình ảnh, mã code, phần mềm tin học mà Công
+            ty có được và thuộc quyền sở hữu hợp pháp của mình. <br />
+            Bí mật kinh doanh và tài sản trí tuệ còn được hiểu và thực hiện theo
+            quy định hiện hành của pháp luật Việt Nam và thông lệ Quốc tế (trong
+            trường hợp pháp luật Việt Nam chưa có quy định). <br />
+            1.2. Thông tin bảo mật: là những thông tin thuộc Bí mật kinh doanh
+            và tài sản trí tuệ nêu tại Điều 1.1 mà Người lao động trong quá
+            trình làm việc tại Công ty biết được hoặc tiếp cận được. <br />
+            1.3. Phù hợp với các quy định ở trên, Công ty quy định những thông
+            tin, tài liệu sau đây là tài sản của Công ty, cần được bảo mật và
+            giữ gìn vì quyền và lợi ích hợp pháp của Công ty. <br />
+            <b
+                ><i
+                    >●
+                    <span style="padding-left: 35px"
+                        >Thông tin bảo mật:</span
+                    ></i
+                ></b
+            >
+            <br />
+            - Danh sách khách hàng, thông tin khách hàng. <br />
+            - Sổ sách tài chính kế toán, chứng từ ngân hàng. <br />
+            - Hệ thống các phần mềm cài đặt trên máy vi tính của Công ty. <br />
+            - Kế hoạch kinh doanh, Báo cáo hoạt động kinh doanh. <br />
+            - Các tài liệu về tình hình tài chính của công ty (vay, nợ, phải
+            thu). <br />
+            - Kế hoạch/ý tưởng kinh doanh. <br />
+            - Tài liệu mô tả, phân tích thiết kế hệ thống, phần mềm, tài liệu
+            hướng dẫn và các tài liệu được phổ biến nội bộ. <br />
+            - Khóa mã bản quyền các phần mềm sử dụng trong Công ty. <br />
+            <b><i>2. Cam kết của người lao động:</i></b> <br />
+            2.1. Người lao động có trách nhiệm và cam kết bảo mật tất cả những
+            tài liệu/thông tin bảo mật của Công ty - quy định và nêu tại Điều 1
+            Phụ lục này. <br />
+            2.2. Người lao động cam kết không tự ý sao chép, cung cấp, mua bán
+            hoặc sử dụng những thông tin/tài liệu bảo mật cho bất kỳ ai, vì bất
+            kỳ lý do và mục đích gì nếu không có sự đồng ý bằng văn bản của Công
+            ty. <br />
+            2.3. Người lao động cam kết không đưa thông tin lên mạng bằng cách
+            phát tán ảnh chụp màn hình phần mềm, một phần hoặc toàn màn hình
+            hoặc bất cứ hành vi nào tiềm ẩn nguy cơ rò rỉ thông tin thông qua
+            Internet. <br />
+            2.4. Trong trường hợp vi phạm cam kết này, ngoài việc phải chịu hình
+            thức xử lý, kỷ luật như quy định của pháp luật, Người lao động còn
+            phải bồi thường toàn bộ thiệt hại do hành vi vi phạm của mình gây ra
+            theo quy định của pháp luật. <br />
+            2.5. Trong trường hợp vi phạm cam kết này, mà vì lý do khách quan
+            Công ty chưa đánh giá được mức độ thiệt hại và sự ảnh hưởng đến
+            quyền lợi hợp pháp của Công ty thì tùy theo mức độ vi phạm, Người
+            lao động đồng ý sẽ bị xử lý kỷ luật lao động đến mức cao nhất là sa
+            thải (theo quy định trong Nội quy lao động) và phải có trách nhiệm
+            bồi thường toàn bộ thiệt hại do mình gây ra cho công ty theo quy
+            định của pháp luật.
+        </p>
+
+        <h3 class="section-title"><u>Điều 7: </u>Điều khoản thi hành</h3>
+        <p class="section1">
+            - Những vấn đề về lao động không ghi trong hợp đồng lao động này thì
+            áp dụng quy định của thỏa ước tập thể, trường hợp chưa có thỏa ước
+            thì áp dụng quy định của pháp luật lao động. <br />
+            - Hợp đồng này được lập thành 2 bản có giá trị pháp lý như nhau, mỗi
+            bên giữ 1 bản và có hiệu lực kể từ ngày ký. <br />
+            - Khi ký kết các phụ lục hợp đồng lao động thì nội dung của phụ lục
+            cũng có giá trị như các nội dung của bản hợp đồng này.
+        </p>
+
+        <h3 class="footer">
+            <div class="worker-employee">
+                <p style="font-weight: bold">NGƯỜI LAO ĐỘNG</p>
+                <p>(Ký, ghi rõ họ tên)</p>
+                <p class="employe"></p>
+            </div>
+            <div class="worker-employer">
+                <p style="font-weight: bold">NGƯỜI SỬ DỤNG LAO ĐỘNG</p>
+                <p>(Ký, ghi rõ họ tên)</p>
+                <p class="employer"></p>
+            </div>
+        </h3>
+    </div>
+</div>
+
+<p-dialog
+    [(visible)]="showDiaLogDelete"
+    [modal]="true"
+    [header]="'Xóa cơ hợp đồng'"
+    [style]="{ width: '450px' }"
+    [closable]="false"
+>
+    <div *ngIf="contractDelete">
+        <p>
+            Bạn có chắc muốn xóa đơn vị cơ cấu này? Lưu ý: Sau khi xóa bạn không
+            thể hoàn tác hay khôi phục.
+        </p>
+        <strong class="name-delete">{{ contractDelete.code }}</strong>
+    </div>
+    <div class="d-flex justify-content-end mt-4">
+        <button
+            pButton
+            pRipple
+            label="Hủy"
+            class="p-button-secondary me-2"
+            (click)="closeDiaLogDelete()"
+        ></button>
+        <button
+            pButton
+            pRipple
+            label="Đồng ý"
+            class="p-button-danger"
+            (click)="ClickDelete()"
+        ></button>
+    </div>
+</p-dialog>

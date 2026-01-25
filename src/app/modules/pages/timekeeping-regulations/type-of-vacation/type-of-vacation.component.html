@@ -1,0 +1,164 @@
+<div class="container-fluid mt-4 container" [formGroup]="attendanceForm" style="min-height: 50px;">
+    <div class="d-flex justify-content-end" style="margin-top: -60px;">
+        <p-button type="button" label="+ Thêm" class="mb-2" (click)="openAddDialog()" *ngIf="this.permission.hasPermissions([permissionConstant.ManageLeaveTypesCreate])"></p-button>
+    </div>
+
+    <!-- Bảng hiển thị dữ liệu -->
+    <form [formGroup]="attendanceForm" *ngIf="this.permission.hasPermissions([permissionConstant.ManageLeaveTypesView])">
+        <table class="table table-bordered text-center">
+            <thead class="table-light">
+                <tr>
+                    <th>
+                        <p-checkbox binary="true" inputId="all"
+                        (onChange)="toggleAllSelection($event)">
+                        </p-checkbox>
+                    </th>
+                    <th>Tên loại nghỉ phép</th>
+                    <th>Số ngày nghỉ tối đa</th>
+                    <th>Tỉ lệ hưởng lương (%)</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody formArrayName="units">
+                <tr *ngFor="let unit of units.controls; let i = index" [formGroupName]="i">
+                    <td>
+                        <p-checkbox binary="true" formControlName="selected"></p-checkbox>
+                    </td>
+                    <td>{{ unit.value.name }}</td>
+                    <td>{{ unit.value.maximumNumberOfDayOff }} ngày</td>
+                    <td>{{ unit.value.salaryRate }}</td>
+                    <td>
+                        <button pButton type="button" icon="pi pi-file-edit" class="p-button-text p-button-sm" style="color: black;" (click)="openEditDialog(unit.value)"
+                        *ngIf="this.permission.hasPermissions([permissionConstant.ManageLeaveTypesEdit])"></button>
+                        <button pButton type="button" icon="pi pi-trash" 
+                            class="p-button-text p-button-danger p-button-sm"
+                            (click)="confirmDelete(unit.value.id, unit.value.name)" style="color: black;"
+                            *ngIf="this.permission.hasPermissions([permissionConstant.ManageLeaveTypesDelete])"></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- Phân trang -->
+        <div *ngIf="totalItems > 0" class="d-flex justify-content-end mt-3">
+            <p-paginator [rows]="pageSize" [totalRecords]="totalItems" [rowsPerPageOptions]="[8, 16, 24]"
+                (onPageChange)="fetchData($event)"></p-paginator>
+        </div>
+    </form>
+
+</div>
+
+<!-- Dialog xóa item trong bảng -->
+<p-dialog header="Cảnh báo" [(visible)]="displayDialog" modal="true">
+    <p>Bạn có chắc chắn muốn xóa thông tin <strong>{{ warningMessage }}</strong> này không?</p>
+    <div class="text-right">
+        <button pButton type="button" label="Hủy" icon="pi pi-times" (click)="displayDialog = false"
+            class="p-button-secondary"></button>
+        <button pButton type="button" label="Xóa" icon="pi pi-trash" (click)="deleteItem()" class="p-button-danger"
+            style="margin-left: 10px;">
+        </button>
+    </div>
+</p-dialog>
+
+
+
+<!-- Dialog Thêm Loại Nghỉ -->
+<p-dialog header="Thêm Loại nghỉ" [(visible)]="displayAddDialog" modal="true" [style]="{ width: '600px' }"
+    [closable]="true">
+    <form [formGroup]="addLeaveForm">
+        <div class="p-fluid">
+            <div class="p-field">
+                <label for="name">Tên <span class="text-danger">*</span></label>
+                <input id="name" pInputText formControlName="name" placeholder="Nhập tên loại nghỉ" />
+                <div class="error-message">
+                    <small *ngIf="addLeaveForm.get('name')?.errors?.required && addLeaveForm.get('name')?.touched">
+                      Tên không được để trống.
+                    </small>
+                </div>
+            </div>
+
+            <div class="p-field">
+                <label for="salaryRate">Tỉ lệ hưởng lương <span class="text-danger">*</span></label>
+                <div class="d-flex align-items-center">
+                    <input formControlName="salaryRate" type="number" id="salaryRate" />
+                    <label class="lable-text"> % </label>
+                </div>
+                <!-- <div class="error-message">
+                    <small *ngIf="addLeaveForm.get('salaryRate')?.errors?.min">
+                        Tỉ lệ hưởng lương không được là số âm.
+                    </small>
+                </div> -->
+            </div>
+
+            <div class="p-field">
+                <label for="maximumNumberOfDayOff">Số ngày nghỉ tối đa <span class="text-danger">*</span></label>
+                <div class="d-flex align-items-center">
+                    <input formControlName="maximumNumberOfDayOff" type="number" id="maximumNumberOfDayOff" />
+                    <label class="lable-text"> Ngày/năm </label>
+                </div>
+            </div>
+            <div class="p-field">
+                <label for="note">Ghi chú</label>
+                <textarea id="note" rows="3" pInputTextarea formControlName="note"
+                    placeholder="Nhập ghi chú"></textarea>
+            </div>
+            <div class="p-field">
+                <label>Đối tượng áp dụng <span class="text-danger">*</span></label>
+                <div class="d-flex align-items-center">
+                    <p-radioButton name="applyObject" [value]="0" label="Toàn công ty" formControlName="applyObject"
+                        class="mr-3"></p-radioButton>
+                    <p-radioButton name="applyObject" [value]="1" label="Cơ cấu tổ chức"
+                        formControlName="applyObject"></p-radioButton>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end">
+            <p-button label="Hủy" class="p-button-secondary-ok" (click)="closeAddDialog()"></p-button>
+            <p-button label="Thêm" class="p-button-primary-prim" (click)="createLeaveType()"></p-button>
+        </div>
+    </form>
+</p-dialog>
+
+<!-- Dialog sửa loại nghỉ -->
+<p-dialog header="Chỉnh sửa Loại nghỉ" [(visible)]="displayEditDialog" modal="true" [style]="{ width: '600px' }"
+    [closable]="true">
+    <form [formGroup]="editLeaveForm">
+        <div class="p-fluid">
+            <div class="p-field">
+                <label for="name">Tên <span class="text-danger">*</span></label>
+                <input id="name" pInputText formControlName="name" placeholder="Nhập tên loại nghỉ" />
+            </div>
+            <div class="p-field">
+                <label for="salaryRate">Tỉ lệ hưởng lương <span class="text-danger">*</span></label>
+                <div class="d-flex align-items-center">
+                    <input formControlName="salaryRate" type="number" id="salaryRate" />
+                    <label class="lable-text"> % </label>
+                </div>
+            </div>
+            <div class="p-field">
+                <label for="maximumNumberOfDayOff">Số ngày nghỉ tối đa <span class="text-danger">*</span></label>
+                <div class="d-flex align-items-center">
+                    <input formControlName="maximumNumberOfDayOff" type="number" id="maximumNumberOfDayOff" />
+                    <label class="lable-text"> Ngày/năm </label>
+                </div>
+            </div>
+            <div class="p-field">
+                <label for="note">Ghi chú</label>
+                <textarea id="note" rows="3" pInputTextarea formControlName="note"
+                    placeholder="Nhập ghi chú"></textarea>
+            </div>
+            <div class="p-field">
+                <label>Đối tượng áp dụng <span class="text-danger">*</span></label>
+                <div class="d-flex align-items-center">
+                    <p-radioButton name="applyObject" [value]="0" label="Toàn công ty" formControlName="applyObject"
+                        class="mr-3"></p-radioButton>
+                    <p-radioButton name="applyObject" [value]="1" label="Cơ cấu tổ chức"
+                        formControlName="applyObject"></p-radioButton>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end">
+            <p-button label="Hủy" class="p-button-secondary-ok" (click)="closeEditDialog()"></p-button>
+            <p-button label="Lưu" class="p-button-primary-hai" (click)="saveEditedLeave()"></p-button>
+        </div>
+    </form>
+</p-dialog>

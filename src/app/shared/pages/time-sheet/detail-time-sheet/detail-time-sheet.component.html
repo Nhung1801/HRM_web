@@ -1,0 +1,283 @@
+<div class="p-3 pb-0 pt-0 flex">
+    <p-toolbar styleClass="mb-2">
+        <div class="">
+            <strong class="font-size-16">Bảng chấm công</strong>
+            <p-breadcrumb
+                [model]="breadcrumbs"
+                [home]="{ icon: 'pi pi-home' }"
+            ></p-breadcrumb>
+        </div>
+    </p-toolbar>
+    <div
+        (click)="handleOpenDialogSetting()"
+        class="p-10 rounded border icon-settings cursor-pointer ml-2 me-2"
+        style="position: relative"
+    >
+        <i class="pi pi-spin pi-cog custom-i" style="font-size: 1rem"></i>
+    </div>
+    <p-dialog
+        header="Cài đặt hiển thị"
+        [(visible)]="showDialogSetting"
+        [style]="{ width: '300px' }"
+        [position]="'right'"
+    >
+        <div>
+            <ul class="custom-checkbox-list p-mt-2">
+                <li>
+                    <p-checkbox
+                        name="selectedColumns"
+                        [value]="false"
+                        [(ngModel)]="isShowFullCalendar"
+                        binary="true"
+                        label="{{
+                            !isShowFullCalendar
+                                ? 'Ẩn tổng quan'
+                                : 'Hiện tổng quan'
+                        }}"
+                    ></p-checkbox>
+                </li>
+            </ul>
+        </div>
+    </p-dialog>
+</div>
+<div class="justify-content-between mb-2 card-custom">
+    <div *ngIf="!isShowFullCalendar" class="dashboard-container">
+        <div class="dashboard-stat">
+            <div class="stat-value">
+                {{ totalShiftWork + holidays.length }}
+            </div>
+            <div class="stat-label">Tổng ca hưởng lương</div>
+            <div class="stat-icon">
+                <i class="pi pi-wallet custom-i"></i>
+            </div>
+        </div>
+        <div class="dashboard-stat">
+            <div class="stat-value">
+                <!-- {{timesheetDurationLateOrEarly.lateDurationCount+timesheetDurationLateOrEarly.earlyLeaveDurationCount}} -->
+                {{ timesheetDurationLateOrEarly.lateOrEarlyLeaveDurationCount }}
+            </div>
+
+            <div class="stat-label">Tổng số lần đi muộn, về sớm</div>
+            <div class="stat-icon">
+                <i class="pi pi-stopwatch custom-i"></i>
+            </div>
+        </div>
+        <div class="dashboard-stat">
+            <!-- <div class="stat-value">{{totalNumberOfDaysOff.totalNumberOfDaysOff}}</div> -->
+            <!-- <div class="stat-value">{{calculateDaysBetweenDates(startDate,endDate)-workingDays.length -scheduledDayOffsCount}}</div> -->
+            <div class="stat-value">
+                {{ totalShiftInTime - totalShiftWork - holidays.length }}
+            </div>
+            <div class="stat-label">Tổng số ca nghỉ</div>
+            <div class="stat-icon">
+                <i class="pi pi-calendar-minus custom-i"></i>
+            </div>
+        </div>
+        <div class="action-container">
+            <div>
+                <!-- <button (click)="{}" pButton class="button" type="button"
+                    style="margin-right: 10px; color: white;font-weight: 500; background-color: #AA0000; border-color: #AA0000; justify-content:center">Ẩn
+                    Tổng quan</button> -->
+            </div>
+        </div>
+        <div class="action-container">
+            <div class="time-confilm">
+                <strong>Thời gian:</strong>
+                <div class="time-custom">
+                    {{ statusByEmployee.date | date : "dd-MM-yyyy hh:mm" }}
+                </div>
+            </div>
+            <div
+                class="action"
+                *ngIf="
+                    statusByEmployee.status ==
+                    summaryTimesheetNameEmployeeConfirmStatus.Pending
+                "
+            >
+                <button
+                    (click)="
+                        handleUpdateStatus(
+                            summaryTimesheetNameEmployeeConfirmStatus.Reject
+                        )
+                    "
+                    pButton
+                    class="button"
+                    type="button"
+                    style="
+                        margin-right: 10px;
+                        color: white;
+                        font-weight: 500;
+                        background-color: #aa0000;
+                        border-color: #aa0000;
+                        justify-content: center;
+                    "
+                >
+                    Từ chối
+                </button>
+                <button
+                    (click)="
+                        handleUpdateStatus(
+                            summaryTimesheetNameEmployeeConfirmStatus.Confirm
+                        )
+                    "
+                    pButton
+                    class="button"
+                    type="submit"
+                    style="
+                        color: white;
+                        font-weight: 500;
+                        background-color: rgb(21, 21, 94);
+                        justify-content: center;
+                    "
+                >
+                    Xác nhận
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="calendar-container">
+        <div class="week-header">
+            <div
+                class="week-day"
+                *ngFor="let day of weekDays; let i = index"
+                [ngClass]="{ 'red-color': i >= weekDays.length - 2 }"
+            >
+                {{ day }}
+            </div>
+        </div>
+        <div
+            class="calendar"
+            [ngClass]="isShowFullCalendar ? 'show-full' : 'show-not-full'"
+        >
+            <div class="day" *ngFor="let day of monthDays">
+                <div class="date">{{ day.date | date : "dd-MM-yyyy" }}</div>
+                <div class="day-status mb-2" *ngFor="let shift of day.shifts">
+                    <div class="time-frame">
+                        <span
+                            *ngIf="
+                                shift.timeKeepingLeaveStatus !=
+                                timeKeepingLeaveStatus.LeaveNotPermission
+                            "
+                            [ngClass]="
+                                shift.isEnoughWork == true
+                                    ? 'status-dot-green'
+                                    : shift.isEnoughWork == fasle
+                                    ? 'status-dot-red'
+                                    : 'status-dot-yellow'
+                            "
+                        ></span>
+                        <div class="status-text">
+                            {{ shift.shiftTableName }}
+                        </div>
+                        <span class="icon"
+                            ><i
+                                class="pi pi-calendar-minus font-17 custom-i"
+                            ></i
+                        ></span>
+                    </div>
+                    <span
+                        class="time"
+                        *ngIf="
+                            getHourAndMinute(shift.startTime) != '' ||
+                            getHourAndMinute(shift.endTime) != ''
+                        "
+                        >{{ getHourAndMinute(shift.startTime) }}
+                        -
+                        {{ getHourAndMinute(shift.endTime) }}</span
+                    >
+                    <span
+                        class="time"
+                        *ngIf="
+                            getHourAndMinute(shift.startTime) == '' &&
+                            getHourAndMinute(shift.endTime) == ''
+                        "
+                    >
+                        <span
+                            class="time"
+                            *ngIf="
+                                shift.timeKeepingLeaveStatus ==
+                                timeKeepingLeaveStatus.LeavePermission
+                            "
+                            >Nghỉ dùng phép</span
+                        >
+                        <span
+                            class="time"
+                            *ngIf="
+                                shift.timeKeepingLeaveStatus ==
+                                timeKeepingLeaveStatus.LeaveNotPermission
+                            "
+                            >Nghỉ phép không lương</span
+                        >
+                        <span
+                            class="time"
+                            *ngIf="
+                                shift.timeKeepingLeaveStatus ==
+                                timeKeepingLeaveStatus.LeaveNotPermissionWithSalary
+                            "
+                            >Nghỉ không dùng phép hưởng lương</span
+                        >
+                    </span>
+                </div>
+                <div class="day-status mb-2" *ngIf="day.isHoliday == true">
+                    <div class="time-frame">
+                        <div class="status-text">Là ngày nghỉ lễ</div>
+                        <span class="icon"
+                            ><i
+                                class="pi pi-calendar-minus font-17 custom-i"
+                            ></i
+                        ></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-confirm-dialog [message]="dialogMessage"> </app-confirm-dialog>
+
+<p-dialog
+    header="Lý do từ chối"
+    [(visible)]="showRejectTimeSheet"
+    [modal]="true"
+    [style]="{ width: '400px' }"
+>
+    <div class="p-field p-grid">
+        <div class="p-col">
+            <textarea
+                [(ngModel)]="note"
+                placeholder="Nhập ghi chú"
+                rows="5"
+                cols="30"
+                pInputTextarea
+                style="width: 100%"
+            ></textarea>
+        </div>
+    </div>
+    <p-footer>
+        <button
+            type="button"
+            pButton
+            label="Hủy"
+            (click)="showRejectTimeSheet = false"
+            class="ui-button-danger cutsom-cancel me-2"
+        ></button>
+        <button
+            type="button"
+            pButton
+            label="Gửi"
+            (click)="handleUpdateStatusRejectConfirm()"
+            class="ui-button-success"
+        ></button>
+    </p-footer>
+</p-dialog>
+
+<!-- ignore -->
+<!-- <div class="day-status" *ngFor="let shift of day.shifts">
+                    <div class="time-frame">
+                        <span [ngClass]="day.workStatus==workStatus.FullWork?'status-dot-green':day.workStatus==workStatus.MissingWork?'status-dot-yellow':'status-dot-red'"></span>
+                        <div class="status-text">{{day.statusLabel}}</div>
+                        <span class="icon"><i class="pi pi-calendar-minus font-17 custom-i"></i></span>
+                    </div>
+                    <span class="time">{{day.startTime}} - {{day.endTime}}</span>
+                </div> -->

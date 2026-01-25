@@ -1,0 +1,19 @@
+<div class="toggle-button" (click)="toggleCollapse()">
+    <i class="fa" [ngClass]="{ 'fa-comments': isCollapsed, 'fa-times': !isCollapsed }"></i>
+</div>
+
+<div class="online-users-container" *ngIf="!isCollapsed">
+    <h3 (click)="toggleCollapse()" class="header">
+        Danh sách nhân viên
+        <!-- <i class="fa" [ngClass]="{ 'fa-chevron-up': !isCollapsed, 'fa-chevron-down': isCollapsed }"></i> -->
+    </h3>
+    <ul *ngIf="!isCollapsed">
+        <div *ngFor="let employee of employees" class="user-item" (click)="openChat(employee)">
+            <i class="fa fa-circle" [ngClass]="{ 'text-success': isUserOnline(employee.id), 'text-muted': !isUserOnline(employee.id) }"></i>
+            {{ employee.lastName + " " + employee.firstName }}
+        </div>
+    </ul>
+</div>
+
+<!-- Hiển thị khung chat khi chọn nhân viên -->
+<app-chat-box *ngIf="selectedUser" [user]="selectedUser"></app-chat-box>

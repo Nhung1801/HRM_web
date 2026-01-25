@@ -1,0 +1,199 @@
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+th {
+  background-color: #f2f2f2;
+  text-align: left;
+}
+
+.bt-plus {
+  margin-right: 8px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+}
+
+.bt-plus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.bt-plus.expanded {
+  font-weight: bold;
+}
+
+.bt-plus:hover {
+  background-color: #f0f0f0;
+}
+
+
+.bt-plus {
+  // margin-right: 8px;
+  margin-left: 10px;
+}
+
+td i {
+  font-size: 18px;
+  margin: 0 8px;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.3s, transform 0.2s;
+}
+
+td i:hover {
+  color: #007bff;
+  transform: scale(1.2);
+}
+
+td i.pi.pi-pencil:hover::after {
+  content: "Sửa";
+  font-family: 'Roboto', sans-serif;
+  position: absolute;
+  background: #000;
+  color: #fff;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+td i.pi.pi-pencil::after {
+  display: none;
+}
+
+td i.pi.pi-pencil:hover::after {
+  display: block;
+}
+
+td i.pi.pi-minus-circle:hover::after {
+  content: "Ngừng theo dõi";
+  font-family: 'Roboto', sans-serif;
+  position: absolute;
+  background: #000;
+  color: #fff;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+td i.pi.pi-minus-circle::after {
+  display: none;
+}
+
+td i.pi.pi-minus-circle:hover::after {
+  display: block;
+}
+
+td i.pi.pi-database:hover::after {
+  content: "Xem phát sinh";
+  font-family: 'Roboto', sans-serif;
+  position: absolute;
+  background: #000;
+  color: #fff;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+td i.pi.pi-database::after {
+  display: none;
+}
+
+td i.pi.pi-database:hover::after {
+  display: block;
+}
+
+td i.pi.pi-trash:hover::after {
+  content: "Xóa";
+  font-family: 'Roboto', sans-serif;
+  position: absolute;
+  background: #000;
+  color: #fff;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+td i.pi.pi-trash:hover {
+  color: red;
+  transform: scale(1.2);
+}
+
+td i.pi.pi-trash::after {
+  display: none;
+}
+
+td i.pi.pi-trash:hover::after {
+  display: block;
+}
+
+.card {
+  border-radius: 5px;
+  border: none !important;
+  padding: 0 !important;
+}
+
+.status-active {
+  color: green;
+}
+
+.status-inactive {
+  color: red;
+}
+
+
+// tny add
+.work-status-span {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 400;
+  text-align: center;
+}
+
+.table-no-border,
+.table-no-border th,
+.table-no-border td {
+    border: none !important; /* Sử dụng !important để đảm bảo ưu tiên cao hơn các định nghĩa khác */
+}

@@ -1,0 +1,592 @@
+<main id="main" class="main">
+    <div class="pagetitle">
+        <div>
+            <h4>
+                <!-- <i
+                    [routerLink]="['/timekeeping']"
+                    [queryParams]="{ page: 'tracking' }"
+                    class="pi pi-arrow-left"
+                ></i> -->
+
+                Danh sách ngày nghỉ lễ
+            </h4>
+        </div>
+
+        <div class="btn-add-wrapper">
+            <button
+            *ngIf="this.permisionHelper.hasPermissions([permissionConstant.ManageLeaveRegulationsCreate])"
+                (click)="showDialogCreate()"
+                pButton
+                pRipple
+                label="Thêm mới"
+                style="height: 40px; width: 130px; border-radius: 10px"
+            ></button>
+        </div>
+    </div>
+    <div class="toast-container"></div>
+    <!-- End Page Title -->
+    <section class="section k-list-table">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card-body">
+                    <div class="card">
+                        <div class="table-section" style="margin-top: 20px">
+                            <p-table
+                                responsiveLayout="scroll"
+                                styleClass="p-datatable-striped"
+                                [rowHover]="true"
+                                [paginator]="false"
+                                [value]="listLocation"
+                                [ngStyle]="{
+                                    width: 'auto',
+                                    'overflow-x': 'auto',
+                                    'table-layout': 'auto'
+                                }"
+                            >
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th>
+                                            <p-checkbox
+                                                [(ngModel)]="checked"
+                                                [binary]="true"
+                                                inputId="binary"
+                                                (onChange)="onSelectAllChange()"
+                                            />
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            [style]="{ minWidth: '200px' }"
+                                        >
+                                            Tên ngày nghỉ
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            [style]="{ minWidth: '200px' }"
+                                        >
+                                            Thời gian
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            [style]="{ minWidth: '200px' }"
+                                        >
+                                            Đối tượng áp dụng
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            [style]="{ minWidth: '200px' }"
+                                        >
+                                            ghi chú
+                                        </th>
+
+                                        <th
+                                            class="text-center"
+                                            [style]="{ minWidth: '200px' }"
+                                        >
+                                            Hành động
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template
+                                    pTemplate="body"
+                                    let-rowData
+                                    let-i="rowIndex"
+                                >
+                                    <tr style="cursor: pointer">
+                                        <td>
+                                            <p-checkbox
+                                                [(ngModel)]="rowData.checked"
+                                                [binary]="true"
+                                                inputId="binary{{ i }}"
+                                                (onChange)="onCheckboxChange()"
+                                            />
+                                        </td>
+                                        <td
+                                            [style]="{ textAlign: 'center' }"
+                                            class="min-w-200"
+                                        >
+                                            {{ rowData?.name }}
+                                        </td>
+                                        <td
+                                            [style]="{ textAlign: 'center' }"
+                                            class="min-w-200"
+                                        >
+                                            {{
+                                                rowData?.fromDate
+                                                    | date : "dd/MM/yyyy"
+                                            }}
+                                            -
+                                            {{
+                                                rowData?.toDate
+                                                    | date : "dd/MM/yyyy"
+                                            }}
+                                        </td>
+                                        <td
+                                            [style]="{ textAlign: 'center' }"
+                                            class="min-w-200"
+                                        >
+                                            {{
+                                                rowData?.applyObject === 0
+                                                    ? "Toàn bộ công ty"
+                                                    : "Cơ cấu tổ chức"
+                                            }}
+                                        </td>
+                                        <td
+                                            [style]="{ textAlign: 'center' }"
+                                            class="min-w-200"
+                                        >
+                                            {{ rowData?.note }}
+                                        </td>
+
+                                        <td
+                                            [style]="{ textAlign: 'center' }"
+                                            class="text-center"
+                                            class="cursor-pointer"
+                                        >
+                                            <div
+                                                class=""
+                                                [style]="{
+                                                    display: 'flex',
+                                                    justifyContent: 'center'
+                                                }"
+                                            >
+                                                <div
+                                                    class="font-size-16 ml-2"
+                                                    style="
+                                                        padding: 3px;
+                                                        border-radius: 50%;
+                                                    "
+                                                >
+                                                    <i *ngIf="this.permisionHelper.hasPermissions([permissionConstant.ManagePublicHolidaysEdit])"
+                                                        (click)="
+                                                            showDialogUpdate(
+                                                                rowData.id
+                                                            )
+                                                        "
+                                                        class="pi pi-file-edit"
+                                                    ></i>
+                                                </div>
+
+                                                <div
+                                                    class="font-size-16"
+                                                    style="
+                                                        padding: 3px;
+                                                        border-radius: 50%;
+                                                    "
+                                                >
+                                                    <i
+                                                    *ngIf="this.permisionHelper.hasPermissions([permissionConstant.ManagePublicHolidaysDelete])"
+                                                        (click)="
+                                                            showDialogDeleteLocation(
+                                                                rowData
+                                                            )
+                                                        "
+                                                        class="pi pi-trash"
+                                                        [style]="{
+                                                            color: 'black'
+                                                        }"
+                                                    ></i>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+
+                                <ng-template pTemplate="empty">
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="8" class="text-center">
+                                                Không có dữ liệu
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </ng-template>
+                            </p-table>
+
+                            <div>
+                                <div
+                                    class="flex justify-content-between"
+                                    *ngIf="totalItems > 0"
+                                >
+                                    <div class="paging-info"></div>
+                                    <p-paginator
+                                        [rows]="pageSize"
+                                        [totalRecords]="totalItems"
+                                        [rowsPerPageOptions]="[10, 20, 30]"
+                                        (onPageChange)="onPageChange($event)"
+                                        (onRowsPerPageChange)="
+                                            onPageSizeChange($event)
+                                        "
+                                        [first]="(pageIndex - 1) * pageSize"
+                                        [pageLinkSize]="3"
+                                    ></p-paginator>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<p-dialog
+    header="Xác nhận"
+    [modal]="true"
+    [(visible)]="deleteLocation"
+    [style]="{ width: '25rem' }"
+>
+    <div>
+        <p>
+            Bạn có chắc chắn muốn xóa ngày nghỉ lễ
+            <b>
+                {{ nameLocation }}
+            </b>
+            không?
+        </p>
+        <div class="flex justify-content-end gap-2 py-3">
+            <p-button
+                (click)="handleDeleteLocation()"
+                label="Xóa"
+                class="btn-delete"
+                [style]="{
+                    backgroundColor: 'red',
+                    borderColor: 'red',
+                    borderRadius: '5px !important'
+                }"
+            />
+            <p-button
+                label="Hủy"
+                severity="secondary"
+                class="btn-cancel"
+                (click)="deleteLocation = false"
+                [style]="{
+                    backgroundColor: '#2a2986',
+                    borderColor: '#2a2986',
+                    borderRadius: '5px !important',
+                    color: 'white'
+                }"
+            />
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog
+    header="Thêm ngày nghỉ"
+    [modal]="true"
+    [(visible)]="createHoliday"
+    [style]="{ width: '450px' }"
+    (onHide)="closeDialogCreate()"
+>
+    <div>
+        <div class="">
+            <!-- Tên địa điểm -->
+            <form [formGroup]="createForm">
+                <div class="">
+                    <div class="row mt-4">
+                        <label for="placeName" class="col-sm-3 col-form-label"
+                            >Tên <span class="text-danger">*</span></label
+                        >
+                        
+                        <div class="col-sm-9">
+                            <div class="" style="width: 350px">
+                                <input
+                                    type="text"
+                                    pInputText
+                                    style="width: 315px"
+                                    placeholder="Nhập tên ngày nghỉ"
+                                    formControlName="name"
+                                />
+                            </div>
+                            <div [style]="{ marginTop: '10px' }"></div>
+                            <p-checkbox
+                                [binary]="true"
+                                inputId="binary"
+                                formControlName="isACompensatoryDayOff"
+                            />
+                            <label for="ny" [style]="{ marginLeft: '4px' }"
+                                >Là ngày nghỉ bù</label
+                            >
+                            <div
+                                *ngIf="
+                                    createForm.get('name')?.touched &&
+                                    createForm.get('name')?.invalid &&
+                                    createForm.get('name')?.errors?.['whitespace']"
+                            >
+                                <span [style]="{ color: 'red' }"
+                                    >Tên ngày nghỉ không được để trống</span
+                                >
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <label for="latitude" class="col-sm-3 col-form-label"
+                            >Thời gian áp dụng
+                            <span class="text-danger">*</span></label
+                        >
+                        <div class="col-sm-9">
+                            <div
+                                [style]="{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between'
+                                }"
+                            >
+                                <p-calendar
+                                    formControlName="fromDate"
+                                    [style]="{ width: '150px' }"
+                                    placeholder="dd/mm/yy"
+                                    dateFormat="dd/mm/yy"
+                                    [showTime]="false"
+                                />
+
+                                <i class="bi bi-dash"></i>
+                                <p-calendar
+                                    formControlName="toDate"
+                                    [style]="{ width: '150px' }"
+                                    placeholder="dd/mm/yy"
+                                    dateFormat="dd/mm/yy"
+                                    [showTime]="false"
+                                />
+                            </div>
+                            <div
+                                *ngIf="
+                                    createForm.get('fromDate')?.touched &&
+                                    createForm.get('fromDate')?.invalid &&
+                                    createForm.get('toDate')?.touched &&
+                                    createForm.get('toDate')?.invalid
+                                "
+                            >
+                                <span [style]="{ color: 'red' }"
+                                    >Thời gian áp dụng không được để trống</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <label for="latitude" class="col-sm-3 col-form-label"
+                            >Đối tượng <span class="text-danger">*</span></label
+                        >
+                        <div class="col-sm-9">
+                            <div class="d-flex">
+                                <div
+                                    *ngFor="let category of listSelectTask"
+                                    class="field-checkbox mr-3"
+                                >
+                                    <p-radioButton
+                                        [inputId]="category.value"
+                                        [value]="category.value"
+                                        formControlName="applyObject"
+                                    >
+                                    </p-radioButton>
+                                    <label [for]="category.value" class="ml-2">
+                                        {{ category.label }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <label for="placeName" class="col-sm-3 col-form-label"
+                            >Ghi chú
+                        </label>
+                        <div class="col-sm-9">
+                            <div class="" style="width: 350px">
+                                <input
+                                    type="text"
+                                    pInputText
+                                    style="width: 315px"
+                                    placeholder="Nhập ghi chú"
+                                    formControlName="note"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="flex justify-content-end gap-2 py-3 mt-3">
+                <p-button
+                    [disabled]="createForm.invalid"
+                    (click)="handleCreateHoliday()"
+                    label="Thêm"
+                    class="btn-delete"
+                    [style]="{}"
+                />
+                <p-button
+                    label="Hủy"
+                    severity="secondary"
+                    class="btn-cancel"
+                    (click)="closeDialogCreate()"
+                    [style]="{
+                        backgroundColor: 'white',
+
+                        color: 'black'
+                    }"
+                />
+            </div>
+        </div>
+    </div>
+</p-dialog>
+<p-dialog
+    header="Cập nhật ngày nghỉ"
+    [modal]="true"
+    [(visible)]="updateHoliday"
+    [style]="{ width: '450px' }"
+>
+    <div>
+        <div class="">
+            <!-- Tên địa điểm -->
+            <form [formGroup]="updateForm">
+                <div class="">
+                    <div class="row mt-4">
+                        <label for="placeName" class="col-sm-3 col-form-label"
+                            >Tên <span class="text-danger">*</span></label
+                        >
+                        <div class="col-sm-9">
+                            <div class="" style="width: 350px">
+                                <input
+                                    type="text"
+                                    pInputText
+                                    style="width: 315px"
+                                    placeholder="Nhập tên ngày nghỉ"
+                                    formControlName="nameUpdate"
+                                />
+                            </div>
+                            <div [style]="{ marginTop: '10px' }"></div>
+                            <p-checkbox
+                                [binary]="true"
+                                inputId="binary"
+                                formControlName="isACompensatoryDayOffUpdate"
+                            />
+                            <label for="ny" [style]="{ marginLeft: '4px' }"
+                                >Là ngày nghỉ bù</label
+                            >
+                            <div
+                                *ngIf="
+                                    updateForm.get('nameUpdate')?.touched &&
+                                    updateForm.get('nameUpdate')?.invalid &&
+                                    updateForm.get('nameUpdate')?.errors?.['whitespace']
+                                "
+                            >
+                                <span [style]="{ color: 'red' }"
+                                    >Tên ngày nghỉ không được để trống</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <label for="latitude" class="col-sm-3 col-form-label"
+                            >Thời gian áp dụng
+                            <span class="text-danger">*</span></label
+                        >
+                        <div class="col-sm-9">
+                            <div
+                                [style]="{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between'
+                                }"
+                            >
+                                <p-calendar
+                                    formControlName="fromDateUpdate"
+                                    [style]="{ width: '150px' }"
+                                    placeholder="dd/mm/yy"
+                                    dateFormat="dd/mm/yy"
+                                    [showTime]="false"
+                                />
+
+                                <i class="bi bi-dash"></i>
+                                <p-calendar
+                                    formControlName="toDateUpdate"
+                                    [style]="{ width: '150px' }"
+                                    placeholder="dd/mm/yy"
+                                    dateFormat="dd/mm/yy"
+                                    [showTime]="false"
+                                />
+                            </div>
+                            <div
+                                *ngIf="
+                                    updateForm.get('fromDateUpdate')?.touched &&
+                                    updateForm.get('fromDateUpdate')?.invalid &&
+                                    updateForm.get('toDateUpdate')?.touched &&
+                                    updateForm.get('toDateUpdate')?.invalid
+                                "
+                            >
+                                <span [style]="{ color: 'red' }"
+                                    >Thời gian áp dụng không được để trống</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <label for="latitude" class="col-sm-3 col-form-label"
+                            >Đối tượng <span class="text-danger">*</span></label
+                        >
+                        <div class="col-sm-9">
+                            <div class="d-flex">
+                                <div
+                                    *ngFor="let category of listSelectTask"
+                                    class="field-checkbox mr-3"
+                                >
+                                    <p-radioButton
+                                        [inputId]="category.value"
+                                        [value]="category.value"
+                                        formControlName="applyObjectUpdate"
+                                    >
+                                    </p-radioButton>
+                                    <label [for]="category.value" class="ml-2">
+                                        {{ category.label }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <label for="placeName" class="col-sm-3 col-form-label"
+                            >Ghi chú
+                        </label>
+                        <div class="col-sm-9">
+                            <div class="" style="width: 350px">
+                                <input
+                                    type="text"
+                                    pInputText
+                                    style="width: 315px"
+                                    placeholder="Nhập ghi chú"
+                                    formControlName="noteUpdate"
+                                />
+                            </div>
+                            <!-- <div
+                                    
+                                    class="text-danger"
+                                >
+                                    Tên địa điểm là bắt buộc.
+                                </div> -->
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="flex justify-content-end gap-2 py-3 mt-3">
+                <p-button
+                    [disabled]="updateForm.invalid"
+                    (click)="handleUpdateHoliday()"
+                    label="Cập nhật"
+                    class="btn-delete"
+                    [style]="{}"
+                />
+                <p-button
+                    label="Hủy"
+                    (click)="updateHoliday = false"
+                    severity="secondary"
+                    class="btn-cancel"
+                    (click)="deleteLocation = false"
+                    [style]="{
+                        backgroundColor: 'white',
+
+                        color: 'black'
+                    }"
+                />
+            </div>
+        </div>
+    </div>
+</p-dialog>

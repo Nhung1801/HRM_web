@@ -1,0 +1,74 @@
+.week{
+    background-color:#f8f7f7;
+    border-radius: 4px;
+    border: 1px solid #eceaea;
+}
+
+.time-input {
+    height: 43px;
+    border-radius: 4px;
+    border: none;
+    border: 1px solid #ccc;
+    padding: 0 10px;
+    outline: none;
+    width: 80px;
+}
+
+
+.dayOfWeek-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.dayOfWeek-item {
+    display: flex;
+    align-items: center;
+}
+
+.dayOfWeek-item p-checkbox {
+    margin-right: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+td {
+    height: 100px;
+    vertical-align: top;
+}
+
+.not-current-month {
+    color: #cccccc;
+}
+
+.not-current-month {
+    color: #cccccc;
+}
+
+.working-day {
+    background-color: #cfefcf;
+    padding: 3px 6px;
+    border-radius: 4px;
+    height: 100%;
+    border: 1px solid #e3f8e3;
+    transition: all 0.15s;
+    /* Màu nền cho ngày làm việc */
+}
+
+.working-day:hover {
+    border: 1px solid #51b851;
+}

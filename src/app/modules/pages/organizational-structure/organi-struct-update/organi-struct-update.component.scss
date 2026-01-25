@@ -1,0 +1,27 @@
+
+input {
+    width: 400px;
+}
+.field{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+input.ng-invalid.ng-touched {
+    border-color: red;
+}
+
+small.p-error {
+    color: red;
+    font-size: 12px;
+}
+
+::ng-deep .custom-checkbox .p-checkbox-box {
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 50% !important;
+  }
+
+  .custom-tree-select {
+    width: 28.5rem !important;
+  }

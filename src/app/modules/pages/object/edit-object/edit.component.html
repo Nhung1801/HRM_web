@@ -1,0 +1,755 @@
+<div class="grid">
+    <!-- Header -->
+    <div class="col-12">
+        <p-toolbar>
+            <div class="p-toolbar-group-left">
+                <strong class="font-size-16">Cập nhật đối tượng</strong>
+                <p-breadcrumb
+                    [model]="items"
+                    class="breadcrumb-left"
+                ></p-breadcrumb>
+            </div>
+        </p-toolbar>
+    </div>
+
+    <!-- Form -->
+    <div class="col-12">
+        <div class="card p-4">
+            <div class="p-fluid">
+                <!-- Loại đối tượng -->
+                <div class="col-12">
+                    <h2 class="text-h2">Loại đối tượng</h2>
+                    <div
+                        class="p-d-flex p-ai-center p-jc-between"
+                        style="margin-top: 15px"
+                    >
+                        <div>
+                            <div class="checkbox-group">
+                                <p-checkbox
+                                    binary="true"
+                                    label="Là người dùng"
+                                    class="checkbox-1"
+                                ></p-checkbox>
+                                <div class="divider"></div>
+                                <p-checkbox
+                                    binary="true"
+                                    label="Là nhân viên"
+                                    class="ml-3 checkbox-2"
+                                ></p-checkbox>
+                            </div>
+                            <div class="horizontal-divider"></div>
+                        </div>
+                        <div
+                            class="upload-container"
+                            *ngIf="objectById?.avatarUrl == null && !imageUrl"
+                        >
+                            <input
+                                type="file"
+                                id="fileInput"
+                                accept="image/*"
+                                (change)="onFileSelect($event)"
+                                style="display: none"
+                            />
+                            <div
+                                class="upload-box"
+                                (click)="triggerFileInput()"
+                            >
+                                <div class="upload-icon">
+                                    <i class="pi pi-upload"></i>
+                                </div>
+                                <div class="upload-text">Tải ảnh</div>
+                            </div>
+                        </div>
+
+                        <div
+                            *ngIf="objectById?.avatarUrl != null"
+                            class="image-container"
+                        >
+                            <img
+                                [src]="ImgUrl + objectById?.avatarUrl"
+                                alt="Image"
+                                class="news-image"
+                            />
+
+                            <i
+                                *ngIf="imageUrl"
+                                class="pi pi-trash trash-icon"
+                                (click)="removeImage()"
+                            ></i>
+                        </div>
+
+                        <div
+                            *ngIf="objectById?.avatarUrl == null && imageUrl"
+                            class="image-container"
+                        >
+                            <img
+                                [src]="imageUrl"
+                                alt="Image"
+                                class="news-image"
+                            />
+
+                            <i
+                                *ngIf="imageUrl"
+                                class="pi pi-trash trash-icon"
+                                (click)="removeImage()"
+                            ></i>
+                        </div>
+                    </div>
+                </div>
+
+                <form
+                    class="grid-container"
+                    [formGroup]="employeeForm"
+                    (ngSubmit)="onSubmitForm()"
+                >
+                    <!-- Thông tin chung -->
+                    <div class="col-12 md:col-6" class="left-section">
+                        <h2 class="text-h2">Thông tin chung</h2>
+
+                        <div class="p-fluid" style="margin-top: 20px">
+                            <div class="p-field">
+                                <label>Mã nhân viên</label>
+                                <input
+                                    pInputText
+                                    formControlName="employeeCode"
+                                />
+                            </div>
+
+                            <!-- họ và đệm -->
+                            <div class="p-field">
+                                <label for="lastName"
+                                    >Họ và đệm
+                                    <span class="required">*</span></label
+                                >
+                                <input
+                                    id="lastName"
+                                    pInputText
+                                    formControlName="lastName"
+                                    required
+                                />
+                                <div
+                                    *ngIf="
+                                        employeeForm.get('lastName').invalid &&
+                                        (employeeForm.get('lastName').touched ||
+                                            employeeForm.get('lastName').dirty)
+                                    "
+                                    class="error-message"
+                                >
+                                    <div
+                                        *ngIf="
+                                            employeeForm
+                                                .get('lastName')
+                                                .hasError('required')
+                                        "
+                                    >
+                                        Họ và đệm là bắt buộc.
+                                    </div>
+                                    <!-- <div *ngIf="employeeForm.get('lastName').hasError('maxlength')">Họ và đệm không được dài quá 100 ký tự.
+                    </div> -->
+                                </div>
+                            </div>
+
+                            <!-- tên -->
+                            <div class="p-field">
+                                <label for="firstName"
+                                    >Tên <span class="required">*</span></label
+                                >
+                                <input
+                                    id="firstName"
+                                    pInputText
+                                    formControlName="firstName"
+                                    required
+                                />
+                                <div
+                                    *ngIf="
+                                        employeeForm.get('firstName').invalid &&
+                                        (employeeForm.get('firstName')
+                                            .touched ||
+                                            employeeForm.get('firstName').dirty)
+                                    "
+                                    class="error-message"
+                                >
+                                    <div
+                                        *ngIf="
+                                            employeeForm
+                                                .get('firstName')
+                                                .hasError('required')
+                                        "
+                                    >
+                                        Tên là bắt buộc.
+                                    </div>
+                                    <div
+                                        *ngIf="
+                                            employeeForm
+                                                .get('firstName')
+                                                .hasError('maxlength')
+                                        "
+                                    >
+                                        Tên không được dài quá 100 ký tự.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Trường Ngày tháng -->
+                            <div class="p-field">
+                                <label for="dateOfBirth">Ngày tháng</label>
+                                <p-calendar
+                                    class="custom-calendar"
+                                    id="dateOfBirth"
+                                    formControlName="dateOfBirth"
+                                    [showIcon]="true"
+                                    [dateFormat]="'dd/mm/yy'"
+                                    placeholder="Nhập ngày sinh"
+                                ></p-calendar>
+                                <!-- <div
+                    *ngIf="employeeForm.get('dateOfBirth').invalid && (employeeForm.get('dateOfBirth').touched || employeeForm.get('dateOfBirth').dirty)"
+                    class="error-message">
+                    <div *ngIf="employeeForm.get('dateOfBirth').hasError('required')">Ngày tháng là bắt buộc.</div>
+                  </div> -->
+                            </div>
+
+                            <!-- Trường Giới tính -->
+                            <div class="p-field">
+                                <label for="sex">Giới tính</label>
+                                <p-dropdown
+                                    class="custom-calendar"
+                                    id="sex"
+                                    formControlName="sex"
+                                    [options]="genderOptions"
+                                    optionLabel="label"
+                                    optionValue="value"
+                                ></p-dropdown>
+                                <!-- <div
+                    *ngIf="employeeForm.get('sex').invalid && (employeeForm.get('sex').touched || employeeForm.get('sex').dirty)"
+                    class="error-message">
+                    <div *ngIf="employeeForm.get('sex').hasError('required')">Giới tính là bắt buộc.</div>
+                  </div> -->
+                            </div>
+
+                            <!-- Trường Tỉnh/Thành phố -->
+                            <div class="p-field">
+                                <label for="city">Tỉnh/Thành phố</label>
+                                <p-dropdown
+                                    class="custom-calendar"
+                                    [options]="cities"
+                                    formControlName="cityId"
+                                    optionLabel="name"
+                                    optionValue="id"
+                                    [showClear]="true"
+                                    placeholder="Chọn thành phố"
+                                    (onChange)="onCityChange($event)"
+                                    (onClear)="onClearCity()"
+                                ></p-dropdown>
+                            </div>
+
+                            <!-- Trường Quận/Huyện -->
+                            <div class="p-field">
+                                <label for="city">Quận/Huyện</label>
+                                <p-dropdown
+                                    class="custom-calendar"
+                                    [options]="districts"
+                                    formControlName="districtId"
+                                    optionLabel="name"
+                                    optionValue="id"
+                                    [showClear]="true"
+                                    placeholder="Chọn quận huyện"
+                                    (onChange)="onDistrictChange($event)"
+                                    (onClear)="onClearDistrict()"
+                                ></p-dropdown>
+                            </div>
+
+                            <!-- Trường Phường/Xã -->
+                            <div class="p-field">
+                                <label for="city">Phường/Xã</label>
+                                <p-dropdown
+                                    class="custom-calendar"
+                                    [options]="wards"
+                                    formControlName="wardId"
+                                    optionLabel="name"
+                                    optionValue="id"
+                                    [showClear]="true"
+                                    placeholder="Chọn phường xã"
+                                    (onClear)="onClearWard()"
+                                ></p-dropdown>
+                            </div>
+
+                            <!-- Trường Địa chỉ -->
+                            <div class="p-field">
+                                <label for="address">Địa chỉ chi tiết:</label>
+                                <input
+                                    id="address"
+                                    pInputText
+                                    formControlName="address"
+                                />
+                                <!-- <div
+                    *ngIf="employeeForm.get('address').invalid && (employeeForm.get('address').touched || employeeForm.get('address').dirty)"
+                    class="error-message">
+                    <div *ngIf="employeeForm.get('address').hasError('required')">Địa chỉ là bắt buộc.</div>
+                    <div *ngIf="employeeForm.get('address').hasError('maxlength')">Địa chỉ không được dài quá 255 ký tự.
+                    </div>
+                  </div> -->
+                            </div>
+
+                            <!-- Trường Điện thoại di động -->
+                            <div class="p-field">
+                                <label for="phoneNumber"
+                                    >Điện thoại di động
+                                    <span class="required">*</span></label
+                                >
+                                <input
+                                    id="phoneNumber"
+                                    pInputText
+                                    formControlName="phoneNumber"
+                                />
+                                <div
+                                    *ngIf="
+                                        employeeForm.get('phoneNumber')
+                                            .invalid &&
+                                        (employeeForm.get('phoneNumber')
+                                            .touched ||
+                                            employeeForm.get('phoneNumber')
+                                                .dirty)
+                                    "
+                                    class="error-message"
+                                >
+                                    <div
+                                        *ngIf="
+                                            employeeForm
+                                                .get('phoneNumber')
+                                                .hasError('required')
+                                        "
+                                    >
+                                        Điện thoại di động là bắt buộc.
+                                    </div>
+                                    <div
+                                        *ngIf="
+                                            employeeForm
+                                                .get('phoneNumber')
+                                                .hasError('pattern')
+                                        "
+                                    >
+                                        Điện thoại không hợp lệ.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Trường Email cá nhân -->
+                            <div class="p-field">
+                                <label for="personalEmail"
+                                    >Email cá nhân
+                                    <span class="required">*</span></label
+                                >
+                                <input
+                                    id="personalEmail"
+                                    pInputText
+                                    formControlName="personalEmail"
+                                    placeholder="Nhập email cá nhân"
+                                    readonly
+                                />
+                                <!-- <div *ngIf="employeeForm.get('personalEmail').invalid && (employeeForm.get('personalEmail').touched || employeeForm.get('personalEmail').dirty)" class="error-message">
+                    <div *ngIf="employeeForm.get('personalEmail').hasError('required')">Email cá nhân là bắt buộc.</div>
+                    <div *ngIf="employeeForm.get('personalEmail').hasError('email')">Email không hợp lệ.</div>
+                  </div> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thông tin công việc -->
+                    <div class="col-12 md:col-6" class="right-section">
+                        <h2 class="text-h2">Thông tin công việc</h2>
+                        <div class="p-fluid" style="margin-top: 20px">
+                            <!-- Đơn vị -->
+                            <div class="p-field">
+                                <label
+                                    >Đơn vị
+                                    <span class="required">*</span></label
+                                >
+                                <div
+                                    style="width: 350px"
+                                    (focusout)="
+                                        handleTreeSelectFocusOut($event)
+                                    "
+                                >
+                                    <p-treeSelect
+                                        class="w-full custom-tree-select"
+                                        formControlName="organizationId"
+                                        [options]="organizations"
+                                        [metaKeySelection]="false"
+                                        placeholder="Chọn đơn vị"
+                                        [showClear]="true"
+                                        (onClear)="validateParentUnit()"
+                                        (onNodeSelect)="
+                                            onParentUnitChange($event)
+                                        "
+                                        [style]="{
+                                            maxHeight: '300px',
+                                            overflow: 'auto'
+                                        }"
+                                    >
+                                    </p-treeSelect>
+                                    <div
+                                        *ngIf="
+                                            employeeForm.get('organizationId')
+                                                .invalid &&
+                                            (employeeForm.get('organizationId')
+                                                .touched ||
+                                                employeeForm.get(
+                                                    'organizationId'
+                                                ).dirty)
+                                        "
+                                        class="error-message"
+                                    >
+                                        <div
+                                            *ngIf="
+                                                employeeForm
+                                                    .get('organizationId')
+                                                    .hasError('required')
+                                            "
+                                        >
+                                            Vui lòng chọn đơn vị
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Vị trí công việc -->
+                            <div class="p-field">
+                                <label
+                                    >Vị trí công việc
+                                    <span class="required">*</span></label
+                                >
+                                <p-dropdown
+                                    formControlName="staffPositionId"
+                                    [options]="positionName"
+                                    optionLabel="label"
+                                    optionValue="value"
+                                    placeholder="Vị trí công việc"
+                                    class="custom-calendar"
+                                >
+                                </p-dropdown>
+                                <div
+                                    *ngIf="
+                                        employeeForm.get('staffPositionId')
+                                            .invalid &&
+                                        (employeeForm.get('staffPositionId')
+                                            .touched ||
+                                            employeeForm.get('staffPositionId')
+                                                .dirty)
+                                    "
+                                    class="error-message"
+                                >
+                                    <div
+                                        *ngIf="
+                                            employeeForm
+                                                .get('staffPositionId')
+                                                .hasError('required')
+                                        "
+                                    >
+                                        Vui lòng chọn quản lý trực tiếp
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quản lý trực tiếp -->
+                            <div class="p-field">
+                                <label
+                                    >Quản lý trực tiếp
+                                    <span class="required">*</span></label
+                                >
+                                <p-dropdown
+                                    class="custom-calendar"
+                                    formControlName="managerDirectId"
+                                    [options]="employeeDetails"
+                                    optionLabel="label"
+                                    optionValue="value"
+                                    placeholder="Chọn quản lý trực tiếp"
+                                ></p-dropdown>
+                                <div
+                                    *ngIf="
+                                        employeeForm.get('managerDirectId')
+                                            .invalid &&
+                                        (employeeForm.get('managerDirectId')
+                                            .touched ||
+                                            employeeForm.get('managerDirectId')
+                                                .dirty)
+                                    "
+                                    class="error-message"
+                                >
+                                    <div
+                                        *ngIf="
+                                            employeeForm
+                                                .get('managerDirectId')
+                                                .hasError('required')
+                                        "
+                                    >
+                                        Vui lòng chọn quản lý trực tiếp
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Công ty trực thuộc -->
+                            <div class="p-field">
+                                <label
+                                    >Công ty trực thuộc
+                                    <span class="required">*</span></label
+                                >
+                                <p-dropdown
+                                    class="custom-calendar"
+                                    formControlName="companyId"
+                                    [options]="fullName"
+                                    optionLabel="label"
+                                    optionValue="value"
+                                    placeholder="Chọn công ty trực thuộc"
+                                ></p-dropdown>
+                                <div
+                                    *ngIf="
+                                        employeeForm.get('companyId').invalid &&
+                                        (employeeForm.get('companyId')
+                                            .touched ||
+                                            employeeForm.get('companyId').dirty)
+                                    "
+                                    class="error-message"
+                                >
+                                    <div
+                                        *ngIf="
+                                            employeeForm
+                                                .get('companyId')
+                                                .hasError('required')
+                                        "
+                                    >
+                                        Vui lòng chọn công ty trực thuộc
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Chức danh -->
+                            <div class="p-field">
+                                <label
+                                    >Chức danh
+                                    <span class="required">*</span></label
+                                >
+                                <p-dropdown
+                                    class="custom-calendar"
+                                    formControlName="staffTitleId"
+                                    [options]="staffTitles"
+                                    optionValue="id"
+                                    optionLabel="staffTitleName"
+                                    placeholder="Chọn chức danh"
+                                ></p-dropdown>
+                                <div
+                                    *ngIf="
+                                        employeeForm.get('staffTitleId')
+                                            .invalid &&
+                                        (employeeForm.get('staffTitleId')
+                                            .touched ||
+                                            employeeForm.get('staffTitleId')
+                                                .dirty)
+                                    "
+                                    class="error-message"
+                                >
+                                    <div
+                                        *ngIf="
+                                            employeeForm
+                                                .get('staffTitleId')
+                                                .hasError('required')
+                                        "
+                                    >
+                                        Vui lòng chọn chức danh
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Trạng thái lao động -->
+                            <div class="p-field">
+                                <label
+                                    >Trạng thái lao động
+                                    <span class="required">*</span></label
+                                >
+                                <p-dropdown
+                                    class="custom-calendar"
+                                    [options]="workingStatusOptions"
+                                    optionLabel="label"
+                                    optionValue="value"
+                                    formControlName="workingStatus"
+                                    placeholder="Chọn trạng thái"
+                                >
+                                </p-dropdown>
+                                <div
+                                    *ngIf="
+                                        employeeForm.get('workingStatus')
+                                            .invalid &&
+                                        (employeeForm.get('workingStatus')
+                                            .touched ||
+                                            employeeForm.get('workingStatus')
+                                                .dirty)
+                                    "
+                                    class="error-message"
+                                >
+                                    <div
+                                        *ngIf="
+                                            employeeForm
+                                                .get('workingStatus')
+                                                .hasError('required')
+                                        "
+                                    >
+                                        Vui lòng chọn trạng thái lao động
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Ngày thử việc -->
+                            <div class="p-field">
+                                <label>Ngày thử việc</label>
+                                <p-calendar
+                                    class="custom-calendar"
+                                    formControlName="probationDate"
+                                    [showIcon]="true"
+                                    [dateFormat]="'dd/mm/yy'"
+                                    placeholder="Nhập ngày thử việc"
+                                ></p-calendar>
+                            </div>
+
+                            <!-- Ngày chính thức -->
+                            <div class="p-field">
+                                <label>Ngày chính thức</label>
+                                <p-calendar
+                                    class="custom-calendar"
+                                    formControlName="officialDate"
+                                    [showIcon]="true"
+                                    [dateFormat]="'dd/mm/yy'"
+                                    placeholder="Nhập ngày chính thức"
+                                ></p-calendar>
+                            </div>
+
+                            <!-- Ngày nghỉ việc -->
+                            <div class="p-field">
+                                <label>Ngày nghỉ việc</label>
+                                <p-calendar
+                                    class="custom-calendar"
+                                    formControlName="leaveJobDate"
+                                    [showIcon]="true"
+                                    [dateFormat]="'dd/mm/yy'"
+                                    placeholder="Nhập ngày nghỉ việc"
+                                ></p-calendar>
+                            </div>
+
+                            <!-- Điện thoại cơ quan -->
+                            <div class="p-field">
+                                <label>Điện thoại cơ quan</label>
+                                <input
+                                    pInputText
+                                    formControlName="workPhoneNumber"
+                                    placeholder="Nhập điện thoại cơ quan"
+                                />
+                                <div
+                                    *ngIf="
+                                        employeeForm.get('workPhoneNumber')
+                                            .invalid &&
+                                        (employeeForm.get('workPhoneNumber')
+                                            .touched ||
+                                            employeeForm.get('workPhoneNumber')
+                                                .dirty)
+                                    "
+                                    class="error-message"
+                                >
+                                    <div
+                                        *ngIf="
+                                            employeeForm
+                                                .get('workPhoneNumber')
+                                                .hasError('required')
+                                        "
+                                    >
+                                        Điện thoại di động là bắt buộc.
+                                    </div>
+                                    <div
+                                        *ngIf="
+                                            employeeForm
+                                                .get('workPhoneNumber')
+                                                .hasError('pattern')
+                                        "
+                                    >
+                                        Điện thoại không hợp lệ.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Email công ty -->
+                            <div class="p-field">
+                                <label>Email công ty</label>
+                                <input
+                                    pInputText
+                                    formControlName="companyEmail"
+                                    placeholder="Nhập email công ty"
+                                />
+                                <div
+                                    *ngIf="
+                                        employeeForm.get('companyEmail')
+                                            .invalid &&
+                                        (employeeForm.get('companyEmail')
+                                            .touched ||
+                                            employeeForm.get('companyEmail')
+                                                .dirty)
+                                    "
+                                    class="error-message"
+                                >
+                                    <div
+                                        *ngIf="
+                                            employeeForm
+                                                .get('companyEmail')
+                                                .hasError('required')
+                                        "
+                                    >
+                                        Không được để trống.
+                                    </div>
+                                    <div
+                                        *ngIf="
+                                            employeeForm
+                                                .get('companyEmail')
+                                                .hasError('email')
+                                        "
+                                    >
+                                        Email không hợp lệ.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Email công ty -->
+                            <div class="button-container">
+                                <button
+                                    class="button"
+                                    type="button"
+                                    [routerLink]="['/object']"
+                                    (click)="onCancelAll()"
+                                    style="
+                                        margin-right: 10px;
+                                        color: white;
+                                        background-color: gray;
+                                    "
+                                >
+                                    Hủy
+                                </button>
+                                <button
+                                    class="button"
+                                    type="submit"
+                                    *ngIf="
+                                        this.permisson.hasPermissions([
+                                            [
+                                                permissionConstant.ManageObjectEdit
+                                            ]
+                                        ])
+                                    "
+                                    style="
+                                        color: white;
+                                        background-color: rgb(21, 21, 94);
+                                    "
+                                >
+                                    Sửa
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

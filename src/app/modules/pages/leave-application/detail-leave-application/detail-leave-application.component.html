@@ -1,0 +1,635 @@
+<div class="row p-3 pb-0 pt-0">
+    <p-toolbar styleClass="mb-2">
+        <div class="">
+            <strong class="font-size-16">Đơn từ</strong>
+            <p-breadcrumb
+                [model]="breadcrumbs"
+                [home]="{ icon: 'pi pi-home' }"
+            ></p-breadcrumb>
+        </div>
+    </p-toolbar>
+</div>
+
+<div class="p-grid p-fluid flex card-custom">
+    <div class="p-col-12 p-md-6">
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="employeeName"
+                        >Người lập đơn<span class="red-asterisk"></span
+                    ></label>
+                </div>
+                <div
+                    class="col-12 mb-2 md:col-8 md:mb-0"
+                    style="justify-content: space-between; gap: 7px"
+                >
+                    <span class="data-display text-center css-span">
+                        {{ leaveApplication.employeeName }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="affiliatedDocument"
+                        >Đơn vị công tác<span class="red-asterisk"></span
+                    ></label>
+                </div>
+                <div
+                    class="col-12 mb-2 md:col-8 md:mb-0"
+                    style="justify-content: space-between; gap: 7px"
+                >
+                    <span class="data-display text-center css-span">
+                        {{
+                            leaveApplication.employee!?.organization!
+                                ?.organizationName
+                        }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="startDate"
+                        >Ngày nộp đơn<span class="red-asterisk"></span
+                    ></label>
+                </div>
+                <div class="col-12 mb-2 md:col-8 md:mb-0">
+                    <span class="data-display text-center css-span">
+                        {{ leaveApplication.createdAt }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="startDate"
+                        >Từ ngày<span class="red-asterisk"></span
+                    ></label>
+                </div>
+                <div class="col-12 mb-2 md:col-8 md:mb-0">
+                    <span class="data-display text-center css-span">
+                        {{ leaveApplication!.startDate }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="endDate"
+                        >Đến ngày<span class="red-asterisk"></span
+                    ></label>
+                </div>
+                <div class="col-12 mb-2 md:col-8 md:mb-0">
+                    <span class="data-display text-center css-span">
+                        {{ leaveApplication.endDate }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="numberOfDays"
+                        >Số ngày nghỉ</label
+                    >
+                </div>
+                <div
+                    class="col-12 mb-2 md:col-8 md:mb-0"
+                    style="justify-content: space-between; gap: 7px"
+                >
+                    <span class="data-display text-center css-span">
+                        {{ leaveApplication.numberOfDays }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="reasonForLeave"
+                        >Lý do nghỉ<span class="red-asterisk"></span
+                    ></label>
+                </div>
+                <div class="col-12 mb-2 md:col-8 md:mb-0">
+                    <span class="data-display text-center css-span">
+                        {{ leaveApplication.reasonForLeave }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label style="font-weight: 600; color: #000" htmlFor="note"
+                        >Ghi chú</label
+                    >
+                </div>
+                <div class="col-12 mb-2 md:col-8 md:mb-0">
+                    <span class="data-display text-center css-span">
+                        {{ leaveApplication.note }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="employeeName"
+                        >Số ngày phép được sử dụng</label
+                    >
+                </div>
+                <div
+                    class="col-12 mb-2 md:col-8 md:mb-0"
+                    style="justify-content: space-between; gap: 7px"
+                >
+                    <span class="data-display text-center css-span">
+                        {{ leaveApplication.typeOfLeave.maximumNumberOfDayOff }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="employeeName"
+                        >Số ngày phép đã nghỉ</label
+                    >
+                </div>
+                <div
+                    class="col-12 mb-2 md:col-8 md:mb-0"
+                    style="justify-content: space-between; gap: 7px"
+                >
+                    <span class="data-display text-center css-span">
+                        {{
+                            leaveApplication.typeOfLeave.maximumNumberOfDayOff -
+                                typeOfLeaveEmployee.daysRemaining
+                        }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="p-col-12 p-md-6">
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="employeeName"
+                        >Số ngày phép theo loại nghỉ còn lại</label
+                    >
+                </div>
+                <div
+                    class="col-12 mb-2 md:col-8 md:mb-0"
+                    style="justify-content: space-between; gap: 7px"
+                >
+                    <span class="data-display text-center css-span">
+                        {{ typeOfLeaveEmployee.daysRemaining }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="typeOfLeave"
+                        >Loại nghỉ<span class="red-asterisk"></span
+                    ></label>
+                </div>
+                <div class="col-12 mb-2 md:col-8 md:mb-0">
+                    <div>
+                        <span class="data-display text-center css-span">
+                            {{ leaveApplication!.typeOfLeave.name }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="salaryPercentage"
+                        >Tỷ lệ hưởng lương<span class="red-asterisk"></span
+                    ></label>
+                </div>
+                <div
+                    class="col-12 mb-2 md:col-8 md:mb-0"
+                    style="justify-content: space-between; gap: 7px"
+                >
+                    <div
+                        style="display: flex; align-items: center; flex-grow: 1"
+                    >
+                        <span class="data-display text-center css-span">
+                            {{ leaveApplication.typeOfLeave.salaryRate }}
+                        </span>
+                        <span style="margin-left: 5px" class="css-span">%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="approvers"
+                        >Người duyệt<span class="red-asterisk"></span
+                    ></label>
+                </div>
+                <div class="col-12 mb-2 md:col-8 md:mb-0 text-center">
+                    <span
+                        class="css-span"
+                        *ngFor="
+                            let leaveApplicationApprover of leaveApplication.leaveApplicationApprovers
+                        "
+                    >
+                        |{{ leaveApplicationApprover.approver.lastName }}
+                        {{ leaveApplicationApprover.approver.firstName }}|
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="replacements"
+                        >Người thay thế</label
+                    >
+                </div>
+                <div class="col-12 mb-2 md:col-8 md:mb-0 text-center">
+                    <span
+                        class="css-span"
+                        *ngFor="
+                            let leaveApplicationReplacement of leaveApplication.leaveApplicationReplacements
+                        "
+                    >
+                        |{{ leaveApplicationReplacement.replacement.lastName }}
+                        {{ leaveApplicationReplacement.replacement.firstName }}|
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="relatedPeople"
+                        >Người liên quan</label
+                    >
+                </div>
+                <div class="col-12 mb-2 md:col-8 md:mb-0 text-center">
+                    <span
+                        class="css-span"
+                        *ngFor="
+                            let leaveApplicationRelatedPerson of leaveApplication.leaveApplicationRelatedPeople
+                        "
+                    >
+                        |{{
+                            leaveApplicationRelatedPerson.relatedPerson.lastName
+                        }}
+                        {{
+                            leaveApplicationRelatedPerson.relatedPerson
+                                .firstName
+                        }}|
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="employeeName"
+                        >Số ngày phép hưởng lương còn lại</label
+                    >
+                </div>
+                <div
+                    class="col-12 mb-2 md:col-8 md:mb-0"
+                    style="justify-content: space-between; gap: 7px"
+                >
+                    <span class="data-display text-center css-span">
+                        {{ leavePermissionByEmployee }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="relatedPeople"
+                        >Nghỉ phép hưởng lương</label
+                    >
+                </div>
+                <div class="col-12 mb-2 md:col-8 md:mb-0 text-center">
+                    <span class="css-span">
+                        {{
+                            getOnPaidLeaveStatusLabel(
+                                leaveApplication.onPaidLeaveStatus
+                            )
+                        }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="typeOfLeave"
+                        >Trạng thái</label
+                    >
+                </div>
+                <div class="col-12 mb-2 md:col-8 md:mb-0">
+                    <div>
+                        <span
+                            class="status-span"
+                            *ngIf="leaveApplication.status != null"
+                            [ngStyle]="{
+                                color: getLeaveApplicationStatus(
+                                    leaveApplication!.status
+                                )!.color,
+                                'background-color': getLeaveApplicationStatus(
+                                    leaveApplication!.status
+                                )!.bgColor
+                            }"
+                        >
+                            {{
+                                getLeaveApplicationStatus(
+                                    leaveApplication!.status
+                                )!.text
+                            }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div
+            class="col-12 p-0 card-custom"
+            *ngIf="leaveApplication.status != leaveApplicationStatus.Pending"
+        >
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="reasonForLeave"
+                        >Phản hồi người duyệt</label
+                    >
+                </div>
+                <div class="col-12 mb-2 md:col-8 md:mb-0">
+                    <span class="data-display text-center css-span">{{
+                        leaveApplication.approverNote
+                    }}</span>
+                </div>
+            </div>
+        </div>
+        <div
+            class="col-12 p-0 card-custom"
+            *ngIf="leaveApplication.status == leaveApplicationStatus.Pending"
+        >
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="reasonForLeave"
+                        >Phản hồi người duyệt</label
+                    >
+                </div>
+                <div class="col-12 mb-2 md:col-8 md:mb-0">
+                    <textarea
+                        [(ngModel)]="approverNote"
+                        placeholder="Nhập phản hồi người duyệt"
+                        rows="5"
+                        cols="30"
+                        pInputTextarea
+                    ></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div
+    class="col-12 p-0 card-custom"
+    *ngIf="
+        leaveApplication.status == leaveApplicationStatus.Pending &&
+        isApprover(leaveApplication)
+    "
+>
+    <div class="field mb-0 flex align-items-center justify-content-end">
+        <button
+            (click)="
+                handleUpdateStatus(
+                    leaveApplication,
+                    leaveApplicationStatus.Rejected
+                )
+            "
+            pButton
+            class="button"
+            type="button"
+            style="
+                margin-right: 10px;
+                color: white;
+                font-weight: 500;
+                background-color: #aa0000;
+                border-color: #aa0000;
+                justify-content: center;
+            "
+        >
+            Từ chối đơn xin nghỉ
+        </button>
+        <button
+            (click)="
+                handleUpdateStatus(
+                    leaveApplication,
+                    leaveApplicationStatus.Approved
+                )
+            "
+            pButton
+            class="button"
+            type="submit"
+            style="
+                color: white;
+                font-weight: 500;
+                background-color: rgb(21, 21, 94);
+                justify-content: center;
+            "
+        >
+            Duyệt đơn xin nghỉ
+        </button>
+    </div>
+</div>
+<div
+    class="flex col-12 p-0 card-custom justify-content-end"
+    *ngIf="leaveApplication.status != leaveApplicationStatus.Pending"
+>
+    <button
+        pButton
+        class="button"
+        disabled
+        style="
+            color: white;
+            font-weight: 500;
+            background-color: rgb(21, 21, 94);
+            justify-content: center;
+        "
+    >
+        Đơn đơn xin nghỉ đã
+        {{
+            getLeaveApplicationStatus(
+                leaveApplication!.status
+            )!.text.toLowerCase()
+        }}
+    </button>
+</div>
+
+<app-confirm-dialog [message]="dialogMessage"></app-confirm-dialog>
+
+<!-- <div class="leave-form">
+    <header class="leave-form-header">
+        <h1>ĐƠN XIN PHÉP NGHỈ HỌC</h1>
+        <p>Kính gửi: Ban Lãnh Đạo Khoa</p>
+        <p>Giáo viên giảng dạy</p>
+        <p>Giáo viên chủ nhiệm</p>
+    </header>
+    <section class="leave-form-body">
+        <div class="leave-form-row">
+            <label>Người lập đơn:</label>
+            <span>{{ leaveApplication.employeeName }}</span>
+        </div>
+        <div class="leave-form-row">
+            <label>Ngày nộp đơn:</label>
+            <span>{{ leaveApplication.createdAt }}</span>
+        </div>
+        <div class="leave-form-row">
+            <label>Từ ngày:</label>
+            <span>{{ leaveApplication.startDate }}</span>
+        </div>
+        <div class="leave-form-row">
+            <label>Đến ngày:</label>
+            <span>{{ leaveApplication.endDate }}</span>
+        </div>
+        <div class="leave-form-row">
+            <label>Số ngày nghỉ:</label>
+            <span>{{ leaveApplication.numberOfDays }}</span>
+        </div>
+        <div class="leave-form-row">
+            <label>Lý do nghỉ:</label>
+            <span>{{ leaveApplication.reasonForLeave }}</span>
+        </div>
+        <div class="leave-form-row">
+            <label>Ghi chú:</label>
+            <span>{{ leaveApplication.note }}</span>
+        </div>
+        <div class="leave-form-row">
+            <label>Số ngày phép đã nghỉ:</label>
+            <span>{{ leaveApplication.totalDaysOff }}</span>
+        </div>
+        <div class="leave-form-row">
+            <label>Số ngày phép còn lại:</label>
+            <span>{{ leaveApplication.daysRemaining }}</span>
+        </div>
+        <div class="leave-form-row">
+            <label>Loại nghỉ:</label>
+            <span>{{ leaveApplication.typeOfLeave.name }}</span>
+        </div>
+        <div class="leave-form-row">
+            <label>Tỷ lệ hưởng lương:</label>
+            <span>{{ leaveApplication.typeOfLeave.salaryRate }}%</span>
+        </div>
+        <div class="leave-form-row">
+            <label>Người duyệt:</label>
+            <div>
+                <span *ngFor="let leaveApplicationApprover of leaveApplication.leaveApplicationApprovers">
+                    {{leaveApplicationApprover.approver.lastName}}
+                    {{leaveApplicationApprover.approver.firstName}}
+                </span>
+
+            </div>
+        </div>
+        <div class="leave-form-row">
+            <label>Người thay thế:</label>
+            <div>
+                <span *ngFor="let leaveApplicationReplacement of leaveApplication.leaveApplicationReplacements">
+                    {{leaveApplicationReplacement.replacement.lastName}}
+                    {{leaveApplicationReplacement.replacement.firstName}}
+                </span>
+            </div>
+        </div>
+        <div class="leave-form-row">
+            <label>Người liên quan:</label>
+            <div>
+                <span *ngFor="let leaveApplicationRelatedPerson of leaveApplication.leaveApplicationRelatedPeople">
+                    {{leaveApplicationRelatedPerson.relatedPerson.lastName}}
+                    {{leaveApplicationRelatedPerson.relatedPerson.firstName}}
+                </span>
+            </div>
+        </div>
+        <div class="leave-form-row">
+            <label>Trạng thái:</label>
+            <span class="status-span" *ngIf="leaveApplication.status!=null"
+                [ngStyle]="{'color': getLeaveApplicationStatus(leaveApplication!.status)!.color, 'background-color': getLeaveApplicationStatus(leaveApplication!.status)!.bgColor}">
+                {{ getLeaveApplicationStatus(leaveApplication!.status)!.text }}
+            </span>
+        </div>
+        <div class="leave-form-row" *ngIf="leaveApplication.status != 'Pending'">
+            <label>Phản hồi người duyệt:</label>
+            <span>{{ leaveApplication.approverNote }}</span>
+        </div>
+    </section>
+    <footer class="leave-form-footer">
+        <p>Trong khi chờ đợi sự chấp thuận, em xin chân thành cám ơn.</p>
+        <div class="signatures">
+            <div class="signature">
+                <span>GVCN</span>
+                <span>(Ký, ghi rõ họ tên)</span>
+            </div>
+            <div class="signature">
+                <span>Người viết đơn</span>
+                <span>(Ký, ghi rõ họ tên)</span>
+            </div>
+        </div>
+    </footer>
+</div> -->
+
+<!-- ignore -->
+<!-- <div class="button-container">
+    <button pButton class="button" type="button"
+        style="margin-right: 10px; color: white;font-weight: 500; background-color: #AA0000; border-color: #AA0000; justify-content:center">Từ
+        chối đơn xin nghỉ</button>
+    <button pButton class="button" type="submit"
+        style="color: white;font-weight: 500; background-color: rgb(21, 21, 94); justify-content:center">Duyệt đơn xin
+        nghỉ</button>
+</div> -->

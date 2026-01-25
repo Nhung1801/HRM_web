@@ -1,0 +1,433 @@
+<div class="row p-3 pb-0 pt-0">
+    <p-toolbar styleClass="mb-2">
+        <div class="">
+            <strong class="font-size-16">Đơn từ</strong>
+            <p-breadcrumb
+                [model]="breadcrumbs"
+                [home]="{ icon: 'pi pi-home' }"
+            ></p-breadcrumb>
+        </div>
+    </p-toolbar>
+</div>
+<form
+    class="p-grid p-fluid flex card-custom"
+    [formGroup]="leaveApplicationForm"
+    (submit)="onSubmit()"
+>
+    <!-- Cột trái -->
+    <div class="p-col-12 p-md-6">
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="employeeName"
+                        >Người lập đơn<span class="red-asterisk">*</span></label
+                    >
+                </div>
+                <div
+                    class="col-12 mb-2 md:col-8 md:mb-0"
+                    style="justify-content: space-between; gap: 7px"
+                >
+                    <input
+                        formControlName="employeeName"
+                        id="employeeName"
+                        placeholder="Nhập người lập đơn"
+                        pInputText
+                        readonly
+                    />
+                    <app-validation-message
+                        [form]="leaveApplicationForm"
+                        [messages]="validationMessages"
+                        field="employeeName"
+                    ></app-validation-message>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="startDate"
+                        >Từ ngày<span class="red-asterisk">*</span></label
+                    >
+                </div>
+                <div class="col-12 mb-2 md:col-8 md:mb-0">
+                    <p-calendar
+                        formControlName="startDate"
+                        id="startDate"
+                        placeholder="Chọn ngày bắt đầu"
+                        [showIcon]="true"
+                        [showTime]="true"
+                        [hourFormat]="24"
+                        [dateFormat]="'dd-mm-yy'"
+                        (onSelect)="onCalendarChange()"
+                        (onInput)="onCalendarChange()"
+                    ></p-calendar>
+
+                    <app-validation-message
+                        [form]="leaveApplicationForm"
+                        [messages]="validationMessages"
+                        field="startDate"
+                    ></app-validation-message>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="endDate"
+                        >Đến ngày<span class="red-asterisk">*</span></label
+                    >
+                </div>
+                <div class="col-12 mb-2 md:col-8 md:mb-0">
+                    <p-calendar
+                        formControlName="endDate"
+                        id="endDate"
+                        placeholder="Chọn ngày kết thúc"
+                        [showIcon]="true"
+                        [hourFormat]="24"
+                        [dateFormat]="'dd-mm-yy'"
+                        [showTime]="true"
+                        (onSelect)="onCalendarChange()"
+                        (onInput)="onCalendarChange()"
+                    ></p-calendar>
+                    <app-validation-message
+                        [form]="leaveApplicationForm"
+                        [messages]="validationMessages"
+                        field="endDate"
+                    ></app-validation-message>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="numberOfDays"
+                        >Số ngày nghỉ</label
+                    >
+                </div>
+                <div
+                    class="col-12 mb-2 md:col-8 md:mb-0"
+                    style="justify-content: space-between; gap: 7px"
+                >
+                    <span>
+                        {{numberOfDays}}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="reasonForLeave"
+                        >Lý do nghỉ<span class="red-asterisk">*</span></label
+                    >
+                </div>
+                <div class="col-12 mb-2 md:col-8 md:mb-0">
+                    <textarea
+                        formControlName="reasonForLeave"
+                        placeholder="Nhập lý do nghỉ"
+                        rows="5"
+                        cols="30"
+                        pInputTextarea
+                    ></textarea>
+                    <app-validation-message
+                        [form]="leaveApplicationForm"
+                        [messages]="validationMessages"
+                        field="reasonForLeave"
+                    ></app-validation-message>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label style="font-weight: 600; color: #000" htmlFor="note"
+                        >Ghi chú</label
+                    >
+                </div>
+                <div class="col-12 mb-2 md:col-8 md:mb-0">
+                    <textarea
+                        formControlName="note"
+                        placeholder="Nhập ghi chú"
+                        rows="5"
+                        cols="30"
+                        pInputTextarea
+                    ></textarea>
+                    <app-validation-message
+                        [form]="leaveApplicationForm"
+                        [messages]="validationMessages"
+                        field="note"
+                    ></app-validation-message>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Cột phải -->
+    <div class="p-col-12 p-md-6">
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="typeOfLeave"
+                        >Loại nghỉ<span class="red-asterisk">*</span></label
+                    >
+                </div>
+                <div class="col-12 mb-2 md:col-8 md:mb-0">
+                    <p-dropdown
+                        formControlName="typeOfLeaveId"
+                        placeholder="Chọn loại nghỉ"
+                        id="typeOfLeave"
+                        [options]="typeOfLeaves"
+                        optionValue="id"
+                        optionLabel="name"
+                        (onChange)="onTypeOfLeaveChange($event)"
+                    ></p-dropdown>
+                    <app-validation-message
+                        [form]="leaveApplicationForm"
+                        [messages]="validationMessages"
+                        field="typeOfLeaveId"
+                    ></app-validation-message>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="salaryPercentage"
+                        >Tỷ lệ hưởng lương<span class="red-asterisk"
+                            >*</span
+                        ></label
+                    >
+                </div>
+                <div
+                    class="col-12 mb-2 md:col-8 md:mb-0"
+                    style="justify-content: space-between; gap: 7px"
+                >
+                    <div
+                        style="display: flex; align-items: center; flex-grow: 1"
+                    >
+                        <input
+                            formControlName="salaryPercentage"
+                            id="salaryPercentage"
+                            placeholder="Tỷ lệ hưởng lương theo loại ngày nghỉ"
+                            pInputText
+                            readonly
+                            style="flex-grow: 1"
+                        />
+                        <span style="margin-left: 5px">%</span>
+                    </div>
+                    <app-validation-message
+                        [form]="leaveApplicationForm"
+                        [messages]="validationMessages"
+                        field="salaryPercentage"
+                    ></app-validation-message>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="salaryPercentage"
+                        >Số ngày nghỉ còn lại theo loại nghỉ</label
+                    >
+                </div>
+                <div
+                    class="col-12 mb-2 md:col-8 md:mb-0"
+                    style="justify-content: space-between; gap: 7px"
+                >
+                    <div
+                        style="display: flex; align-items: center; flex-grow: 1"
+                    >
+                        <span>{{
+                            daysRemaining ? daysRemaining.daysRemaining : 0
+                        }}</span
+                        >/
+                        <span style="margin-left: 5px">{{
+                            typeOfLeaveSelected.maximumNumberOfDayOff
+                                ? typeOfLeaveSelected.maximumNumberOfDayOff
+                                : 0
+                        }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="approvers"
+                        >Người duyệt<span class="red-asterisk">*</span></label
+                    >
+                </div>
+                <div class="col-12 mb-2 md:col-8 md:mb-0">
+                    <p-multiSelect
+                        formControlName="approverIds"
+                        placeholder="Chọn người duyệt"
+                        defaultLabel="Chọn người duyệt"
+                        selectedItemsLabel="{0} người đã chọn"
+                        [options]="eployees"
+                        optionLabel="fullName"
+                        optionValue="id"
+                    ></p-multiSelect>
+                    <app-validation-message
+                        [form]="leaveApplicationForm"
+                        [messages]="validationMessages"
+                        field="approverIds"
+                    ></app-validation-message>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="replacements"
+                        >Người thay thế</label
+                    >
+                </div>
+                <div class="col-12 mb-2 md:col-8 md:mb-0">
+                    <p-multiSelect
+                        formControlName="replacementIds"
+                        placeholder="Chọn người thay thế"
+                        defaultLabel="Chọn người thay thế"
+                        selectedItemsLabel="{0} người đã chọn"
+                        [options]="eployees"
+                        optionLabel="fullName"
+                        optionValue="id"
+                    ></p-multiSelect>
+                    <app-validation-message
+                        [form]="leaveApplicationForm"
+                        [messages]="validationMessages"
+                        field="replacementIds"
+                    ></app-validation-message>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="relatedPeople"
+                        >Người liên quan</label
+                    >
+                </div>
+                <div class="col-12 mb-2 md:col-8 md:mb-0">
+                    <p-multiSelect
+                        formControlName="relatedPersonIds"
+                        placeholder="Chọn người liên quan"
+                        defaultLabel="Chọn người liên quan"
+                        selectedItemsLabel="{0} người đã chọn"
+                        [options]="eployees"
+                        optionLabel="fullName"
+                        optionValue="id"
+                    ></p-multiSelect>
+                    <app-validation-message
+                        [form]="leaveApplicationForm"
+                        [messages]="validationMessages"
+                        field="relatedPersonIds"
+                    ></app-validation-message>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="salaryPercentage"
+                        >Số phép có lương còn lại</label
+                    >
+                </div>
+                <div
+                    class="col-12 mb-2 md:col-8 md:mb-0"
+                    style="justify-content: space-between; gap: 7px"
+                >
+                    <div
+                        style="display: flex; align-items: center; flex-grow: 1"
+                    >
+                        <span>{{ leavePermissionByEmployee }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 p-0">
+            <div class="field mb-0 flex align-items-center">
+                <div class="col-12 mb-2 md:col-4 md:mb-0">
+                    <label
+                        style="font-weight: 600; color: #000"
+                        htmlFor="relatedPeople"
+                        >Sử dụng phép còn lại</label
+                    >
+                </div>
+                <div class="col-12 mb-2 md:col-8 md:mb-0">
+                    <div
+                        *ngFor="let permission of onPaidLeaveStatusConstant"
+                        class="p-field-radiobutton p-3"
+                    >
+                        <p-radioButton
+                            [disabled]="leavePermissionByEmployee <= 0"
+                            [ngModelOptions]="{ standalone: true }"
+                            [name]="'role'"
+                            [value]="permission.key"
+                            [(ngModel)]="onPaidLeaveStatus"
+                            [label]="permission.value"
+                        >
+                        </p-radioButton>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div
+            class="button-container danger-notice"
+            *ngIf="leaveApplicationForm.errors?.['dateRange']"
+        >
+            {{ leaveApplicationForm.errors.dateRange }}
+        </div>
+        <div class="button-container">
+            <button
+                routerLink="/leave-application"
+                pButton
+                class="button"
+                type="button"
+                style="
+                    margin-right: 10px;
+                    color: white;
+                    background-color: gray;
+                    border-color: gray;
+                    justify-content: center;
+                "
+            >
+                Hủy
+            </button>
+            <button
+                pButton
+                class="button"
+                type="submit"
+                style="
+                    color: white;
+                    background-color: rgb(21, 21, 94);
+                    justify-content: center;
+                "
+            >
+                Lưu
+            </button>
+        </div>
+    </div>
+</form>

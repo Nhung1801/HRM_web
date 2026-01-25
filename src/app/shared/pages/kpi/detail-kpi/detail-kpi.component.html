@@ -1,0 +1,155 @@
+<!-- <p-confirmPopup></p-confirmPopup> -->
+
+<div class="grid">
+    <div class="col-12">
+        <p-toolbar styleClass="mb-2">
+            <div class="">
+                <strong class="font-size-16">Bảng KPI</strong>
+                <p-breadcrumb
+                    [model]="items"
+                    [home]="{ icon: 'pi pi-home' }"
+                ></p-breadcrumb>
+            </div>
+        </p-toolbar>
+        <div class="toast-container">
+            <p-messages
+                [(value)]="messages"
+                [enableService]="false"
+                [closable]="false"
+            ></p-messages>
+        </div>
+        <div class="card">
+            <div style="display: flex; justify-content: space-between;" class="gap-3">
+                <div class="flex flex-column">
+                    <p-autoComplete
+                        [style]="{ height: '43px', width: '300px' }"
+                        [(ngModel)]="selectedEmployee"
+                        [suggestions]="filteredEmployees"
+                        (completeMethod)="searchEmployee($event)"
+                        [field]="'displayName'"
+                        [forceSelection]="true"
+                        [showClear]="true"
+                        placeholder="Tìm kiếm nhân viên"
+                        (onSelect)="fetchData()">
+                    </p-autoComplete>
+                </div>
+                <div class="flex gap-3">
+                    <div class="flex flex-column">
+                        <p-dropdown
+                            [options]="staffPosition"
+                            [(ngModel)]="selectedStaffPosition"
+                            optionLabel="name"
+                            [style]="{ width: '300px' }"
+                            [showClear]="true"
+                            placeholder="Chọn vị trí"
+                            (onChange)="fetchData()"
+                            (onClear)="fetchData()">
+                      </p-dropdown>
+                    </div>
+                    <div class="flex flex-column">
+                        <p-treeSelect
+                            [options]="treeData"
+                            [(ngModel)]="selectedNode"
+                            [placeholder]="'Chọn đơn vị'"
+                            [showClear]="true"
+                            [style]="{ width: '300px' }"
+                            (onNodeSelect)="fetchData()"
+                            (onClear)="fetchData()"
+                        ></p-treeSelect>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-section" style="margin-top: 20px">
+                <p-table
+                    [value]="detailKpi"
+                    [rows]="pageSize"
+                    [totalRecords]="totalRecords"
+                    [paginator]="false"
+                    responsiveLayout="scroll"
+                    (onPage)="onPageChange($event)"
+                    styleClass="p-datatable-striped"
+                    >
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width: 5%;">
+                                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                            </th>
+                            <th style="width: 10%;">Mã nhân viên</th>
+                            <th style="width: 20%;">Tên nhân viên</th>
+                            <th style="width: 20%;">Tỷ lệ hoàn thành KPI</th>
+                            <th style="width: 20%;">Thưởng</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-i="rowIndex">
+                        <tr>
+                            <td>
+                                <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+                            </td>
+                            <td>{{ rowData.employeeCode }}</td>
+                            <td>{{ rowData.employeeName }}</td>
+                            <td>
+                                <!-- Hiển thị input nếu hàng đang được chỉnh sửa -->
+                                <div *ngIf="editingRowIndex === i; else displayValue">
+                                <input
+                                    type="text"
+                                    [(ngModel)]="rowData.completionRate"
+                                    (blur)="stopEditingAndSave(rowData)"
+                                    (keydown.enter)="stopEditingAndSave(rowData)"
+                                    class="p-inputtext p-component"
+                                    style="width: 40%;"
+                                />
+                                </div>
+                                <!-- Hiển thị giá trị nếu không trong chế độ chỉnh sửa -->
+                                <ng-template #displayValue>
+                                    <span (click)="startEditing(i)" style="cursor: pointer;">
+                                        {{ rowData.completionRate || 0 }}%
+                                    </span>
+                                </ng-template>
+                            </td>
+                            <td>
+                                <!-- Hiển thị input nếu hàng đang được chỉnh sửa -->
+                                <div *ngIf="editingRowIndex2 === i; else displayValue2">
+                                <input
+                                    type="text"
+                                    [(ngModel)]="rowData.bonus"
+                                    (blur)="stopEditingAndSave2(rowData)"
+                                    (keydown.enter)="stopEditingAndSave2(rowData)"
+                                    class="p-inputtext p-component"
+                                    style="width: 40%;"
+                                />
+                                </div>
+                                <!-- Hiển thị giá trị nếu không trong chế độ chỉnh sửa -->
+                                <ng-template #displayValue2>
+                                    <span (click)="startEditing2(i)" style="cursor: pointer;">
+                                        {{ rowData.bonus || 0 }} ₫
+                                    </span>
+                                </ng-template>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+
+
+                <div *ngIf="totalRecords === 0" style="text-align: center; margin-top: 20px;">
+                    <strong style="text-align: center; width: 100%">Không tìm thấy kết quả phù hợp</strong>
+                </div>
+
+                <div class="paging-bot dg-fix">
+                    <div class="paging-info">
+                        <div [innerHTML]="currentPageReport"></div>
+                    </div>
+                    <p-paginator [rows]="this.pageSize" (onPageChange)="onPageChange($event)"
+                        [totalRecords]="totalRecords > 0 ? totalRecords : 1" [rowsPerPageOptions]="[10, 20, 30]"
+                        [first]="
+                    (this.pageIndex - 1) *
+                    this.pageSize
+                  "></p-paginator>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

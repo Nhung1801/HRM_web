@@ -1,0 +1,146 @@
+.container {
+    font-family: Arial, sans-serif;
+}
+
+table {
+    margin-top: 10px;
+
+}
+
+th,
+td {
+    vertical-align: middle;
+}
+
+.p-button-text {
+    font-weight: bold;
+}
+
+h5 {
+    font-size: 15px;
+    margin: 0;
+}
+
+p-checkbox {
+    margin-right: 5px;
+}
+
+/* Màu nền khi nút GPS được chọn */
+.p-button-secondary {
+    background-color: white;
+    color: #2a2986;
+    /* Màu chữ xanh */
+    border: 1px solid #2a2986;
+    /* Đường viền màu xanh */
+}
+
+.p-button-primary-prim {
+    margin-left: 5px;
+}
+
+/* Màu nền khi nút GPS được chọn */
+.button-gps-active {
+    background-color: #2a2986;
+    color: white;
+}
+
+/* Màu nền khi nút chấm công được chọn */
+.button-cham-cong-active {
+    background-color: #2a2986;
+    color: white;
+}
+
+
+/* Css button đơn vị và áp dụng */
+.button-add {
+    background-color: #d3d3d3;
+    /* Màu xám */
+    color: #2a2986;
+    /* Màu chữ #2a2986 */
+    border: none;
+}
+
+.button-add:hover {
+    background-color: #bdbdbd;
+    /* Màu xám đậm hơn khi hover */
+}
+
+
+/* button dialog */
+.dialog-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.dialog-buttons button {
+    margin: 0 5px;
+    /* Adjust as needed */
+}
+
+//dialog thêm loai nghỉ
+/* Đặt flex cho toàn bộ hàng */
+.p-field {
+    display: flex;
+    align-items: center;
+    /* Căn giữa theo trục dọc */
+    margin-bottom: 20px;
+    /* Khoảng cách giữa các dòng */
+}
+
+/* Style cho label */
+.p-field label {
+    flex: 0 0 150px;
+    /* Đặt chiều rộng cố định cho label */
+    margin-right: 10px;
+    /* Khoảng cách giữa label và input */
+    font-weight: bold;
+    /* Tăng độ đậm cho label */
+}
+
+/* Style cho input */
+.p-field input,
+.p-field textarea,
+.p-field select {
+    flex: 1;
+    /* Input sẽ giãn ra để chiếm hết không gian còn lại */
+    padding: 8px;
+    border: 1px solid #ccc;
+    /* Đường viền nhạt */
+    border-radius: 5px;
+    /* Góc bo tròn */
+}
+
+/* Đặt chiều rộng riêng cho radio button */
+.p-field .radio-group {
+    display: flex;
+    gap: 20px;
+    /* Khoảng cách giữa các radio button */
+    align-items: center;
+}
+
+.lable-text {
+    margin-left: 5px;
+}
+
+.p-button-primary-hai {
+    margin-left: 5px;
+}
+
+.p-field .error-message {
+    color: red;
+    font-size: 0.9rem;
+    position: absolute;
+    left: 175px;
+    white-space: nowrap;
+    top: 100px;
+}
+
+.p-field input.ng-invalid.ng-touched {
+    border: 1px solid #d9534f;
+    box-shadow: none;
+}
+.table-no-border,
+.table-no-border th,
+.table-no-border td {
+    border: none !important; /* Sử dụng !important để đảm bảo ưu tiên cao hơn các định nghĩa khác */
+}

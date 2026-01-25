@@ -1,0 +1,120 @@
+<p-dialog
+    header="Nhắc việc"
+    [modal]="true"
+    [style]="{ width: '50vw' }"
+    [(visible)]="createReminderVisible"
+>
+    <div class="p-fluid">
+        <div class="switch-container">
+            <label class="labelip" for="toggle-all">Bật/Tắt tất cả</label>
+            <p-inputSwitch style="margin-top: 10px" id="toggle-all">
+            </p-inputSwitch>
+        </div>
+        <div class="p-field mt-3">
+            <div style="display: flex; align-items: center">
+                <div style="width: 5%; text-align: center; margin-top: 5px">
+                    <p-checkbox
+                        formControlName="remindBeforeStart"
+                        [binary]="true"
+                    ></p-checkbox>
+                </div>
+                <div style="width: 35%">
+                    <label class="labelip">Nhắc nhở trước khi bắt đầu</label>
+                </div>
+                <div style="width: 60%">
+                    <p-multiSelect
+                        class="custom-multiselect"
+                        formControlName="timeSelected"
+                        placeholder="Chọn các khoảng thời gian"
+                        optionLabel="name"
+                        display="chip"
+                        [style]="{ width: '100%' }"
+                    ></p-multiSelect>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-field mt-3">
+            <div style="display: flex; align-items: center">
+                <div style="width: 5%; text-align: center">
+                    <p-checkbox
+                        formControlName="remindBeforeExpire"
+                        [binary]="true"
+                    ></p-checkbox>
+                </div>
+                <div style="width: 35%">
+                    <label class="labelip" for="value"
+                        >Nhắc nhở trước khi hết hạn</label
+                    >
+                </div>
+                <div style="width: 60%">
+                    <p-dropdown
+                        formControlName="signStatus"
+                        [style]="{ height: '40px', width: '100%' }"
+                        optionValue="id"
+                        optionLabel="name"
+                        [showClear]="true"
+                        placeholder="Chọn nhắc nhở"
+                    ></p-dropdown>
+                </div>
+            </div>
+        </div>
+
+        <div class="notification-settings">
+            <h3>Thiết lập người nhận thông báo</h3>
+            <div class="flex flex-column gap-3 m-0 mt-3">
+                <p-checkbox
+                    [binary]="true"
+                    formControlName="all"
+                    label="Tất cả"
+                ></p-checkbox>
+                <p-checkbox
+                    [binary]="true"
+                    formControlName="creator"
+                    label="Tôi ( Người thiết lập )"
+                ></p-checkbox>
+                <p-checkbox
+                    [binary]="true"
+                    formControlName="executor"
+                    label="Người thực hiện"
+                ></p-checkbox>
+                <p-checkbox
+                    [binary]="true"
+                    formControlName="related"
+                    label="Người liên quan"
+                ></p-checkbox>
+                <p-checkbox
+                    [binary]="true"
+                    formControlName="pendingApproval"
+                    label="Người chờ phê duyệt"
+                ></p-checkbox>
+                <p-checkbox
+                    [binary]="true"
+                    label="Người đã phê duyệt"
+                ></p-checkbox>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <ng-template pTemplate="footer">
+        <div
+            class="footer-buttons justify-content-end flex gap-2"
+            style="text-align: right"
+        >
+            <p-button
+                label="Hủy"
+                [outlined]="true"
+                severity="secondary"
+                (click)="closeCreateKpiVisible()"
+            ></p-button>
+            <button
+                pButton
+                type="button"
+                label="Lưu"
+                severity="danger"
+                (click)="addKpi()"
+            ></button>
+        </div>
+    </ng-template>
+</p-dialog>

@@ -1,0 +1,674 @@
+<div class="grid">
+  <!-- Header -->
+  <div class="col-12">
+    <p-toolbar>
+      <div class="p-toolbar-group-left">
+        <strong class="font-size-16">Thêm đối tượng</strong>
+        <p-breadcrumb [model]="items" class="breadcrumb-left"></p-breadcrumb>
+      </div>
+    </p-toolbar>
+  </div>
+
+  <!-- Form -->
+  <div class="col-12">
+    <div class="card p-4">
+      <div class="p-fluid">
+        <!-- Loại đối tượng -->
+        <div class="col-12">
+          <h2 class="text-h2">Loại đối tượng</h2>
+          <div class="p-d-flex p-ai-center p-jc-between" style="margin-top: 15px;">
+            <div>
+              <form [formGroup]="employeeForm">
+                <div class="checkbox-group">
+                  <p-checkbox binary="true" formControlName="objectTypeU" label="Là người dùng"
+                    class="checkbox-1"></p-checkbox>
+                  <div class="divider"></div>
+                  <p-checkbox binary="true" formControlName="objectTypeE" label="Là nhân viên"
+                    class="ml-3 checkbox-2"></p-checkbox>
+                </div>
+              </form>
+              <div class="horizontal-divider"></div>
+            </div>
+            <div class="upload-container" *ngIf="!imageUrl">
+              <input type="file" id="fileInput" accept="image/*" (change)="onFileSelect($event)"
+                style="display: none;" />
+              <div class="upload-box" (click)="triggerFileInput()">
+                <div class="upload-icon"><i class="pi pi-upload"></i></div>
+                <div class="upload-text">Tải ảnh</div>
+              </div>
+            </div>
+            <div *ngIf="imageUrl" class="image-container">
+              <img [src]="imageUrl" alt="Image" class="news-image" />
+
+              <i *ngIf="imageUrl" class="pi pi-trash trash-icon" (click)="removeImage()"></i>
+            </div>
+          </div>
+        </div>
+
+
+        <form class="grid-container" [formGroup]="employeeForm" (ngSubmit)="onSubmitForm()">
+          <!-- Thông tin chung -->
+          <div class="col-12 md:col-6" class="left-section">
+            <h2 class="text-h2">Thông tin chung</h2>
+
+            <div class="p-fluid" style="margin-top: 20px;">
+              <div class="p-field">
+                <label for="employeeCode">Mã nhân viên</label>
+                <input pInputText id="employeeCode" formControlName="employeeCode" readonly>
+              </div>
+
+              <!-- họ và đệm -->
+              <div class="p-field">
+                <label for="lastName">Họ và đệm <span class="required">*</span></label>
+                <input id="lastName" pInputText formControlName="lastName" required />
+                <div
+                  *ngIf="employeeForm.get('lastName').invalid && (employeeForm.get('lastName').touched || employeeForm.get('lastName').dirty)"
+                  class="error-message">
+                  <div *ngIf="employeeForm.get('lastName').hasError('required')">Họ và đệm là bắt buộc.</div>
+                  <div *ngIf="employeeForm.get('lastName').hasError('maxlength')">Họ và đệm không được dài quá 100 ký
+                    tự.</div>
+                  <div *ngIf="employeeForm.get('lastName').hasError('pattern')">Không được để khoảng trắng.</div>
+
+                </div>
+              </div>
+
+
+              <!-- tên -->
+              <div class="p-field">
+                <label for="firstName">Tên <span class="required">*</span></label>
+                <input id="firstName" pInputText formControlName="firstName" required />
+                <div
+                  *ngIf="employeeForm.get('firstName').invalid && (employeeForm.get('firstName').touched || employeeForm.get('firstName').dirty)"
+                  class="error-message">
+                  <div *ngIf="employeeForm.get('firstName').hasError('required')">Tên là bắt buộc.</div>
+                  <div *ngIf="employeeForm.get('firstName').hasError('maxlength')">Tên không được dài quá 100 ký tự.
+                  </div>
+                </div>
+              </div>
+
+
+              <!-- kết hợp họ và đệm & tên -->
+              <div class="p-field">
+                <label for="fullbemName">Họ và tên<span class="required"></span></label>
+                <input id="fullbemName" pInputText formControlName="fullbemName" readonly />
+              </div>
+
+
+              <!-- Trường Ngày tháng -->
+              <div class="p-field">
+                <label for="dateOfBirth">Ngày tháng</label>
+                <p-calendar class="custom-calendar" id="dateOfBirth" formControlName="dateOfBirth" [showIcon]="true"
+                  [dateFormat]="'dd/mm/yy'" placeholder="Vui lòng nhập ngày sinh"></p-calendar>
+                <!-- <div
+                    *ngIf="employeeForm.get('dateOfBirth').invalid && (employeeForm.get('dateOfBirth').touched || employeeForm.get('dateOfBirth').dirty)"
+                    class="error-message">
+                    <div *ngIf="employeeForm.get('dateOfBirth').hasError('required')">Ngày tháng là bắt buộc.</div>
+                  </div> -->
+              </div>
+
+              <!-- Trường Tỉnh/Thành phố -->
+              <div class="p-field">
+                <label for="city">Tỉnh/Thành phố</label>
+                <p-dropdown class="custom-calendar" [options]="cities" formControlName="cityId" optionLabel="name"
+                  [showClear]="true" placeholder="Chọn thành phố" (onChange)="onCityChange($event)"
+                  (onClear)="onClearCity()"></p-dropdown>
+              </div>
+
+              <!-- Trường Quận/Huyện -->
+              <div class="p-field">
+                <label for="city">Quận/Huyện</label>
+                <p-dropdown class="custom-calendar" [options]="districts" formControlName="districtId"
+                  optionLabel="name" [showClear]="true" placeholder="Chọn quận huyện"
+                  (onChange)="onDistrictChange($event) " (onClear)="onClearDistrict()"></p-dropdown>
+              </div>
+
+              <!-- Trường Phường/Xã -->
+              <div class="p-field">
+                <label for="city">Phường/Xã</label>
+                <p-dropdown class="custom-calendar" [options]="wards" formControlName="wardId" optionLabel="name"
+                  [showClear]="true" placeholder="Chọn phường xã" (onClear)="onClearWard()"></p-dropdown>
+              </div>
+
+              <!-- Trường Địa chỉ -->
+              <div class="p-field">
+                <label for="address">Địa chỉ chi tiết</label>
+                <input id="address" pInputText formControlName="address" />
+                <!-- <div
+                    *ngIf="employeeForm.get('address').invalid && (employeeForm.get('address').touched || employeeForm.get('address').dirty)"
+                    class="error-message">
+                    <div *ngIf="employeeForm.get('address').hasError('required')">Địa chỉ là bắt buộc.</div>
+                    <div *ngIf="employeeForm.get('address').hasError('maxlength')">Địa chỉ không được dài quá 255 ký tự.
+                    </div>
+                  </div> -->
+              </div>
+
+
+              <!-- Trường Giới tính -->
+              <div class="p-field">
+                <label for="sex">Giới tính</label>
+                <p-dropdown class="custom-calendar" id="sex" formControlName="sex" [options]="genderOptions"
+                  optionLabel="label" optionValue="value"></p-dropdown>
+                <!-- <div
+                    *ngIf="employeeForm.get('sex').invalid && (employeeForm.get('sex').touched || employeeForm.get('sex').dirty)"
+                    class="error-message">
+                    <div *ngIf="employeeForm.get('sex').hasError('required')">Giới tính là bắt buộc.</div>
+                  </div> -->
+              </div>
+
+              <!-- Trường Điện thoại di động -->
+              <div class="p-field">
+                <label for="phoneNumber">Điện thoại di động <span class="required">*</span></label>
+                <input id="phoneNumber" pInputText formControlName="phoneNumber" />
+                <div
+                  *ngIf="employeeForm.get('phoneNumber').invalid && (employeeForm.get('phoneNumber').touched || employeeForm.get('phoneNumber').dirty)"
+                  class="error-message">
+                  <div *ngIf="employeeForm.get('phoneNumber').hasError('required')">Không được để trống.</div>
+                  <div *ngIf="employeeForm.get('phoneNumber').hasError('pattern')">Điện thoại không hợp lệ.</div>
+                </div>
+              </div>
+
+              <!-- Trường Email cá nhân -->
+              <div class="p-field">
+                <label for="personalEmail">Email cá nhân <span class="required">*</span></label>
+                <input id="personalEmail" pInputText formControlName="personalEmail" placeholder="Nhập email cá nhân" />
+                <div
+                  *ngIf="employeeForm.get('personalEmail').invalid && (employeeForm.get('personalEmail').touched || employeeForm.get('personalEmail').dirty)"
+                  class="error-message">
+                  <div *ngIf="employeeForm.get('personalEmail').hasError('required')">Không được để trống.</div>
+                  <div *ngIf="employeeForm.get('personalEmail').hasError('email')">Email không hợp lệ.</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+
+          <!-- Thông tin công việc -->
+          <div class="col-12 md:col-6" class="right-section">
+            <h2 class="text-h2">Thông tin công việc</h2>
+            <div class="p-fluid" style="margin-top: 20px;">
+
+              <!-- Đơn vị -->
+              <div class="p-field">
+                <label>Đơn vị <span class="required">*</span></label>
+                <div style="width: 350px;" (focusout)="handleTreeSelectFocusOut($event)">
+                  <p-treeSelect class="w-full custom-tree-select" formControlName="organizationId"
+                    [options]="organizations" [metaKeySelection]="false" placeholder="Chọn đơn vị" [showClear]="true"
+                    (onClear)="validateParentUnit()" (onChange)="onParentUnitChange($event)"
+                    [style]="{ maxHeight: '300px', overflow: 'auto' }">
+                  </p-treeSelect>
+                  <div
+                    *ngIf="employeeForm.get('organizationId').invalid && (employeeForm.get('organizationId').touched || employeeForm.get('organizationId').dirty)"
+                    class="error-message">
+                    <div *ngIf="employeeForm.get('organizationId').hasError('required')">Vui lòng chọn đơn vị
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Vị trí công việc -->
+              <div class="p-field">
+                <label>Vị trí công việc <span class="required">*</span></label>
+                <p-dropdown formControlName="staffPositionId" [options]="positionName" optionLabel="label"
+                  optionValue="value" placeholder="Vị trí công việc" class="custom-calendar">
+                </p-dropdown>
+                <div
+                  *ngIf="employeeForm.get('staffPositionId').invalid && (employeeForm.get('staffPositionId').touched || employeeForm.get('staffPositionId').dirty)"
+                  class="error-message">
+                  <div *ngIf="employeeForm.get('staffPositionId').hasError('required')">Vui lòng chọn vị trí</div>
+                </div>
+              </div>
+
+              <!-- Quản lý trực tiếp -->
+              <div class="p-field">
+                <label>Quản lý trực tiếp <span class="required">*</span></label>
+                <p-dropdown class="custom-calendar" formControlName="managerDirectId" [options]="employeeDetails"
+                  optionLabel="label" optionValue="value" placeholder="Chọn quản lý trực tiếp"></p-dropdown>
+                <div
+                  *ngIf="employeeForm.get('managerDirectId').invalid && (employeeForm.get('managerDirectId').touched || employeeForm.get('managerDirectId').dirty)"
+                  class="error-message">
+                  <div *ngIf="employeeForm.get('managerDirectId').hasError('required')">Vui lòng chọn quản lý trực tiếp
+                  </div>
+                </div>
+              </div>
+
+
+              <!-- Công ty trực thuộc -->
+              <div class="p-field">
+                <label>Công ty trực thuộc <span class="required">*</span></label>
+                <p-dropdown class="custom-calendar" formControlName="companyId" [options]="fullName" optionLabel="label"
+                  optionValue="value" placeholder="Chọn công ty trực thuộc"></p-dropdown>
+                <div
+                  *ngIf="employeeForm.get('companyId').invalid && (employeeForm.get('companyId').touched || employeeForm.get('companyId').dirty)"
+                  class="error-message">
+                  <div *ngIf="employeeForm.get('companyId').hasError('required')">Vui lòng chọn quản lý trực tiếp</div>
+                </div>
+              </div>
+
+              <!-- Chức danh -->
+              <div class="p-field">
+                <label>Chức danh <span class="required">*</span></label>
+                <p-dropdown class="custom-calendar" formControlName="staffTitleId" [options]="staffTitles"
+                  optionValue="id" optionLabel="staffTitleName" placeholder="Chọn chức danh"></p-dropdown>
+                <div
+                  *ngIf="employeeForm.get('staffTitleId').invalid && (employeeForm.get('staffTitleId').touched || employeeForm.get('staffTitleId').dirty)"
+                  class="error-message">
+                  <div *ngIf="employeeForm.get('staffTitleId').hasError('required')">Vui lòng chọn quản lý trực tiếp
+                  </div>
+                </div>
+              </div>
+
+              <!-- Trạng thái lao động -->
+              <div class="p-field">
+                <label>Trạng thái lao động <span class="required">*</span></label>
+                <p-dropdown class="custom-calendar" [options]="workingStatusOptions" optionLabel="label"
+                  optionValue="value" formControlName="workingStatus" placeholder="Chọn trạng thái">
+                </p-dropdown>
+                <div
+                  *ngIf="employeeForm.get('workingStatus').invalid && (employeeForm.get('workingStatus').touched || employeeForm.get('workingStatus').dirty)"
+                  class="error-message">
+                  <div *ngIf="employeeForm.get('workingStatus').hasError('required')">Vui lòng trọn trạng thái</div>
+                </div>
+              </div>
+
+              <!-- Ngày thử việc -->
+              <div class="p-field">
+                <label>Ngày thử việc</label>
+                <p-calendar class="custom-calendar" formControlName="probationDate" [showIcon]="true"
+                  [dateFormat]="'dd/mm/yy'" placeholder="Vui lòng nhập ngày thử việc"></p-calendar>
+              </div>
+
+              <!-- Ngày chính thức -->
+              <div class="p-field">
+                <label>Ngày chính thức</label>
+                <p-calendar class="custom-calendar" formControlName="officialDate" [showIcon]="true"
+                  [dateFormat]="'dd/mm/yy'" placeholder="Vui lòng nhập ngày chính thức"></p-calendar>
+              </div>
+
+              <!-- Điện thoại cơ quan -->
+              <div class="p-field">
+                <label>Điện thoại cơ quan</label>
+                <input pInputText formControlName="workPhoneNumber" placeholder="Nhập điện thoại cơ quan" />
+                <div
+                  *ngIf="employeeForm.get('workPhoneNumber').invalid && (employeeForm.get('workPhoneNumber').touched || employeeForm.get('workPhoneNumber').dirty)"
+                  class="error-message">
+                  <div *ngIf="employeeForm.get('workPhoneNumber').hasError('pattern')">Điện thoại không hợp lệ.</div>
+                </div>
+              </div>
+
+              <!-- Email công ty -->
+              <div class="p-field">
+                <label>Email công ty</label>
+                <input pInputText formControlName="companyEmail" placeholder="Nhập email công ty" />
+                <div
+                  *ngIf="employeeForm.get('companyEmail').invalid && (employeeForm.get('companyEmail').touched || employeeForm.get('companyEmail').dirty)"
+                  class="error-message">
+                  <div *ngIf="employeeForm.get('companyEmail').hasError('required')">Không được để trống.</div>
+                  <div *ngIf="employeeForm.get('companyEmail').hasError('email')">Email không hợp lệ.</div>
+                </div>
+              </div>
+
+              <div class="information-account" style="margin-top: 40px;">
+                <h2 class="text-h2">Thông tin tài khoản</h2>
+                <div class="p-fluid" style="margin-top: 20px;">
+                  <div class="p-field">
+                    <label>Email tài khoản <span class="required">*</span></label>
+                    <input pInputText formControlName="accountEmail" placeholder="Nhập email" />
+                    <div
+                      *ngIf="employeeForm.get('accountEmail').invalid && (employeeForm.get('accountEmail').touched || employeeForm.get('accountEmail').dirty)"
+                      class="error-message">
+                      <div *ngIf="employeeForm.get('accountEmail').hasError('required')">Không được để trống.</div>
+                      <div *ngIf="employeeForm.get('accountEmail').hasError('email')">Email không hợp lệ.</div>
+                    </div>
+                  </div>
+
+
+
+                  <div class="check-box-email" style="text-align: center;" *ngIf="this.permisson.hasPermissions([permissionConstant.ManageObjectSendMail])">
+                    <p-checkbox binary="true" formControlName="accountStatus" inputId="isPerson"
+                      (onChange)="handleEmailActivationChange($event)"></p-checkbox>
+                    <span style="margin-left: 15px;">Gửi email kích hoạt <span style="font-style: italic;"
+                      >(Người dùng
+                        cần kích hoạt email để vào hệ thống)</span></span>
+                  </div>
+
+
+
+                </div>
+                <div class="button-container">
+                  <button class="button" type="button" style="margin-right: 10px; color: white; background-color: gray;"
+                    (click)="onCancelAll()">Hủy</button>
+                  <button class="button" type="submit" *ngIf="this.permisson.hasPermissions([permissionConstant.ManageObjectCreate])"
+                    style="color: white; background-color: rgb(21, 21, 94);">Thêm</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+    <p-dialog header="Thêm vị trí công việc" [(visible)]="display" [modal]="true" [closable]="true"
+      [style]="{width: '35vw', height: '25vw'}">
+      <div class="grid">
+        <div class="col-12">
+
+          <div class="card">
+            <form [formGroup]="staffPositionCreateForm" (ngSubmit)="onSubmit()">
+              <div class="grid p-fluid p-3">
+                <div class="col-12 p-0">
+                  <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-3 md:mb-0">
+                      <label style="font-weight: 600; color: #000" htmlFor="phoneNumber">Mã vị trí<span
+                          class="red-asterisk">*</span></label>
+                    </div>
+                    <div class="col-12 mb-2 md:col-9 md:mb-0">
+                      <input pInputText id="phoneNumber" type="text" spellcheck="false" formControlName="code"
+                        placeholder="Nhập mã vị trí" />
+                      <!-- <div *ngIf="
+                                          staffPositionCreateForm.get('code')
+                                              ?.invalid &&
+                                          (staffPositionCreateForm.get('code')
+                                              ?.dirty ||
+                                              staffPositionCreateForm.get('code')
+                                                  ?.touched)
+                                      ">
+                        <div *ngIf="staffPositionCreateForm.get('code')?.errors?.['required']" class="error-message">
+                          Vui lòng nhập mã vị trí
+                        </div>
+                        <div *ngIf="!staffPositionCreateForm.get('code')?.errors?.['required'] &&
+                                          staffPositionCreateForm.get('code')?.errors?.['whitespace']"
+                          class="error-message">
+                          Tên không được chứa khoảng trắng
+                        </div>
+                      </div> -->
+                    </div>
+
+                    <!-- <p-dropdown
+                                    [options]="positionGroupes"
+                                    formControlName="positionGroup"
+                                    placeholder="Chọn trạng thái"
+                                    [showClear]="true"
+                                    (onChange)="onStatusChange($event)"
+                                >
+                                </p-dropdown> -->
+                  </div>
+                </div>
+                <!-- Nhóm vị trí -->
+                <div class="col-12 p-0">
+                  <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-3 md:mb-0">
+                      <label style="font-weight: 600; color: #000;" htmlFor="name1">Nhóm vị trí<span
+                          class="red-asterisk">*</span></label>
+                    </div>
+                    <div class="col-12 mb-2 md:col-8 md:mb-0">
+                      <p-dropdown formControlName="locationGroup" [options]="groupPositions" optionValue="id"
+                        optionLabel="groupPositionName" placeholder="Chọn chức danh"></p-dropdown>
+                    </div>
+                    <div class="col-12 mb-2 md:col-2 md:mb-0">
+                      <button style="margin-left: -18px;" pButton type="button" pRipple icon="pi pi-ellipsis-v"
+                        (click)="showPositionGroupDal()"></button>
+                    </div>
+                    <!-- <div
+                                *ngIf="
+                                    orderForm.get('name')?.invalid &&
+                                    (orderForm.get('name')?.dirty ||
+                                        orderForm.get('name')?.touched)
+                                "
+                              >
+                                <div
+                                    *ngIf="orderForm.get('name')?.errors?.['required']"
+                                    class="error-message"
+                                >
+                                    Vui lòng nhập tên
+                                </div>
+                                <div
+                                    *ngIf="!orderForm.get('name')?.errors?.['required'] &&
+                              orderForm.get('name')?.errors?.['whitespace']"
+                                    class="error-message"
+                                >
+                                    Tên không được chứa khoảng trắng
+                                </div>
+                            </div> -->
+                  </div>
+                </div>
+                <!-- Tên vị trí -->
+                <div class="col-12 p-0">
+                  <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-3 md:mb-0">
+                      <label style="font-weight: 600; color: #000" htmlFor="phoneNumber">Tên vị trí<span
+                          class="red-asterisk">*</span></label>
+                    </div>
+                    <div class="col-12 mb-2 md:col-9 md:mb-0">
+                      <input pInputText id="phoneNumber" type="text" formControlName="name" optionValue="id"
+                        spellcheck="false" placeholder="Chọn tên vị trí" />
+                    </div>
+
+                    <!-- <p-dropdown
+                                    [options]="positionGroupes"
+                                    formControlName="positionGroup"
+                                    placeholder="Chọn trạng thái"
+                                    [showClear]="true"
+                                    (onChange)="onStatusChange($event)"
+                                >
+                                </p-dropdown> -->
+                  </div>
+                </div>
+
+                <!-- Chức danh -->
+                <div class="col-12 p-0">
+                  <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-3 md:mb-0">
+                      <label style="font-weight: 600; color: #000" htmlFor="name1">Chức danh<span
+                          class="red-asterisk">*</span></label>
+                    </div>
+                    <div class="col-12 mb-2 md:col-8 md:mb-0">
+                      <p-dropdown formControlName="title" [options]="staffTitles" optionValue="id"
+                        optionLabel="staffTitleName" placeholder="Chọn chức danh"></p-dropdown>
+                    </div>
+                    <div class="col-12 mb-2 md:col-2 md:mb-0">
+                      <button style="margin-left: -20px;" pButton type="button" pRipple icon="pi pi-ellipsis-v"
+                        (click)="showTitleDal()"></button>
+                    </div>
+                    <!-- <div
+                                *ngIf="
+                                    orderForm.get('name')?.invalid &&
+                                    (orderForm.get('name')?.dirty ||
+                                        orderForm.get('name')?.touched)
+                                "
+                            >
+                                <div
+                                    *ngIf="orderForm.get('name')?.errors?.['required']"
+                                    class="error-message"
+                                >
+                                    Vui lòng nhập tên
+                                </div>
+                                <div
+                                    *ngIf="!orderForm.get('name')?.errors?.['required'] &&
+                              orderForm.get('name')?.errors?.['whitespace']"
+                                    class="error-message"
+                                >
+                                    Tên không được chứa khoảng trắng
+                                </div>
+                            </div> -->
+                  </div>
+                </div>
+
+                <!-- Đơn vị công tác -->
+                <div class="col-12 p-0">
+                  <div class="field mb-0 flex align-items-center">
+                    <div class="col-12 mb-2 md:col-3 md:mb-0">
+                      <label style="font-weight: 600; color: #000" htmlFor="phoneNumber">Đơn vị công tác<span
+                          class="red-asterisk">*</span></label>
+                    </div>
+                    <div class="col-12 mb-2 md:col-9 md:mb-0">
+                      <!-- <p-multiSelect
+                                      [options]="groupPositions"
+                                      formControlName="group"
+                                      placeholder="Chọn đơn vị công tác"
+                                      optionLabel="groupPositionName"
+                                      display="chip"
+                                      [showClear]="true"
+                                  ></p-multiSelect> -->
+
+                      <p-treeSelect class="w-full md:w-20rem" containerStyleClass="w-full"
+                        formControlName="organizations" [options]="organizations" display="chip"
+                        [metaKeySelection]="false" selectionMode="checkbox"
+                        placeholder="Chọn đơn vị công tác"></p-treeSelect>
+                      <!-- <div *ngIf="
+                                      staffPositionCreateForm.get(
+                                          'organizations'
+                                      )?.invalid &&
+                                      (staffPositionCreateForm.get(
+                                          'organizations'
+                                      )?.dirty ||
+                                          staffPositionCreateForm.get(
+                                              'organizations'
+                                          )?.touched)
+                                  ">
+                        <div *ngIf="staffPositionCreateForm.get('organizations')?.errors?.['required']"
+                          class="error-message">
+                          Vui lòng chọn đơn vị công tác
+                        </div>
+                      </div> -->
+                    </div>
+
+                    <!-- <p-dropdown
+                                    [options]="positionGroupes"
+                                    formControlName="positionGroup"
+                                    placeholder="Chọn trạng thái"
+                                    [showClear]="true"
+                                    (onChange)="onStatusChange($event)"
+                                >
+                                </p-dropdown> -->
+                  </div>
+                </div>
+                <div class="col-12 md:col-6 p-0"></div>
+                <div class="col-12 mb-2 md:col-12 md:mb-0 flex gap-2" style="justify-content: flex-end">
+                  <p-button label="Hủy" [outlined]="true" severity="secondary" (click)="onCancel()"></p-button>
+                  <p-button icon="pi pi-plus" label="Thêm mới" type="submit"></p-button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </p-dialog>
+
+    <p-dialog header="Nhóm vị trí" [modal]="true" [(visible)]="positionVisible" [style]="{ width: '30vw' }">
+      <div class="card" style="position: sticky; top: 97px; min-height: 525px">
+        <div class="grid p-fluid">
+          <div class="position__list">
+            <div class="position-item" *ngFor="let position of groupPositions">
+              <input type="radio" name="position" [(ngModel)]="selectedPosition" [value]="position.id" />
+              <label>{{ position?.groupPositionName }}</label>
+              <div class="position-tools">
+                <span>
+                  <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="1em"
+                    width="1em" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="none" d="M0 0h24v24H0z"></path>
+                    <path
+                      d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z">
+                    </path>
+                  </svg>
+                </span>
+                <span>
+                  <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em"
+                    width="1em" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M128 405.429C128 428.846 147.198 448 170.667 448h170.667C364.802 448 384 428.846 384 405.429V160H128v245.429zM416 96h-80l-26.785-32H202.786L176 96H96v32h320V96z">
+                    </path>
+                  </svg>
+                </span>
+              </div>
+            </div>
+
+            <div class="position-add">
+              <div *ngIf="!positionAddVisible" class="position-add-btn"
+                (click)="positionAddVisible = !positionAddVisible">
+                <span>
+                  <i class="pi pi-plus"></i>
+                </span>
+                <label>Thêm mới</label>
+              </div>
+              <div *ngIf="positionAddVisible" class="position-add-input">
+                <input pInputText id="name1" type="text" spellcheck="false" placeholder="Nhập vị trí" />
+              </div>
+            </div>
+          </div>
+          <div class="flex gap-2" style="
+          justify-content: flex-end;
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+      ">
+            <p-button label="Hủy" [outlined]="true" (click)="positionVisible = false" severity="secondary"></p-button>
+            <!-- <p-button
+          label="Lưu"
+          (click)="handleSelectPositionGroup()"
+      ></p-button> -->
+
+            <p-button *ngIf="!groupAddVisible" label="Lưu" (click)="handleSelectPositionGroup()"></p-button>
+            <p-button *ngIf="groupAddVisible" label="Tạo mới" (click)="handleCreateGroupPosition()"></p-button>
+          </div>
+        </div>
+      </div>
+    </p-dialog>
+
+    <p-dialog header="Chức danh" [modal]="true" [(visible)]="jobTitleVisible" [style]="{ width: '30vw' }">
+      <div class="card" style="position: sticky; top: 97px; min-height: 525px">
+        <div class="grid p-fluid">
+          <div class="position__list">
+            <div class="position-item" *ngFor="let position of staffTitles">
+              <input type="radio" name="position" [(ngModel)]="selectedTitle" [value]="position.id" />
+              <label>{{ position?.staffTitleName }}</label>
+              <div class="position-tools">
+                <span>
+                  <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="1em"
+                    width="1em" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="none" d="M0 0h24v24H0z"></path>
+                    <path
+                      d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z">
+                    </path>
+                  </svg>
+                </span>
+                <span>
+                  <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em"
+                    width="1em" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M128 405.429C128 428.846 147.198 448 170.667 448h170.667C364.802 448 384 428.846 384 405.429V160H128v245.429zM416 96h-80l-26.785-32H202.786L176 96H96v32h320V96z">
+                    </path>
+                  </svg>
+                </span>
+              </div>
+            </div>
+
+            <div class="position-add">
+              <div *ngIf="!positionAddVisible" class="position-add-btn"
+                (click)="positionAddVisible = !positionAddVisible">
+                <span>
+                  <i class="pi pi-plus"></i>
+                </span>
+                <label>Thêm mới</label>
+              </div>
+              <div *ngIf="positionAddVisible" class="position-add-input">
+                <input pInputText id="name1" type="text" spellcheck="false" placeholder="Nhập vị trí" />
+              </div>
+            </div>
+          </div>
+          <div class="flex gap-2" style="
+                      justify-content: flex-end;
+                      position: absolute;
+                      bottom: 0;
+                      width: 100%;
+                  ">
+            <p-button label="Hủy" [outlined]="true" severity="secondary" (click)="jobTitleVisible = false"></p-button>
+            <p-button label="Lưu" (click)="handleSelectTitle()"></p-button>
+          </div>
+        </div>
+      </div>
+    </p-dialog>
+
+    <!-- Form -->

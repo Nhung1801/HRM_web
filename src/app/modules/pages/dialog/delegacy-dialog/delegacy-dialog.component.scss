@@ -1,0 +1,20 @@
+.form-group-custom {
+    margin-bottom: 1em;
+}
+.form-group-custom label {
+    font-weight: bold;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1em;
+}
+
+.form-actions p-button {
+    margin-left: 0.5em;
+}
+
+::ng-deep .p-treeselect {
+    width: 100%;
+}

@@ -1,0 +1,1776 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="flex gap-5">
+            <div class="card">
+                <!-- <div class="avatar">
+                    <div class="frame-image">
+                        <span>
+                            <svg
+                                stroke="currentColor"
+                                fill="currentColor"
+                                stroke-width="0"
+                                viewBox="0 0 512 512"
+                                height="1em"
+                                width="1em"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    fill="none"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="32"
+                                    d="m350.54 148.68-26.62-42.06C318.31 100.08 310.62 96 302 96h-92c-8.62 0-16.31 4.08-21.92 10.62l-26.62 42.06C155.85 155.23 148.62 160 140 160H80a32 32 0 0 0-32 32v192a32 32 0 0 0 32 32h352a32 32 0 0 0 32-32V192a32 32 0 0 0-32-32h-59c-8.65 0-16.85-4.77-22.46-11.32z"
+                                ></path>
+                                <circle
+                                    cx="256"
+                                    cy="272"
+                                    r="80"
+                                    fill="none"
+                                    stroke-miterlimit="10"
+                                    stroke-width="32"
+                                ></circle>
+                                <path
+                                    fill="none"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="32"
+                                    d="M124 158v-22h-24v22"
+                                ></path>
+                            </svg>
+                        </span>
+                    </div>
+                    <label>Ảnh đại diện</label>
+                </div> -->
+                <div class="profile">
+                    <form [formGroup]="createJobInfo" (ngSubmit)="onSubmit()">
+                        <div class="employee-info">
+                            <h5 class="title__heading">THÔNG TIN NHÂN VIÊN</h5>
+                            <div class="grid p-fluid p-3">
+                                <!-- Đơn vị công tác -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Đơn vị công tác<span
+                                                    class="red-asterisk"
+                                                    >*</span
+                                                ></label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <!-- <p-dropdown
+                                                [options]="cities"
+                                                formControlName="organizationId"
+                                                optionLabel="name"
+                                                [showClear]="true"
+                                                placeholder="Chọn trình độ/ bằng cấp"
+                                            ></p-dropdown> -->
+                                            <input
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                spellcheck="false"
+                                                formControlName="organizationId"
+                                                placeholder=""
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Loại hợp đồng  -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="name1"
+                                                >Loại hợp đồng</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                                            style="
+                                                justify-content: space-between;
+                                                gap: 7px;
+                                            "
+                                        >
+                                            <p-dropdown
+                                                [options]="contractTypes"
+                                                formControlName="contractTypeId"
+                                                optionLabel="name"
+                                                optionValue="id"
+                                                [showClear]="true"
+                                                placeholder="Chọn loại hợp đồng"
+                                            ></p-dropdown>
+                                            <p-button
+                                                label=""
+                                                [outlined]="true"
+                                                (click)="
+                                                    contractTypeVisible = true
+                                                "
+                                                severity="secondary"
+                                                icon="pi pi-ellipsis-v"
+                                            ></p-button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Vị trí công việc -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Vị trí công việc<span
+                                                    class="red-asterisk"
+                                                    >*</span
+                                                ></label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <!-- <p-dropdown
+                                                [options]="cities"
+                                                [(ngModel)]="selectedCity"
+                                                formControlName="staffPositionId"
+                                                optionLabel="name"
+                                                [showClear]="true"
+                                                placeholder="Chọn vị trí công việc"
+                                            ></p-dropdown> -->
+                                            <input
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                spellcheck="false"
+                                                formControlName="staffPositionId"
+                                                placeholder=""
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Mã chấm công -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="name1"
+                                                >Mã chấm công</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                                            style="
+                                                justify-content: space-between;
+                                                gap: 7px;
+                                            "
+                                        >
+                                            <input
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                spellcheck="false"
+                                                formControlName="timeKeepingId"
+                                                placeholder="Nhập mã chấm công"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Chức danh -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Chức danh<span
+                                                    class="red-asterisk"
+                                                    >*</span
+                                                ></label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <!-- <p-dropdown
+                                                [options]="cities"
+                                                formControlName="staffTitleId"
+                                                optionLabel="name"
+                                                [showClear]="true"
+                                                placeholder="Chọn chức danh"
+                                            ></p-dropdown> -->
+                                            <input
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                spellcheck="false"
+                                                formControlName="staffTitleId"
+                                                placeholder=""
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Ngày học việc -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Ngày học việc</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <p-calendar
+                                                dateFormat="dd/mm/yy"
+                                                placeholder="dd/mm/yy"
+                                                formControlName="internshipStartDate"
+                                                [showIcon]="true"
+                                                dateFormat="dd/mm/yy"
+                                                placeholder="dd/mm/yy"
+                                                placeholder="Nhập ngày học việc"
+                                            ></p-calendar>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Cấp -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Cấp<span class="red-asterisk"
+                                                    >*</span
+                                                ></label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <p-dropdown
+                                                [options]="cities"
+                                                formControlName="level"
+                                                optionLabel="name"
+                                                [showClear]="true"
+                                                placeholder="Chọn cấp"
+                                            ></p-dropdown>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Ngày thử việc -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Ngày thử việc</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <p-calendar
+                                                dateFormat="dd/mm/yy"
+                                                placeholder="dd/mm/yy"
+                                                formControlName="probationStartDate"
+                                                [showIcon]="true"
+                                                placeholder="Nhập ngày thử việc"
+                                            ></p-calendar>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Bậc  -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="name1"
+                                                >Bậc</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                                            style="
+                                                justify-content: space-between;
+                                                gap: 7px;
+                                            "
+                                        >
+                                            <p-dropdown
+                                                [options]="cities"
+                                                formControlName="bac"
+                                                optionLabel="name"
+                                                [showClear]="true"
+                                                placeholder="Chọn bậc"
+                                            ></p-dropdown>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Ngày chính thức -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Ngày chính thức</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <p-calendar
+                                                dateFormat="dd/mm/yy"
+                                                placeholder="dd/mm/yy"
+                                                formControlName="officialStartDate"
+                                                [showIcon]="true"
+                                                placeholder="Nhập ngày chính thức"
+                                            ></p-calendar>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Trạng thái lao động -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Trạng thái lao động<span
+                                                    class="red-asterisk"
+                                                    >*</span
+                                                ></label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <p-dropdown
+                                                [options]="
+                                                    constant.jobInfo
+                                                        .workingStatus
+                                                "
+                                                formControlName="workingStatus"
+                                                optionLabel="label"
+                                                optionValue="value"
+                                                placeholder="Chọn trình độ/ bằng cấp"
+                                            ></p-dropdown>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Thâm niên -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="name1"
+                                                >Thâm niên</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                                            style="
+                                                justify-content: space-between;
+                                                gap: 7px;
+                                            "
+                                        >
+                                            <input
+                                                pInputText
+                                                id="name1"
+                                                formControlName="seniority"
+                                                type="text"
+                                                spellcheck="false"
+                                                placeholder="Nhập thâm niên"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Tính chất lao động  -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="name1"
+                                                >Tính chất lao động</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                                            style="
+                                                justify-content: space-between;
+                                                gap: 7px;
+                                            "
+                                        >
+                                            <p-dropdown
+                                                [options]="labores"
+                                                formControlName="natureOfLaborId"
+                                                optionLabel="name"
+                                                optionValue="id"
+                                                [showClear]="true"
+                                                placeholder="Chọn Tính chất lao động"
+                                            ></p-dropdown>
+                                            <p-button
+                                                label=""
+                                                [outlined]="true"
+                                                (click)="laborVisible = true"
+                                                severity="secondary"
+                                                icon="pi pi-ellipsis-v"
+                                            ></p-button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Ngày nghỉ hưu dự kiến -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Ngày nghỉ hưu dự kiến</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <p-calendar
+                                                dateFormat="dd/mm/yy"
+                                                placeholder="dd/mm/yy"
+                                                formControlName="retiredDate"
+                                                [showIcon]="true"
+                                                placeholder="Nhập ngày nghỉ hưu dự kiến"
+                                            ></p-calendar>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Khu vực làm việc  -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="name1"
+                                                >Khu vực làm việc</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                                            style="
+                                                justify-content: space-between;
+                                                gap: 7px;
+                                            "
+                                        >
+                                            <input
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                spellcheck="false"
+                                                formControlName="workingArea"
+                                                placeholder="Nhập khu vực làm việc"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Địa điểm làm việc -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="name1"
+                                                >Địa điểm làm việc</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0 flex"
+                                            style="
+                                                justify-content: space-between;
+                                                gap: 7px;
+                                            "
+                                        >
+                                            <input
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                formControlName="workingLocation"
+                                                spellcheck="false"
+                                                placeholder="Nhập dịa điểm làm việc"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resignation-info mt-4">
+                            <h5 class="title__heading">THÔNG TIN NGHỈ VIỆC</h5>
+                            <div class="grid p-fluid p-3">
+                                <!-- Nhóm lí do nghỉ -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Nhóm lí do nghỉ</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <p-dropdown
+                                                [options]="
+                                                    constant.jobInfo
+                                                        .reasonsForLeaving
+                                                "
+                                                formControlName="reasonGroupQuitJob"
+                                                optionLabel="label"
+                                                optionValue="value"
+                                                [showClear]="true"
+                                                placeholder="Chọn nhóm lí do nghỉ"
+                                            ></p-dropdown>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Lí do nghỉ -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Lí do nghỉ</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <input
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                spellcheck="false"
+                                                formControlName="reasonQuitJob"
+                                                placeholder="Nhập lí do nghỉ"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Người duyệt -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Người duyệt</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <p-dropdown
+                                                [options]="employees"
+                                                formControlName="employeeApproveId"
+                                                optionLabel="name"
+                                                optionValue="id"
+                                                [showClear]="true"
+                                                placeholder="Chọn người duyệt"
+                                            ></p-dropdown>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Ngày nghỉ việc -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Ngày nghỉ việc</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <p-calendar
+                                                dateFormat="dd/mm/yy"
+                                                placeholder="dd/mm/yy"
+                                                formControlName="quitJobDate"
+                                                [showIcon]="true"
+                                                placeholder="Nhập ngày nghỉ việc"
+                                            ></p-calendar>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Ngày nghỉ việc -->
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Ý kiến đóng góp</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <textarea
+                                                rows="5"
+                                                cols="30"
+                                                formControlName="opinionContribute"
+                                                pInputTextarea
+                                                [autoResize]="true"
+                                            ></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="resignation-info">
+                            <h5 class="title__heading">THÔNG TIN LƯƠNG</h5>
+                            <div class="grid p-fluid p-3">
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Bậc lương</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <p-dropdown
+                                                [options]="
+                                                    constant.jobInfo
+                                                        .reasonsForLeaving
+                                                "
+                                                formControlName="reasonGroupQuitJob"
+                                                optionLabel="label"
+                                                optionValue="value"
+                                                [showClear]="true"
+                                                placeholder="Chọn nhóm lí do nghỉ"
+                                            ></p-dropdown>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Tổng lương</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <input
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                spellcheck="false"
+                                                formControlName="reasonQuitJob"
+                                                placeholder="Nhập tổng lương"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Lương cơ bản</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <input
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                spellcheck="false"
+                                                formControlName="reasonQuitJob"
+                                                placeholder="Nhập lương cơ bản"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Tài khoản ngân hàng</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <input
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                spellcheck="false"
+                                                formControlName="bankAccountNumber"
+                                                placeholder="Nhập số tài khoản ngân hàng"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Lương đóng bảo hiểm</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <input
+                                                pInputText
+                                                id="name1"
+                                                type="text"
+                                                spellcheck="false"
+                                                formControlName="reasonQuitJob"
+                                                placeholder="Nhập lương đóng bảo hiểm"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 md:col-6 p-0">
+                                    <div
+                                        class="field mb-0 flex align-items-center"
+                                    >
+                                        <div
+                                            class="col-12 mb-2 md:col-4 md:mb-0"
+                                        >
+                                            <label
+                                                style="
+                                                    font-weight: 600;
+                                                    color: #000;
+                                                "
+                                                htmlFor="phoneNumber"
+                                                >Ngân hàng</label
+                                            >
+                                        </div>
+                                        <div
+                                            class="col-12 mb-2 md:col-8 md:mb-0"
+                                        >
+                                            <p-dropdown
+                                                [options]="
+                                                    constant.jobInfo.bank
+                                                "
+                                                formControlName="bankName"
+                                                optionLabel="label"
+                                                optionValue="label"
+                                                [showClear]="true"
+                                                placeholder="Chọn ngân hàng giao dịch"
+                                            ></p-dropdown>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-content-end mb-5 px-3">
+                            <div class="col-md-12">
+                                <button
+                                    pButton
+                                    icon="pi pi-plus"
+                                    label="Cập nhật"
+                                    type="submit"
+                                ></button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Phụ cấp  -->
+                    <div class="allowance-info px-3">
+                        <div class="flex justify-content-between">
+                            <h5 class="title__heading">CÁC KHOẢN PHỤ CẤP</h5>
+                            <div class="allowance-add">
+                                <!-- <span class="allowance-add-icon">
+                                    <i class="pi pi-plus"></i>
+                                </span> -->
+                                <!-- <span
+                                         class="allowance-add-text"
+                                         (click)="allowanceVisible = true"
+                                         >Thêm mới</span
+                                     > -->
+                            </div>
+                        </div>
+                        <div class="allowance-list">
+                            <div
+                                *ngIf="allowances?.length == 0"
+                                class="allowance-none"
+                            >
+                                <p class="allowance-add-text-none">
+                                    Chưa có dữ liệu
+                                </p>
+                            </div>
+                            <p-table
+                                *ngIf="allowances?.length > 0"
+                                [value]="allowances"
+                                [scrollable]="true"
+                                scrollHeight="400px"
+                            >
+                                <!-- Header -->
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th
+                                            class="text-center"
+                                            style="min-width: 100px"
+                                        >
+                                            #
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            style="min-width: 100px"
+                                        >
+                                            Mã hợp đồng
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            style="min-width: 100px"
+                                        >
+                                            Tên phụ cấp
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            style="min-width: 100px"
+                                        >
+                                            Cấp độ phụ cấp
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            style="min-width: 200px"
+                                        >
+                                            Định mức
+                                        </th>
+                                        <th
+                                            class="text-center"
+                                            style="min-width: 200px"
+                                        >
+                                            Giá trị
+                                        </th>
+                                    </tr>
+                                </ng-template>
+
+                                <!-- Body -->
+                                <ng-template
+                                    pTemplate="body"
+                                    let-item
+                                    let-index="rowIndex"
+                                >
+                                    <tr>
+                                        <td class="text-center">
+                                            {{ index + 1 }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ item?.contractId }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ item?.allowanceName }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ item?.standardType }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{
+                                                item?.standardValue
+                                                    | number : "1.0-0" || 0
+                                            }}
+                                            đ
+                                        </td>
+                                        <td class="text-center">
+                                            {{
+                                                item?.value
+                                                    | number : "1.0-0" || 0
+                                            }}
+                                            đ
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <!-- Footer -->
+                                <ng-template pTemplate="footer">
+                                    <tr>
+                                        <td colspan="5" class="text-right">
+                                            <span
+                                                [style]="{
+                                                    paddingRight: '80px'
+                                                }"
+                                            >
+                                                Tổng phụ cấp
+                                            </span>
+                                        </td>
+
+                                        <td class="text-center">
+                                            {{ totalAmount | number : "1.0-0" }}
+                                            đ
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+
+                    <!-- Khấu trừ -->
+                    <div class="deduction-info px-3">
+                        <div class="flex justify-content-between">
+                            <h5 class="title__heading">CÁC KHOẢN KHẤU TRỪ</h5>
+                            <div class="allowance-add">
+                                <span class="allowance-add-icon">
+                                    <i class="pi pi-plus"></i>
+                                </span>
+                                <span
+                                    class="allowance-add-text"
+                                    (click)="deductionsVisible = true"
+                                    >Thêm mới</span
+                                >
+                            </div>
+                        </div>
+
+                        <div class="allowance-list">
+                            <div class="allowance-none">
+                                <p
+                                    *ngIf="deductions?.length == 0"
+                                    class="allowance-add-text-none"
+                                >
+                                    Chưa có dữ liệu
+                                </p>
+                                <p-table
+                                    *ngIf="deductions?.length > 0"
+                                    [value]="deductions"
+                                    [scrollable]="true"
+                                    scrollHeight="400px"
+                                >
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th style="min-width: 100px">
+                                                Tên khoản
+                                            </th>
+                                            <th style="min-width: 200px">
+                                                Định mức
+                                            </th>
+                                            <th style="min-width: 200px">
+                                                Giá trị
+                                            </th>
+                                            <th>Hành động</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-item>
+                                        <tr>
+                                            <td>{{ item.deducationName }}</td>
+                                            <td>
+                                                {{
+                                                    item.standardValue
+                                                        | number : "1.0-0"
+                                                }}đ
+                                            </td>
+                                            <td>
+                                                {{
+                                                    item.value
+                                                        | number : "1.0-0"
+                                                }}đ
+                                            </td>
+                                            <td (click)="handleDelete(item)">
+                                                Xóa
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="footer">
+                                        <tr>
+                                            <td>Tổng cộng</td>
+                                            <td></td>
+                                            <td>
+                                                {{
+                                                    totalAmountDeductions
+                                                        | number : "1.0-0"
+                                                }}đ
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Phụ cấp -->
+<p-dialog
+    header="Các khoản phụ cấp"
+    [modal]="true"
+    [(visible)]="allowanceVisible"
+    [style]="{ width: '45vw' }"
+>
+    <div class="card" style="position: sticky; top: 97px">
+        <form [formGroup]="createAllowanceForm">
+            <div class="grid p-fluid">
+                <!-- Tên khoản -->
+                <div class="col-12 md:col-12 p-0">
+                    <div class="field mb-0 flex align-items-center">
+                        <div class="col-12 mb-2 md:col-3 md:mb-0">
+                            <label
+                                style="font-weight: 600; color: #000"
+                                htmlFor="phoneNumber"
+                                >Tên khoản<span class="red-asterisk"
+                                    >*</span
+                                ></label
+                            >
+                        </div>
+                        <div class="col-12 mb-2 md:col-9 md:mb-0">
+                            <p-dropdown
+                                [options]="allowanceAccount"
+                                formControlName="allowanceName"
+                                optionLabel="label"
+                                optionValue="label"
+                                [showClear]="true"
+                                placeholder="Chọn trình độ/ bằng cấp"
+                            ></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Định mức -->
+                <div class="col-12 md:col-12 p-0">
+                    <div class="field mb-0 flex align-items-center">
+                        <div class="col-12 mb-2 md:col-3 md:mb-0">
+                            <label
+                                style="font-weight: 600; color: #000"
+                                htmlFor="phoneNumber"
+                                >Định mức</label
+                            >
+                        </div>
+                        <div class="col-12 mb-2 md:col-4 md:mb-0">
+                            <p-dropdown
+                                [options]="allowanceStandard"
+                                formControlName="standardType"
+                                optionLabel="label"
+                                optionValue="label"
+                                [showClear]="true"
+                                placeholder="Chọn định mức"
+                            ></p-dropdown>
+                        </div>
+                        <div class="col-12 mb-2 md:col-5 md:mb-0">
+                            <input
+                                type="text"
+                                pInputText
+                                formControlName="standardValue"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Giá trị -->
+                <div class="col-12 md:col-12 p-0">
+                    <div class="field mb-0 flex align-items-center">
+                        <div class="col-12 mb-2 md:col-3 md:mb-0">
+                            <label
+                                style="font-weight: 600; color: #000"
+                                htmlFor="phoneNumber"
+                                >Giá trị</label
+                            >
+                        </div>
+                        <div class="col-12 mb-2 md:col-4 md:mb-0">
+                            <p-dropdown
+                                [options]="allowanceStandard"
+                                formControlName="typeValue"
+                                optionLabel="label"
+                                optionValue="label"
+                                [showClear]="true"
+                                placeholder="Chọn trình độ/ bằng cấp"
+                            ></p-dropdown>
+                        </div>
+                        <div class="col-12 mb-2 md:col-5 md:mb-0">
+                            <input
+                                type="text"
+                                pInputText
+                                formControlName="value"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ghi chú -->
+                <div class="col-12 md:col-12 p-0">
+                    <div class="field mb-0 flex align-items-center">
+                        <div class="col-12 mb-2 md:col-3 md:mb-0">
+                            <label
+                                style="font-weight: 600; color: #000"
+                                htmlFor="phoneNumber"
+                                >Ghi chú</label
+                            >
+                        </div>
+                        <div class="col-12 mb-2 md:col-9 md:mb-0">
+                            <textarea
+                                pKeyFilter="int"
+                                rows="4"
+                                cols="30"
+                                formControlName="note"
+                                pInputTextarea
+                            ></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="flex gap-2 col-12 md:col-12 p-0"
+                    style="justify-content: flex-end"
+                >
+                    <div class="field mb-0 flex align-items-center gap-2">
+                        <p-button
+                            label="Hủy"
+                            [outlined]="true"
+                            severity="secondary"
+                        ></p-button>
+                        <p-button
+                            label="Lưu"
+                            (click)="handleCreateAllowance()"
+                        ></p-button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</p-dialog>
+
+<!-- Khấu trừ -->
+<p-dialog
+    header="Các khoản khấu trừ"
+    [modal]="true"
+    [(visible)]="deductionsVisible"
+    [style]="{ width: '45vw' }"
+>
+    <div class="card" style="position: sticky; top: 97px">
+        <form [formGroup]="createDeductionForm">
+            <div class="grid p-fluid">
+                <!-- Tên khoản -->
+                <div class="col-12 md:col-12 p-0">
+                    <div class="field mb-0 flex align-items-center">
+                        <div class="col-12 mb-2 md:col-3 md:mb-0">
+                            <label
+                                style="font-weight: 600; color: #000"
+                                htmlFor="phoneNumber"
+                                >Tên khoản<span class="red-asterisk"
+                                    >*</span
+                                ></label
+                            >
+                        </div>
+                        <div class="col-12 mb-2 md:col-9 md:mb-0">
+                            <!-- <p-dropdown
+                                [options]="allowanceAccount"
+                                formControlName="deducationName"
+                                optionLabel="label"
+                                optionValue="label"
+                                [showClear]="true"
+                                placeholder="Chọn trình độ/ bằng cấp"
+                            ></p-dropdown> -->
+                            <input
+                                pInputText
+                                type="text"
+                                placeholder="Nhập tên khoản"
+                                formControlName="deducationName"
+                            />
+                            <div
+                                *ngIf="
+                                    createDeductionForm.get('deducationName')
+                                        ?.invalid &&
+                                    (createDeductionForm.get('deducationName')
+                                        ?.dirty ||
+                                        createDeductionForm.get(
+                                            'deducationName'
+                                        )?.touched)
+                                "
+                            >
+                                <div
+                                    *ngIf="createDeductionForm.get('deducationName')?.errors?.['required']"
+                                    class="error-message"
+                                >
+                                    Vui lòng nhập mã thành viên
+                                </div>
+                                <div
+                                    *ngIf="!createDeductionForm.get('deducationName')?.errors?.['required'] &&
+                                            createDeductionForm.get('deducationName')?.errors?.['whitespace']"
+                                    class="error-message"
+                                >
+                                    Tên không được chứa khoảng trắng
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Định mức -->
+                <div class="col-12 md:col-12 p-0">
+                    <div class="field mb-0 flex align-items-center">
+                        <div class="col-12 mb-2 md:col-3 md:mb-0">
+                            <label
+                                style="font-weight: 600; color: #000"
+                                htmlFor="phoneNumber"
+                                >Định mức</label
+                            >
+                        </div>
+                        <div class="col-12 mb-2 md:col-4 md:mb-0">
+                            <p-dropdown
+                                [options]="allowanceStandard"
+                                formControlName="standardType"
+                                optionLabel="label"
+                                optionValue="label"
+                                [showClear]="true"
+                                placeholder="Chọn trình độ/ bằng cấp"
+                            ></p-dropdown>
+                        </div>
+                        <div class="col-12 mb-2 md:col-5 md:mb-0">
+                            <input
+                                type="text"
+                                pInputText
+                                formControlName="standardValue"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Giá trị -->
+                <div class="col-12 md:col-12 p-0">
+                    <div class="field mb-0 flex align-items-center">
+                        <div class="col-12 mb-2 md:col-3 md:mb-0">
+                            <label
+                                style="font-weight: 600; color: #000"
+                                htmlFor="phoneNumber"
+                                >Giá trị</label
+                            >
+                        </div>
+                        <div class="col-12 mb-2 md:col-4 md:mb-0">
+                            <p-dropdown
+                                [options]="allowanceStandard"
+                                formControlName="typeValue"
+                                optionLabel="label"
+                                optionValue="label"
+                                [showClear]="true"
+                                placeholder="Chọn trình độ/ bằng cấp"
+                            ></p-dropdown>
+                        </div>
+                        <div class="col-12 mb-2 md:col-5 md:mb-0">
+                            <input
+                                type="text"
+                                pInputText
+                                formControlName="value"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ghi chú -->
+                <div class="col-12 md:col-12 p-0">
+                    <div class="field mb-0 flex align-items-center">
+                        <div class="col-12 mb-2 md:col-3 md:mb-0">
+                            <label
+                                style="font-weight: 600; color: #000"
+                                htmlFor="phoneNumber"
+                                >Ghi chú</label
+                            >
+                        </div>
+                        <div class="col-12 mb-2 md:col-9 md:mb-0">
+                            <textarea
+                                pKeyFilter="int"
+                                rows="4"
+                                cols="30"
+                                formControlName="note"
+                                pInputTextarea
+                            ></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="flex gap-2 col-12 md:col-12 p-0"
+                    style="justify-content: flex-end"
+                >
+                    <div class="field mb-0 flex align-items-center gap-2">
+                        <p-button
+                            label="Hủy"
+                            [outlined]="true"
+                            (click)="
+                                deductionsVisible = false;
+                                this.createDeductionForm.reset()
+                            "
+                            severity="secondary"
+                        ></p-button>
+                        <p-button
+                            label="Lưu"
+                            (click)="handleCreateDeduction()"
+                        ></p-button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</p-dialog>
+
+<!-- Loại hợp đồng -->
+<p-dialog
+    header="Loại hợp đồng"
+    [modal]="true"
+    [(visible)]="contractTypeVisible"
+    [style]="{ width: '30vw' }"
+>
+    <div class="card" style="position: sticky; top: 97px; min-height: 525px">
+        <div class="grid p-fluid">
+            <div class="position__list">
+                <div
+                    class="position-item"
+                    *ngFor="let item of contractTypes; let i = index"
+                >
+                    <input
+                        type="radio"
+                        name="position"
+                        [(ngModel)]="selectedContructType"
+                        [value]="item.id"
+                    />
+                    <div *ngIf="isContractTypeEditing === i; else viewMode">
+                        <input
+                            pInputText
+                            id="name1"
+                            (blur)="saveContractTypeEdit(item)"
+                            [style]="{ width: '100%' }"
+                            [(ngModel)]="item.name"
+                            type="text"
+                            spellcheck="false"
+                            placeholder="Nhập loại hợp đồng"
+                        />
+                    </div>
+                    <ng-template #viewMode>
+                        <label>{{ item?.name }}</label>
+                    </ng-template>
+                    <div class="position-tools">
+                        <span (click)="editContractType(i)">
+                            <svg
+                                stroke="currentColor"
+                                fill="currentColor"
+                                stroke-width="0"
+                                viewBox="0 0 24 24"
+                                height="1em"
+                                width="1em"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path fill="none" d="M0 0h24v24H0z"></path>
+                                <path
+                                    d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+                                ></path>
+                            </svg>
+                        </span>
+                        <!-- <span (click)="deleteContractType(position)">
+                            <svg
+                                stroke="currentColor"
+                                fill="currentColor"
+                                stroke-width="0"
+                                viewBox="0 0 512 512"
+                                height="1em"
+                                width="1em"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M128 405.429C128 428.846 147.198 448 170.667 448h170.667C364.802 448 384 428.846 384 405.429V160H128v245.429zM416 96h-80l-26.785-32H202.786L176 96H96v32h320V96z"
+                                ></path>
+                            </svg>
+                        </span> -->
+                    </div>
+                </div>
+                <div class="position-add">
+                    <div
+                        *ngIf="!contractTypeAddVisible"
+                        class="position-add-btn"
+                        (click)="
+                            contractTypeAddVisible = !contractTypeAddVisible
+                        "
+                    >
+                        <span>
+                            <i class="pi pi-plus"></i>
+                        </span>
+                        <label>Thêm mới</label>
+                    </div>
+                    <div
+                        *ngIf="contractTypeAddVisible"
+                        class="position-add-input"
+                    >
+                        <form [formGroup]="contractTypeCreateForm">
+                            <input
+                                pInputText
+                                id="name1"
+                                formControlName="name"
+                                type="text"
+                                spellcheck="false"
+                                placeholder="Nhập loại hợp đồng"
+                            />
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="flex gap-2"
+                style="
+                    justify-content: flex-end;
+                    position: absolute;
+                    bottom: 0;
+                    width: 100%;
+                "
+            >
+                <p-button
+                    label="Hủy"
+                    [outlined]="true"
+                    severity="secondary"
+                    (click)="handleCancelContractType()"
+                ></p-button>
+                <p-button
+                    *ngIf="!contractTypeAddVisible"
+                    label="Lưu"
+                    (click)="handleSelectContractType()"
+                ></p-button>
+                <p-button
+                    *ngIf="contractTypeAddVisible"
+                    label="Tạo mới"
+                    (click)="handleCreateContractType()"
+                ></p-button>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<!-- Tính chất lao động -->
+<p-dialog
+    header="Tính chất lao động"
+    [modal]="true"
+    [(visible)]="laborVisible"
+    [style]="{ width: '30vw' }"
+>
+    <div class="card" style="position: sticky; top: 97px; min-height: 525px">
+        <div class="grid p-fluid">
+            <div class="position__list">
+                <div
+                    class="position-item"
+                    *ngFor="let item of labores; let i = index"
+                >
+                    <input
+                        type="radio"
+                        name="position"
+                        [(ngModel)]="selectedLabor"
+                        [value]="item.id"
+                    />
+                    <div *ngIf="isLaborEditing === i; else viewMode">
+                        <input
+                            pInputText
+                            id="name1"
+                            (blur)="saveLaborEdit(item)"
+                            [style]="{ width: '100%' }"
+                            [(ngModel)]="item.name"
+                            type="text"
+                            spellcheck="false"
+                            placeholder="Nhập tính chất lao động"
+                        />
+                    </div>
+                    <ng-template #viewMode>
+                        <label>{{ item?.name }}</label>
+                    </ng-template>
+                    <div class="position-tools">
+                        <span (click)="editLabor(i)">
+                            <svg
+                                stroke="currentColor"
+                                fill="currentColor"
+                                stroke-width="0"
+                                viewBox="0 0 24 24"
+                                height="1em"
+                                width="1em"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path fill="none" d="M0 0h24v24H0z"></path>
+                                <path
+                                    d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+                                ></path>
+                            </svg>
+                        </span>
+                        <!-- <span (click)="deleteLabor(position)">
+                            <svg
+                                stroke="currentColor"
+                                fill="currentColor"
+                                stroke-width="0"
+                                viewBox="0 0 512 512"
+                                height="1em"
+                                width="1em"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M128 405.429C128 428.846 147.198 448 170.667 448h170.667C364.802 448 384 428.846 384 405.429V160H128v245.429zM416 96h-80l-26.785-32H202.786L176 96H96v32h320V96z"
+                                ></path>
+                            </svg>
+                        </span> -->
+                    </div>
+                </div>
+
+                <div class="position-add">
+                    <div
+                        *ngIf="!laborAddVisible"
+                        class="position-add-btn"
+                        (click)="laborAddVisible = !laborAddVisible"
+                    >
+                        <span>
+                            <i class="pi pi-plus"></i>
+                        </span>
+                        <label>Thêm mới</label>
+                    </div>
+                    <div *ngIf="laborAddVisible" class="position-add-input">
+                        <form [formGroup]="laborCreateForm">
+                            <input
+                                pInputText
+                                id="name1"
+                                formControlName="name"
+                                type="text"
+                                spellcheck="false"
+                                placeholder="Nhập tính chất lao động"
+                            />
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="flex gap-2"
+                style="
+                    justify-content: flex-end;
+                    position: absolute;
+                    bottom: 0;
+                    width: 100%;
+                "
+            >
+                <p-button
+                    label="Hủy"
+                    [outlined]="true"
+                    severity="secondary"
+                    (click)="handleCancelLabor()"
+                ></p-button>
+                <p-button
+                    *ngIf="!laborAddVisible"
+                    label="Lưu"
+                    (click)="handleSelectLabor()"
+                ></p-button>
+                <p-button
+                    *ngIf="laborAddVisible"
+                    label="Tạo mới"
+                    (click)="handleCreateLabor()"
+                ></p-button>
+            </div>
+        </div>
+    </div>
+</p-dialog>

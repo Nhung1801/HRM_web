@@ -1,0 +1,44 @@
+.status-red{
+    color: red;
+}
+
+.status-red{
+    padding: 5px 15px;
+    background-color:#fcecec;
+    border-radius:8px;
+    font-size:14px;
+}
+
+.status-green {
+    color: green;
+    padding: 5px 15px;
+    background-color: #eaf9e6;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.icon-tool{
+    padding: 8px;
+    border-radius:5px;
+    background-color: #ebe9e9;
+    transition: all 0.2s;
+}
+
+.icon-tool:hover {
+    background-color: #dddcdc;
+}
+
+.icon-edit{
+    padding: 6px;
+    background-color: #e4e4e4;
+    border-radius:6px
+;}
+
+.salary-detail-name{
+    font-size:17px;
+    font-weight: 700;
+}
+
+/* .icon-edit i{
+    display: block;
+} */

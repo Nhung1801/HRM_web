@@ -1,0 +1,44 @@
+.status-red {
+    color: red;
+}
+
+.status-red {
+    padding: 5px 15px;
+    background-color: #fcecec;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.status-green {
+    color: green;
+    padding: 5px 15px;
+    background-color: #eaf9e6;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.icon-tool {
+    padding: 8px;
+    border-radius: 5px;
+    background-color: #ebe9e9;
+    transition: all 0.2s;
+}
+
+.icon-tool:hover {
+    background-color: #dddcdc;
+}
+
+::ng-deep .p-treeselect {
+    width: 100%;
+}
+
+::ng-deep .ui-autocomplete-panel {
+    width: 500px !important;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.disabled-class {
+    pointer-events: none;
+    opacity: 0.6;
+}

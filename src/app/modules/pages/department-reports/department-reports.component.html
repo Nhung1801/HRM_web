@@ -1,0 +1,105 @@
+<div class="card">
+    <div class="row">
+        <div class="col-8">
+            <div class="chart-count-job">
+                <div class="d-flex justify-content-between align-item-center">
+                    <!-- <h4>Tổng số lượng công việc</h4> -->
+                    <p-dropdown
+                    [options]="liststatusJob"
+                    optionLabel="title"
+                    placeholder="Tổng số lượng công việc"
+                    showClear="true"
+                    [style]="{ width: '330px' }"
+                    (onChange)="onStatusChange($event)"
+                />
+                    <div
+                        class="d-flex justify-content-between align-items-center"
+                    >
+                        <p-dropdown
+                            [options]="listChartJob"
+                            optionLabel="titile"
+                            placeholder="Chọn mốc thời gian"
+                            showClear="true"
+                            [style]="{ width: '200px' }"
+                        />
+                        <i class="pi pi-file-export icon-export"></i>
+                    </div>
+                </div>
+                <div >
+                    <canvas   id="horizontalBarChart"></canvas>
+                    <canvas   id="horizontalBarChart1"></canvas>
+                    <canvas   id="horizontalBarChart2"></canvas>
+                  </div>
+                  
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="chart-count-job">
+                <div class="d-flex justify-content-between align-item-center">
+                    <!-- <h4>Tổng số lượng công việc</h4> -->
+                    <div class="">
+                        <p-dropdown
+                            [options]="statusJob"
+                            optionLabel="name"
+                            placeholder="Trạng thái công việc"
+                            showClear="true"
+                            [style]="{ border: 'none' }"
+                        />
+                        <p>
+                            <p-calendar
+                                dateFormat="dd/mm/yy"
+                                selectionMode="range"
+                                [placeholder]="'Từ ngày  ->  Đến ngày'"
+                                [style]="{ width: '230px', border: 'none' }"
+                            >
+                            </p-calendar>
+                        </p>
+                    </div>
+                </div>
+                <div class="chart mt-4">
+                    <div class="chart2">
+                        <canvas id="chart2"></canvas>
+                        <div class="m-auto mt-3">
+                            <div
+                                class="slider-container"
+                               
+                            >
+                                <div
+                                    class="d-flex justify-content-center align-items-center mt-xl-2 text-today "
+                                    [style.left.%]="sliderValue"
+                                    style="margin-bottom: 10px;"
+                                >
+                                    <span class="title-today">Hôm nay ( {{sliderValue}}% )</span>
+                                </div>
+                                <p-slider
+                                    [(ngModel)]="sliderValue"
+                                    [min]="0"
+                                    [max]="100"
+                                    styleClass="w-14rem"
+                                    (onChange)="updateSliderPosition($event)"
+                                ></p-slider>
+                            </div>
+                            <div
+                                class="d-flex justify-content-between align-item-center mt-xl-2"
+                            >
+                                <span>Bắt đầu </span>
+                                <span>Kết thúc</span>
+                            </div>
+                        </div>
+                        <!-- <div class="chart-label">
+                        <p>17</p>
+                        <p>Công việc</p>
+                      </div> -->
+                    </div>
+                    <!-- <ul class="chart-legend">
+                      <li><span class="legend-color blue"></span>Hoàn thành trước hạn</li>
+                      <li><span class="legend-color red"></span>Chưa hoàn thành</li>
+                      <li><span class="legend-color orange"></span>Quá hạn</li>
+                    </ul> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,196 @@
+<!-- <button (click)="generatePDF()">Tải PDF</button> -->
+<!-- <div id="contract-content" class="contract">
+    <div style="display: flex; justify-content: space-around;">
+        <div class="image-contract">
+            <p style="font-size: 18px; font-weight: 600;">XE NÂNG NGƯỜI HOÀNG THỊNH</p>
+            <p style="font-size: 16px; font-weight: 600;">Bán và cho thuê xe nâng người tự hành</p>
+        </div>
+        <div class="title-contract">
+            <h1 class="header">CÔNG TY TNHH HOÀNG THỊNH HƯNG YÊN</h1>
+            <p class="sub-header">Địa chỉ: Dân Tiến - Khoái Châu - Hưng Yên</p>
+            <p class="sub-header">Điện thoại: 0358.116.116</p>
+            <p class="sub-header">Email: nguyenvanhanhspkt&#64;gmail.com</p>
+        </div>
+    </div>
+
+    <h2 class="title">QUYẾT TOÁN CHO THUÊ XE</h2>
+    <div class="contract-container">
+        <p class="section">Tên Khách Hàng: CÔNG TY CỔ PHẦN ĐẦU TƯ VÀ THƯƠNG MẠI MÁY XÂY DỰNG 568</p>
+        <p class="section">Địa chỉ:Số nhà 2A, Ngách 45, Ngõ 88 Phố Ngọc Hà, Phường Đội Cấn, Quận Ba Đình, Thành phố Hà Nội, Việt Nam</p>
+        <p class="section">Địa điểm giao nhận xe: HDD làm Yên Mỹ 2</p>
+
+        <h3 class="section-title">Theo yêu cầu của Quý khách chúng tôi hân hạnh gửi báo giá thuê xe nâng như sau:</h3>
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Tên hạng mục</th>
+              <th>CCLV</th>
+              <th>SL</th>
+              <th>Từ ngày</th>
+              <th>Đến ngày</th>
+              <th>Số ngày</th>
+              <th>Đơn giá/tháng</th>
+              <th>Thành tiền</th>
+            </tr>
+          </thead>
+    
+          <tbody>
+            <tr *ngFor="let row of tableData">
+                <td>{{ row.stt }}</td>
+                <td style="text-align: left;">{{ row.tenHangMuc }}</td>
+                <td>{{ row.cclv }}</td>
+                <td>{{ row.sl }}</td>
+                <td>{{ row.tuNgay }}</td>
+                <td>{{ row.denNgay }}</td>
+                <td>{{ row.soNgay }}</td>
+                <td>{{ row.donGiaThang }}</td>
+                <td>{{ row.thanhTien }}</td>
+            </tr>
+      
+            <tr class="summary-row">
+              <td colspan="8" style="text-align: center; font-weight: bold;">Thành tiền:</td>
+              <td>{{ summary.thanhTien }}</td>
+            </tr>
+            <tr class="summary-row">
+              <td colspan="8" style="text-align: center; font-weight: bold;">Thuế VAT 8%:</td>
+              <td>{{ summary.vat }}</td>
+            </tr>
+            <tr class="summary-row total-row">
+              <td colspan="8" style="text-align: center; font-weight: bold;">Tổng cộng tiền đã bao gồm thuế:</td>
+              <td>{{ summary.tongCong }}</td>
+            </tr>
+          </tbody>
+        </table>
+                   
+        <p class="intro">Ghi chú: Giá thuê phát sinh theo số ngày thuê</p>
+
+        <h3 class="footer">
+            <div>
+                <p style="font-weight: bold;">Xác nhận bên thuê</p>
+                <p>(Ký, ghi rõ họ tên)</p>
+            </div>
+            <div>
+                <p style="font-weight: bold;">Hưng Yên, ngày 17 tháng 12 năm 2024</p>
+                <p>(Ký, ghi rõ họ tên)</p>
+            </div>
+        </h3>
+    </div>
+</div> -->
+
+
+<button (click)="exportToExcel()">Xuất Excel</button>
+<div class="flex flex-column">
+  <button
+      pButton
+      pRipple
+      icon="pi pi-plus"
+      label="Thêm mới"
+      (click)="openCreateKpiVisible()"
+  ></button>
+</div>
+
+
+<p-dialog
+    header="Nhắc việc"
+    [modal]="true"
+    [style]="{ width: '50vw' }"
+    [(visible)]="createKpiVisible"
+    (onHide)="closeCreateKpiVisible()">
+    <form [formGroup]="detailForm">
+        <div class="p-fluid">
+            <div class="switch-container">
+                <label class="labelip" for="toggle-all">Bật/Tắt tất cả</label>
+                <p-inputSwitch
+                  style="margin-top: 10px;"
+                  id="toggle-all" 
+                  formControlName="toggleAll" 
+                  (onChange)="toggleAllCheckboxes()">
+                </p-inputSwitch>
+            </div>
+
+            <div class="p-field mt-3">
+                <div style="display: flex; align-items: center;">
+                    <div style="width: 5%; text-align: center; margin-top: 5px;">
+                        <p-checkbox
+                            formControlName="remindBeforeStart"
+                            [binary]="true"
+                        ></p-checkbox>
+                    </div>
+                    <div style="width: 35%;">
+                        <label class="labelip">Nhắc nhở trước khi bắt đầu</label>
+                    </div>
+                    <div style="width: 60%;">
+                        <p-multiSelect
+                            class="custom-multiselect"
+                            [options]="timeOptions"
+                            formControlName="timeSelected"
+                            placeholder="Chọn các khoảng thời gian"
+                            optionLabel="name"
+                            display="chip"
+                            [showClear]="true"
+                            [style]="{ width: '100%' }"
+                        ></p-multiSelect>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-field mt-3">
+                <div style="display: flex; align-items: center;">
+                    <div style="width: 5%; text-align: center;">
+                        <p-checkbox
+                            formControlName="remindBeforeExpire"
+                            [binary]="true"
+                        ></p-checkbox>
+                    </div>
+                    <div style="width: 35%;">
+                        <label class="labelip" for="value">Nhắc nhở trước khi hết hạn</label>
+                    </div>
+                    <div style="width: 60%;">
+                        <p-dropdown
+                            formControlName="signStatus"
+                            [options]="options"
+                            [style]="{ height: '40px', width: '100%' }"
+                            optionValue="id"
+                            optionLabel="name"
+                            [showClear]="true"
+                            placeholder="Chọn nhắc nhở"
+                        ></p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="notification-settings">
+                <h3>Thiết lập người nhận thông báo</h3>
+                <p-checkbox [binary]="true" formControlName="all" label="Tất cả"></p-checkbox>
+                <p-checkbox [binary]="true" formControlName="creator" label="Tôi ( Người thiết lập )"></p-checkbox>
+                <p-checkbox [binary]="true" formControlName="executor" label="Người thực hiện"></p-checkbox>
+                <p-checkbox [binary]="true" formControlName="related" label="Người liên quan"></p-checkbox>
+                <p-checkbox [binary]="true" formControlName="pendingApproval" label="Người chờ phê duyệt"></p-checkbox>
+                <p-checkbox [binary]="true" formControlName="approved" label="Người đã phê duyệt"></p-checkbox>
+            </div>
+        </div>
+    </form>
+
+    <!-- Footer -->
+    <ng-template pTemplate="footer">
+        <div
+            class="footer-buttons justify-content-end flex gap-2"
+            style="text-align: right"
+        >
+            <p-button
+                label="Hủy"
+                [outlined]="true"
+                severity="secondary"
+                (click)="closeCreateKpiVisible()"
+            ></p-button>
+            <button
+                pButton
+                type="button"
+                label="Lưu"
+                severity="danger"
+                (click)="addKpi()"
+            ></button>
+        </div>
+    </ng-template>
+</p-dialog>
