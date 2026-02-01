@@ -37,17 +37,14 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-3 mt-3">
-                            <p-autoComplete
-                                [style]="{ height: '43px', width: '100%' }"
-                                [(ngModel)]="selectedEmployee"
-                                [suggestions]="filteredEmployees"
-                                (completeMethod)="searchEmployee($event)"
-                                [field]="'displayName'"
-                                [forceSelection]="true"
-                                [showClear]="true"
+                            <input
+                                pInputText
+                                type="text"
+                                [(ngModel)]="employeeSearchName"
                                 placeholder="Tìm kiếm nhân viên"
-                            >
-                            </p-autoComplete>
+                                (keyup.enter)="onSearchEmployee()"
+                                [style]="{ height: '43px', width: '100%' }"
+                            />
                         </div>
 
                         <div class="col-lg-3 mt-3">
@@ -80,29 +77,31 @@
                             ></button>
                         </div>
                         <div class="col-lg-1 mt-3">
-                            <div style="display: flex">
-                                <p-button
+                            <div style="display: flex; align-items: center; justify-content: flex-end;">
+                                <!-- <p-button
                                     label=""
                                     [outlined]="true"
                                     severity="secondary"
                                     icon="pi pi-filter"
-                                ></p-button>
+                                ></p-button> -->
 
                                 <p-button
-                                    style="margin-left: 10px"
+                                    style="margin-left: 0"
                                     label=""
                                     [outlined]="true"
                                     severity="secondary"
                                     icon="pi pi-file-export"
+                                    class="single-action-btn"
+                                    (click)="exportContract()"
                                 ></p-button>
-
+<!-- 
                                 <p-button
                                     style="margin-left: 10px"
                                     label=""
                                     [outlined]="true"
                                     severity="secondary"
                                     icon="pi pi-spin pi-cog"
-                                ></p-button>
+                                ></p-button> -->
                             </div>
                         </div>
                     </div>

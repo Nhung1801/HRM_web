@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MenuItem, TreeNode } from 'primeng/api';
 import { ContractService } from 'src/app/core/services/contract.service';
-import { EmployeeService } from 'src/app/core/services/employee.service';
 import { OrganizationService } from 'src/app/core/services/organization.service';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -10,6 +9,8 @@ import { CompanyInfoService } from 'src/app/core/services/company-info.service';
 import { PermissionConstant } from 'src/app/core/constants/permission-constant';
 import { HasPermissionHelper } from 'src/app/core/helpers/has-permission.helper';
 import html2pdf from 'html2pdf.js';
+import * as ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: 'app-contract-list',
@@ -19,12 +20,10 @@ import html2pdf from 'html2pdf.js';
 export class ContractListComponent implements OnInit {
     messages: any[] = [];
     contracts!: any;
-    employees: any[] = [];
-    filteredEmployees: any[] = [];
-    selectedEmployee: any;
+    employeeSearchName: string = '';
     selectedContract: any;
     items: MenuItem[] | undefined;
-    pageSize: number = 30;
+    pageSize: number = 10;
     unitOptions: any[] = [];
     pageIndex: number = 1;
     totalRecords: number = 0;
@@ -53,7 +52,6 @@ export class ContractListComponent implements OnInit {
 
     constructor(
         private contractService: ContractService,
-        private employeesService: EmployeeService,
         private organizationService: OrganizationService,
         private companyService: CompanyInfoService,
         private http: HttpClient,
@@ -66,7 +64,6 @@ export class ContractListComponent implements OnInit {
             { label: 'Hợp đồng' },
         ];
 
-        this.fetchEmployees();
         this.getOrganizations();
         this.getPagingContract();
         this.getCompanyData(1);
@@ -100,7 +97,7 @@ export class ContractListComponent implements OnInit {
         const request: any = {
             pageSize: this.pageSize,
             pageIndex: this.pageIndex,
-            nameEmployee: this.selectedEmployee?.displayName || '',
+            nameEmployee: this.employeeSearchName?.trim() || '',
             unitId: this.selectedNode?.data?.id,
             ExpiredStatus:
                 this.selectedContractStatus !== null
@@ -119,6 +116,117 @@ export class ContractListComponent implements OnInit {
                 console.error(error);
             }
         );
+    }
+
+    exportContract(): void {
+        const request: any = {
+            nameEmployee: this.employeeSearchName?.trim() || '',
+            unitId: this.selectedNode?.data?.id,
+            ExpiredStatus:
+                this.selectedContractStatus !== null
+                    ? this.selectedContractStatus
+                    : undefined,
+        };
+        this.contractService.exportContract(request).subscribe({
+            next: (response: any) => {
+                const contracts =
+                    Array.isArray(response) ? response : response?.items || [];
+                this.exportToExcel(contracts);
+            },
+            error: (error: any) => {
+                console.error(error);
+                this.messages = [
+                    {
+                        severity: 'error',
+                        summary: 'Lỗi',
+                        detail: 'Có lỗi xảy ra khi xuất file Excel',
+                        life: 3000,
+                    },
+                ];
+            },
+        });
+    }
+
+    private exportToExcel(contracts: any[]): void {
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Danh sách hợp đồng');
+
+        const headers = [
+            'Ngày ký HĐ',
+            'Số hợp đồng',
+            'Họ và Tên NLĐ',
+            'Vị trí công việc',
+            'Đơn vị',
+            'Loại hợp đồng',
+            'Thời hạn HĐ',
+            'Ngày có hiệu lực',
+            'Ngày hết',
+        ];
+
+        const headerRow = worksheet.addRow(headers);
+        headerRow.font = { bold: true, size: 12 };
+        headerRow.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FFE0E0E0' },
+        };
+        headerRow.alignment = {
+            vertical: 'middle',
+            horizontal: 'center',
+        };
+
+        const formatDate = (date: any): string => {
+            if (!date) return '';
+            const d = new Date(date);
+            return d.toLocaleDateString('vi-VN');
+        };
+
+        contracts.forEach((contract: any) => {
+            const row = worksheet.addRow([
+                formatDate(contract.signingDate),
+                contract.code ?? 'N/A',
+                contract.nameEmployee ?? '',
+                contract.position ?? '',
+                contract.unit?.organizationName ?? '',
+                contract.contractType?.name ?? contract.contractTypeName ?? '',
+                contract.contractDuration?.duration ?? '',
+                formatDate(contract.effectiveDate),
+                formatDate(contract.expiryDate),
+            ]);
+            row.alignment = { vertical: 'middle', horizontal: 'left' };
+        });
+
+        const colWidths = [14, 18, 25, 22, 25, 22, 15, 16, 14];
+        worksheet.columns.forEach((column, index) => {
+            column.width = colWidths[index] ?? 15;
+        });
+
+        worksheet.eachRow((row, rowNumber) => {
+            row.eachCell((cell) => {
+                cell.border = {
+                    top: { style: 'thin' },
+                    left: { style: 'thin' },
+                    bottom: { style: 'thin' },
+                    right: { style: 'thin' },
+                };
+            });
+        });
+
+        workbook.xlsx.writeBuffer().then((data) => {
+            const blob = new Blob([data], {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            });
+            const fileName = `Danh_sach_hop_dong_${new Date().getTime()}.xlsx`;
+            saveAs(blob, fileName);
+            this.messages = [
+                {
+                    severity: 'success',
+                    summary: 'Thành công',
+                    detail: 'Xuất file Excel thành công',
+                    life: 3000,
+                },
+            ];
+        });
     }
 
     onTerminate(contract: any) {
@@ -213,24 +321,9 @@ export class ContractListComponent implements OnInit {
             });
     }
 
-    fetchEmployees() {
-        const request: any = {
-            pageSize: this.pageSize,
-            pageIndex: this.pageIndex,
-        };
-        this.employeesService.getEmployees(request).subscribe((data: any) => {
-            this.employees = data.items.map((employee) => ({
-                ...employee,
-                displayName: `${employee.lastName} ${employee.firstName}`,
-            }));
-        });
-    }
-
-    searchEmployee(event: any) {
-        const query = event.query.toLowerCase();
-        this.filteredEmployees = this.employees.filter((employee) =>
-            employee.displayName.toLowerCase().includes(query)
-        );
+    onSearchEmployee(): void {
+        this.pageIndex = 1;
+        this.getPagingContract();
     }
 
     getOrganizations(): void {

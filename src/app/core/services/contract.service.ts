@@ -46,6 +46,10 @@ export class ContractService {
     return this.http.put(`workingform/update?id=${Id}`, resquest)
   }
 
+  exportContract(request: any = null): Observable<any> {
+    return this.http.get('contract/get-all', request);
+  }
+
   getPagingAllContract(request: any = null): Observable<any> {
     return this.http.get('contract/paging', request);
   }

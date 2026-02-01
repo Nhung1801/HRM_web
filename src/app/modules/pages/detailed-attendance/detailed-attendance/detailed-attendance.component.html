@@ -30,15 +30,14 @@
           <div class="card-body">
             <div class="row">
               <div class="col-lg-3 mt-3">
-                <p-autoComplete 
+                <input
+                  pInputText
+                  type="text"
+                  [(ngModel)]="searchNameInput"
+                  placeholder="Tìm kiếm tên bảng chấm công"
+                  (keyup.enter)="onSearchTimesheet()"
                   [style]="{ height: '43px', width: '100%' }"
-                  [(ngModel)]="selectedEmployee" 
-                  [suggestions]="filteredName" 
-                  (completeMethod)="searchName($event)" 
-                  [field]="'displayName'"
-                  [showClear]="true"
-                  placeholder="Tìm kiếm tên bảng chấm công">
-                </p-autoComplete>
+                />
               </div>              
               <div class="col-lg-3 mt-3">
                 <div class="filter-container">

@@ -16,8 +16,7 @@ import { StaffPositionService } from 'src/app/core/services/staff-position.servi
 })
 export class DetailedAttendanceComponent implements OnInit {
   messages: any[] = [];
-  filteredName: any[] = [];
-  selectedEmployee: any;
+  searchNameInput: string = '';
   detailTimesheet: any;
   items: MenuItem[] | undefined;
   pageSize: number = 30;
@@ -155,7 +154,7 @@ export class DetailedAttendanceComponent implements OnInit {
       pageIndex: this.pageIndex,
       Month: month,
       Year: year,
-      name: this.selectedEmployee?.displayName || "",
+      name: this.searchNameInput?.trim() || '',
       organizationId: this.selectedNode?.data?.id || this.userCurrent.organization.id,
     };
 
@@ -178,23 +177,10 @@ export class DetailedAttendanceComponent implements OnInit {
       );
   }
 
-  searchName(event: any): void {
-    const query = event.query.toLowerCase();
-
-    this.staffDetailService.getPaging({
-      name: query,
-      pageSize: this.pageSize,
-      pageIndex: this.pageIndex
-    }).subscribe((response: any) => {
-      this.filteredName = response.data.items.map((item: any) => ({
-        displayName: item.timekeepingSheetName, // Lấy timekeepingSheetName
-        id: item.id
-      }));
-    }, (error: any) => {
-      console.error(error);
-    });
+  onSearchTimesheet(): void {
+    this.pageIndex = 1;
+    this.getPagingDetailTimesheet();
   }
-
 
   getOrganizations(): void {
     const request: any = {
