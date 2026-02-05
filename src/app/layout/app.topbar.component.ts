@@ -526,73 +526,96 @@ export class AppTopBarComponent implements OnInit {
     }
     // TimekeepingGpsLog;
     handleCheckInOut(action: string, event: any) {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                const latitude = position.coords.latitude;
-                const longitude = position.coords.longitude;
-                const formData = {
-                    timekeepingLocationId: 0,
-                    employeeId: this.userCurrent?.employee?.id,
-                    latitude: latitude,
-                    longitude: longitude,
-                    type: action === 'chamRa' ? 1 : 0,
-                };
+        // 0: không yêu cầu vị trí (chấm ở bất cứ đâu)
+        // 1: yêu cầu vị trí (kiểm tra GPS trong phạm vi địa điểm)
+        const requiresLocation =
+            this.checkStatus?.timekeepingLocationOption === 1;
 
-                this.confirmationService.confirm({
-                    target: event.target as EventTarget,
-                    message: `Bạn có muốn chấm ${
-                        action === 'chamRa' ? 'ra' : 'vào'
-                    }?`,
-                    header: 'Thông báo',
-                    icon: 'pi pi-exclamation-triangle',
-                    acceptIcon: 'none',
-                    rejectIcon: 'none',
-                    rejectButtonStyleClass: 'p-button-text',
-                    acceptLabel: 'Xác nhận',
-                    rejectLabel: 'Không',
-                    accept: () => {
-                        this.gpsTimekeepingService
-                            .checkInOut(formData)
-                            .subscribe((results) => {
-                                console.log(results);
+        const timekeepingLocationId =
+            this.checkStatus?.timekeepingLocationId ?? 0;
 
-                                if (results.status) {
-                                    if (action === 'chamRa') {
-                                        this.checkStatus.canCheckIn = true;
-                                        this.checkStatus.canCheckOut = false;
-                                        this.messageService.add({
-                                            severity: 'success',
-                                            summary: 'Thông báo',
-                                            detail: results.message,
-                                        });
-                                    } else {
-                                        this.checkStatus.canCheckIn = false;
-                                        this.checkStatus.canCheckOut = true;
-                                        this.messageService.add({
-                                            severity: 'success',
-                                            summary: 'Thông báo',
-                                            detail: results.message,
-                                        });
-                                    }
+        const doConfirmAndCallApi = (latitude?: number, longitude?: number) => {
+            const formData: any = {
+                timekeepingLocationId: timekeepingLocationId,
+                employeeId: this.userCurrent?.employee?.id,
+                // Enum TimekeepingGPSType: 0 = CheckIn, 1 = CheckOut
+                type: action === 'chamRa' ? 1 : 0,
+            };
+
+            // Chỉ gửi toạ độ khi đơn vị yêu cầu vị trí
+            if (requiresLocation) {
+                formData.latitude = latitude;
+                formData.longitude = longitude;
+            }
+
+            this.confirmationService.confirm({
+                target: event.target as EventTarget,
+                message: `Bạn có muốn chấm ${
+                    action === 'chamRa' ? 'ra' : 'vào'
+                }?`,
+                header: 'Thông báo',
+                icon: 'pi pi-exclamation-triangle',
+                acceptIcon: 'none',
+                rejectIcon: 'none',
+                rejectButtonStyleClass: 'p-button-text',
+                acceptLabel: 'Xác nhận',
+                rejectLabel: 'Không',
+                accept: () => {
+                    this.gpsTimekeepingService
+                        .checkInOut(formData)
+                        .subscribe((results) => {
+                            console.log(results);
+
+                            if (results.status) {
+                                if (action === 'chamRa') {
+                                    this.checkStatus.canCheckIn = true;
+                                    this.checkStatus.canCheckOut = false;
                                 } else {
-                                    this.messageService.add({
-                                        severity: 'warn',
-                                        summary: 'Thông báo',
-                                        detail: results.message,
-                                    });
+                                    this.checkStatus.canCheckIn = false;
+                                    this.checkStatus.canCheckOut = true;
                                 }
-                            });
-                    },
-                    reject: () => {
-                        // this.messageService.add({
-                        //     severity: 'error',
-                        //     summary: 'Rejected',
-                        //     detail: 'You have rejected',
-                        //     life: 3000,
-                        // });
-                    },
-                });
+
+                                this.messageService.add({
+                                    severity: 'success',
+                                    summary: 'Thông báo',
+                                    detail: results.message,
+                                });
+                            } else {
+                                this.messageService.add({
+                                    severity: 'warn',
+                                    summary: 'Thông báo',
+                                    detail: results.message,
+                                });
+                            }
+                        });
+                },
+                reject: () => {},
             });
+        };
+
+        // Nếu không yêu cầu vị trí → không cần gọi geolocation, chấm công ở bất cứ đâu
+        if (!requiresLocation) {
+            doConfirmAndCallApi();
+            return;
+        }
+
+        // Chỉ khi timekeepingLocationOption = 1 mới dùng GPS
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    doConfirmAndCallApi(latitude, longitude);
+                },
+                (error) => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Thông báo',
+                        detail:
+                            'Không thể lấy vị trí. Vui lòng bật GPS và thử lại.',
+                    });
+                }
+            );
         } else {
             alert('Trình duyệt của bạn không hỗ trợ Geolocation.');
         }
