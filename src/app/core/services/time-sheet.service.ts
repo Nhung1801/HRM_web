@@ -44,6 +44,11 @@ export class TimeSheetService {
         return this.http.get('detail-timesheet/get-detail-time-sheet-with-time-sheet', request);
     }
 
+    // Lấy chi tiết chấm công theo DetailTimeSheetId (không phân trang)
+    getTimesheetByDetailSheet(request: any = null): Observable<any> {
+        return this.http.get('detail-timesheet/get-detail-time-sheet', request);
+    }
+
     getTimesheetData(request: any = null): Observable<any> {
         return this.http.get('detail-timesheet/statistic-detail-time-sheet', request);
     }

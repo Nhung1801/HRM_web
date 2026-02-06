@@ -383,12 +383,13 @@ export class TimesheetComponent implements OnInit {
                 this.selectedNode?.data?.id || this.userCurrent.organization.id,
         };
 
-        // Gọi API lấy dữ liệu nhân viên
+        // Gọi API mới lấy dữ liệu nhân viên theo DetailTimeSheet (KHÔNG phân trang)
         this.timeSheetService
-            .getTimesheet(request)
+            .getTimesheetByDetailSheet(request)
             .subscribe((response: any) => {
                 if (response && response.status) {
-                    const items = response.data.items;
+                    // API get-detail-time-sheet trả data là List<GetDetailTimesheetWithEmployeeDto>
+                    const items = response.data;
 
                     // Gọi API lấy danh sách ngày lễ
                     this.employees = items.map((item: any) => {
