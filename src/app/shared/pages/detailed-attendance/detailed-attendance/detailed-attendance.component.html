@@ -1,3 +1,4 @@
+<p-confirmDialog styleClass="confirm-delete-timesheet-dialog"></p-confirmDialog>
 <main id="main" class="main">
     <div class="pagetitle">
         <div>
@@ -130,8 +131,15 @@
                             </span>
                           </td>
                           <td>
-                            <i *ngIf="this.permisionHelper.hasPermissions([permissionConstant.ManageDetailedTimekeepingEdit])" class="pi pi-eye" [routerLink]="['/timesheet', detail.id]"></i>
-                            <i *ngIf="this.permisionHelper.hasPermissions([permissionConstant.ManageGeneralTimekeepingDelete])" style="padding-left: 15px;" class="pi pi-trash"></i>
+                            <i *ngIf="this.permisionHelper.hasPermissions([permissionConstant.ManageDetailedTimekeepingEdit])"
+                               style="cursor: pointer;"
+                               class="pi pi-eye"
+                               (click)="viewDetailTimesheet(detail)"
+                               title="Xem chi tiết"></i>
+                            <i *ngIf="this.permisionHelper.hasPermissions([permissionConstant.ManageGeneralTimekeepingDelete])"
+                               style="padding-left: 15px; cursor: pointer;"
+                               class="pi pi-trash"
+                               (click)="confirmDeleteDetailTimesheet($event, detail)"></i>
                           </td>
                       </tr>
                   </ng-template>

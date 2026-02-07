@@ -68,3 +68,68 @@
   font-weight: 400;
   text-align: center;
 }
+
+/* Popup xác nhận xóa bảng chấm công */
+::ng-deep .confirm-delete-timesheet-dialog {
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  max-width: 420px;
+
+  .p-dialog-header {
+    padding: 1rem 1.25rem;
+    background: #fff3cd;
+    border-bottom: 1px solid #ffc107;
+    font-weight: 600;
+    color: #856404;
+  }
+
+  .p-dialog-content {
+    padding: 1.25rem 1.25rem 0.5rem;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #333;
+  }
+
+  .p-confirm-dialog-icon {
+    font-size: 1.75rem;
+    color: #dc3545;
+    margin-right: 0.75rem;
+  }
+
+  .p-dialog-footer {
+    padding: 1rem 1.25rem 1.25rem;
+    gap: 1.25rem;
+    border-top: 1px solid #eee;
+
+    .p-button + .p-button {
+      margin-left: 1.25rem;
+    }
+
+    .p-button {
+      min-width: 88px;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .p-button.p-button-danger {
+      background: #dc3545;
+      border-color: #dc3545;
+      &:hover {
+        background: #c82333;
+        border-color: #bd2130;
+      }
+    }
+
+    .p-button.p-button-secondary {
+      background: #6c757d;
+      border-color: #6c757d;
+      &:hover {
+        background: #5a6268;
+        border-color: #545b62;
+      }
+    }
+  }
+}

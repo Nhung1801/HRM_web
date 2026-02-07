@@ -1,18 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MenuItem, TreeNode } from 'primeng/api';
+import { Router } from '@angular/router';
+import { ConfirmationService, MenuItem, TreeNode } from 'primeng/api';
 import { PermissionConstant } from 'src/app/core/constants/permission-constant';
 import { HasPermissionHelper } from 'src/app/core/helpers/has-permission.helper';
 import { AuthService } from 'src/app/core/services/identity/auth.service';
 import { OrganizationService } from 'src/app/core/services/organization.service';
 import { StaffDetailService } from 'src/app/core/services/staff-detail.service';
 import { StaffPositionService } from 'src/app/core/services/staff-position.service';
+import { TimeSheetService } from 'src/app/core/services/time-sheet.service';
 
 @Component({
   selector: 'app-detailed-attendance',
   templateUrl: './detailed-attendance.component.html',
-  styleUrl: './detailed-attendance.component.scss'
+  styleUrl: './detailed-attendance.component.scss',
+  providers: [ConfirmationService],
 })
 export class DetailedAttendanceComponent implements OnInit {
   messages: any[] = [];
@@ -55,6 +58,9 @@ export class DetailedAttendanceComponent implements OnInit {
     private organizationService: OrganizationService,
     private staffPositionService: StaffPositionService,
     private staffDetailService: StaffDetailService,
+    private timeSheetService: TimeSheetService,
+    private confirmationService: ConfirmationService,
+    private router: Router,
     private http: HttpClient,
     private fb: FormBuilder,
     private authService: AuthService,
@@ -441,6 +447,51 @@ export class DetailedAttendanceComponent implements OnInit {
           },
         ];
       }
+    });
+  }
+
+  /** Điều hướng sang trang xem chi tiết bảng chấm công */
+  viewDetailTimesheet(detail: any): void {
+    if (detail?.id) {
+      this.router.navigate(['/timesheet', detail.id]);
+    }
+  }
+
+  /** Xác nhận và gọi API xóa bảng chấm công chi tiết */
+  confirmDeleteDetailTimesheet(event: Event, detail: any): void {
+    if (!detail?.id) return;
+    const name = detail.timekeepingSheetName || 'bảng chấm công';
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: `Bạn có chắc chắn muốn xóa bảng chấm công "${name}"?`,
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Có',
+      rejectLabel: 'Không',
+      acceptButtonStyleClass: 'p-button-danger',
+      rejectButtonStyleClass: 'p-button-secondary',
+      accept: () => {
+        this.timeSheetService.delete(detail.id).subscribe({
+          next: (response: any) => {
+            if (response?.status) {
+              this.messages = [
+                { severity: 'success', summary: 'Thành công', detail: response.message || 'Xóa bảng chấm công chi tiết thành công.', life: 3000 },
+              ];
+              this.getPagingDetailTimesheet();
+            } else {
+              this.messages = [
+                { severity: 'warn', summary: 'Thông báo', detail: response?.message || 'Không thể xóa.', life: 3000 },
+              ];
+            }
+          },
+          error: (err: any) => {
+            const msg = err?.error?.message || err?.message || 'Không thể xóa bảng chấm công chi tiết.';
+            this.messages = [
+              { severity: 'error', summary: 'Lỗi', detail: msg, life: 5000 },
+            ];
+          },
+        });
+      },
+      reject: () => {},
     });
   }
 

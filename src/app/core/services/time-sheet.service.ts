@@ -98,4 +98,8 @@ export class TimeSheetService {
         return of(fakeApiData);
     }
 
+    /** Xóa bảng chấm công chi tiết (soft delete). Backend nhận id qua query param. */
+    delete(id: number): Observable<any> {
+        return this.http.putBodyAndQueryParams('detail-timesheet/delete', { id }, null);
+    }
 }
