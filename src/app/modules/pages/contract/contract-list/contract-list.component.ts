@@ -556,21 +556,25 @@ export class ContractListComponent implements OnInit {
 
         const employeeElement = document.querySelector(
             '.worker-employee .employe'
-        );
-        if (contract.signStatus === 1) {
-            employeeElement.textContent = contract.nameEmployee; // Hiển thị tên nhân viên
-        } else if (contract.signStatus === 0) {
-            employeeElement.textContent = ''; // Để trống
+        ) as HTMLElement | null;
+        if (employeeElement) {
+            if (contract.signStatus === 1) {
+                employeeElement.textContent = contract.nameEmployee;
+            } else if (contract.signStatus === 0) {
+                employeeElement.textContent = '';
+            }
         }
 
         const employerElement = document.querySelector(
             '.worker-employer .employer'
-        );
-        if (contract.signStatus === 1) {
-            employerElement.textContent =
-                contract.employee?.legalRepresentativeTitle; // Hiển thị tên nhân viên
-        } else if (contract.signStatus === 0) {
-            employerElement.textContent = ''; // Để trống
+        ) as HTMLElement | null;
+        if (employerElement) {
+            if (contract.signStatus === 1) {
+                employerElement.textContent =
+                    contract.employee?.legalRepresentativeTitle ?? '';
+            } else if (contract.signStatus === 0) {
+                employerElement.textContent = '';
+            }
         }
 
         const professionElement = document.querySelector(
@@ -662,10 +666,10 @@ export class ContractListComponent implements OnInit {
         clonedElement.style.display = 'block';
 
         const options = {
-            margin: [2, -45, 2, -45], // Tăng lề: trên 10mm, phải 15mm, dưới 10mm, trái 15mm
+            margin: [2, -45, 2, -45],
             filename: `HD_${contract.nameEmployee + contract.codeEmployee}.pdf`,
-            image: { type: 'jpeg', quality: 1 },
-            html2canvas: { scale: 3, useCORS: true },
+            image: { type: 'jpeg', quality: 0.95 },
+            html2canvas: { scale: 2, useCORS: true },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
         };
 
@@ -834,21 +838,25 @@ export class ContractListComponent implements OnInit {
 
         const employeeElement = document.querySelector(
             '.worker-employee .employe'
-        );
-        if (contract.signStatus === 1) {
-            employeeElement.textContent = contract.nameEmployee; // Hiển thị tên nhân viên
-        } else if (contract.signStatus === 0) {
-            employeeElement.textContent = ''; // Để trống
+        ) as HTMLElement | null;
+        if (employeeElement) {
+            if (contract.signStatus === 1) {
+                employeeElement.textContent = contract.nameEmployee;
+            } else if (contract.signStatus === 0) {
+                employeeElement.textContent = '';
+            }
         }
 
         const employerElement = document.querySelector(
             '.worker-employer .employer'
-        );
-        if (contract.signStatus === 1) {
-            employerElement.textContent =
-                contract.employee?.legalRepresentativeTitle; // Hiển thị tên nhân viên
-        } else if (contract.signStatus === 0) {
-            employerElement.textContent = ''; // Để trống
+        ) as HTMLElement | null;
+        if (employerElement) {
+            if (contract.signStatus === 1) {
+                employerElement.textContent =
+                    contract.employee?.legalRepresentativeTitle ?? '';
+            } else if (contract.signStatus === 0) {
+                employerElement.textContent = '';
+            }
         }
 
         const professionElement = document.querySelector(
@@ -936,13 +944,20 @@ export class ContractListComponent implements OnInit {
             return;
         }
 
+        // Mở cửa sổ ngay trong lúc user click để tránh trình duyệt chặn popup
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) {
+            console.error('Popup bị chặn. Vui lòng cho phép popup cho trang này.');
+            return;
+        }
+
         const clonedElement = element.cloneNode(true) as HTMLElement;
         clonedElement.style.display = 'block';
 
         const options = {
             margin: [15, -45, 15, -45],
-            image: { type: 'jpeg', quality: 1 },
-            html2canvas: { scale: 3, useCORS: true },
+            image: { type: 'jpeg', quality: 0.95 },
+            html2canvas: { scale: 2, useCORS: true },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
         };
 
@@ -954,12 +969,11 @@ export class ContractListComponent implements OnInit {
             .then((pdf) => {
                 const blob = pdf.output('blob');
                 const url = URL.createObjectURL(blob);
-
-                // Mở xem trước trong một cửa sổ mới
-                const newWindow = window.open(url, '_blank');
-                if (!newWindow) {
-                    console.error('Popup blocked! Please allow popups.');
-                }
+                printWindow.location.href = url;
+            })
+            .catch((err) => {
+                console.error('Lỗi tạo PDF:', err);
+                printWindow.close();
             });
     }
 
