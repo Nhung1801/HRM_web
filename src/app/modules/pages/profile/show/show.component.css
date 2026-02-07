@@ -142,3 +142,32 @@
 .code:hover{
     text-decoration: underline;
 }
+
+/* Search input - đồng bộ với dropdown và nút Lọc */
+.search-input-wrapper {
+    display: inline-block;
+    min-width: 200px;
+}
+
+.search-input-wrapper input.search-input,
+:host ::ng-deep .search-input-wrapper .p-inputtext {
+    height: 44px !important;
+    min-width: 200px;
+    padding: 0.5rem 0.75rem 0.5rem 2.25rem;
+    border-radius: 6px;
+    border: 1px solid var(--p-input-border-color, #ced4da);
+    font-size: 0.875rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input-wrapper input.search-input:focus,
+:host ::ng-deep .search-input-wrapper .p-inputtext:enabled:focus {
+    outline: 0;
+    border-color: var(--p-primary-color, #3b82f6);
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+}
+
+.search-input-wrapper input.search-input::placeholder,
+:host ::ng-deep .search-input-wrapper .p-inputtext::placeholder {
+    color: var(--p-input-placeholder-color, #6c757d);
+}

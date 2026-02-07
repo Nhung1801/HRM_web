@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { MenuItem, TreeNode } from 'primeng/api';
-import { Paginator } from 'primeng/paginator';
-import { Table } from 'primeng/table';
+import { TreeNode } from 'primeng/api';
 import { OrganizationUnit } from 'src/app/core/models/organization.model';
 import { OrganizationService } from 'src/app/core/services/organization.service';
 
@@ -13,14 +10,10 @@ import { OrganizationService } from 'src/app/core/services/organization.service'
 })
 export class ShowComponent {
     messages: any[] = [];
-    items: any[] = [];
-    struct!: any;
     pageSize: number = 100000;
     pageIndex: number = 1;
-    totalRecords: number = 0;
     currentPageReport: string = '';
     organizationUnits: OrganizationUnit[] = [];
-    keyWord: string = '';
     data: TreeNode[] = [];
     value: number = 1;
     selectedIcon: string = 'sitemap';
@@ -34,15 +27,7 @@ export class ShowComponent {
     constructor(private organizationService: OrganizationService) {}
 
     ngOnInit() {
-        this.items = [
-            { label: 'Hệ thống', route: '/installation' },
-            { label: 'Cơ cấu tổ chức' },
-        ];
-
         this.loadOrganizationData();
-        // this.loadOrganizationData1()
-        this.data = this.convertToTreeNode(this.organizationUnits);
-        console.log(this.data);
     }
 
     startDragging(event: MouseEvent): void {
@@ -78,8 +63,6 @@ export class ShowComponent {
                         this.mapToOrganizationUnit(unit, 1)
                     );
                     this.organizationUnits = rootUnits1;
-
-                    this.totalRecords = response.data.totalRecords;
                 }
             });
     }

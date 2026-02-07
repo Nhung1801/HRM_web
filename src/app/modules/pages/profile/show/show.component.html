@@ -11,14 +11,14 @@
                 ></p-breadcrumb>
             </div>
             <ng-template pTemplate="right">
-                <!-- <button
+                <button
                     pButton
                     pRipple
                     [routerLink]="['/personnel-record']"
                     icon="pi pi-plus"
                     label="Thêm hồ sơ"
                     (click)="staffPositionVisible = true"
-                ></button> -->
+                ></button>
             </ng-template>
         </p-toolbar>
         <div class="card">
@@ -48,37 +48,16 @@
                             />
                         </div>
                         <div class="flex flex-column">
-                            <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <span class="search-input-wrapper block mt-2 md:mt-0 p-input-icon-left">
                                 <i class="pi pi-search"></i>
-                                <p-autoComplete
-                                    [suggestions]="employees"
-                                    (completeMethod)="
-                                        filterEmployeeSuggestions($event)
-                                    "
-                                    field="name"
-                                    [(ngModel)]="queryParameters.employeeObject"
-                                    (ngModelChange)="onEmployeeSelected($event)"
-                                    [style]="{
-                                        width: '20%',
-                                        height: '44px'
-                                    }"
-                                    placeholder="Chọn người dùng"
-                                >
-                                    <ng-template let-item pTemplate="item">
-                                        <div>
-                                            <span>{{ item.name }}</span>
-                                            <span
-                                                style="
-                                                    color: rgb(64, 0, 255);
-                                                    font-weight: 600;
-                                                "
-                                            >
-                                                -
-                                                {{ item.phoneNumber }}</span
-                                            >
-                                        </div>
-                                    </ng-template>
-                                </p-autoComplete>
+                                <input
+                                    pInputText
+                                    type="text"
+                                    class="search-input"
+                                    [(ngModel)]="queryParameters.keyWord"
+                                    (keydown.enter)="$event.preventDefault(); handleSearchProfile()"
+                                    placeholder="Tìm theo tên, SĐT..."
+                                />
                             </span>
                         </div>
                         <div class="flex flex-column">
@@ -434,50 +413,6 @@
                         [totalRecords]="paging.totalRecords"
                         [rowsPerPageOptions]="config.pageSizeOptions"
                     />
-                </div>
-            </div>
-            <div class="dashboard p-3">
-                <div class="dashboard-item working">
-                    <div class="content">1000</div>
-                    <span class="title-heading">Đang làm việc</span>
-                </div>
-                <div class="dashboard-item classify">
-                    <div class="classify-left" style="width: 250px">
-                        <p-chart
-                            type="doughnut"
-                            [data]="data"
-                            [options]="options"
-                        ></p-chart>
-                    </div>
-                    <div class="classify-dropdown">
-                        <p-dropdown
-                            [options]="classifyOptions"
-                            optionLabel="label"
-                            optionValue="value"
-                            placeholder="Chọn loại"
-                        >
-                        </p-dropdown>
-                    </div>
-                    <span class="title-heading">Phân loại:</span>
-                </div>
-                <div class="dashboard-item trial">
-                    <div class="content">1000</div>
-
-                    <span class="title-heading">Thử việc</span>
-                </div>
-                <div class="dashboard-item maternity">
-                    <div class="content">1000</div>
-
-                    <span class="title-heading">Chính thức</span>
-                </div>
-                <div class="dashboard-item office_employee">
-                    <div class="content">1000</div>
-
-                    <span class="title-heading">Nghỉ thai sản</span>
-                </div>
-                <div class="dashboard-item other">
-                    <div class="content">1000</div>
-                    <span class="title-heading">Khác</span>
                 </div>
             </div>
         </div>

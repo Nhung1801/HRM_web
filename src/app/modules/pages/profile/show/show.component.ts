@@ -18,7 +18,6 @@ import { ToastService } from 'src/app/core/services/global/toast.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { environment } from 'src/environments/environment';
 import profileConstant from 'src/app/core/constants/profile.constant';
-import { ObjectService } from 'src/app/core/services/object.service';
 import { M } from '@fullcalendar/core/internal-common';
 import { HasPermissionHelper } from 'src/app/core/helpers/has-permission.helper';
 import * as ExcelJS from 'exceljs';
@@ -39,7 +38,6 @@ export class ShowComponent implements OnInit, OnDestroy {
     options: any;
     classifyOptions: any;
     organizations: any;
-    employees: any[] = [];
 
     constructor(
         private route: ActivatedRoute,
@@ -49,7 +47,6 @@ export class ShowComponent implements OnInit, OnDestroy {
         private profileService: ProfileService,
         private organiStructTypeService: OrganiStructTypeService,
         private confirmationService: ConfirmationService,
-        private objectService: ObjectService,
         private messageService: MessageService,
         public permisionHelper: HasPermissionHelper
     ) {}
@@ -92,8 +89,6 @@ export class ShowComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loadOrganization();
-        // Load danh sách employees ban đầu (không có keyword)
-        this.loadEmployeesForAutocomplete();
         const documentStyle = getComputedStyle(document.documentElement);
         const textColor = documentStyle.getPropertyValue('--text-color');
         this.classifyOptions = [
@@ -198,33 +193,6 @@ export class ShowComponent implements OnInit, OnDestroy {
                             );
                     }
 
-                    if (this.queryParameters.employeeId) {
-                        // if (this.employees.length == 0) {
-                        //     this.objectService
-                        //         .getAllEmployee()
-                        //         .subscribe((results) => {
-                        //             this.employees = results.items;
-                        //             console.log(
-                        //                 this.employees?.find(
-                        //                     (o) =>
-                        //                         o.id ==
-                        //                         this.queryParameters.employeeId
-                        //                 )
-                        //             );
-                        //             this.queryParameters.employeeObject =
-                        //                 this.employees?.find(
-                        //                     (o) =>
-                        //                         o.id ==
-                        //                         this.queryParameters.employeeId
-                        //                 );
-                        //         });
-                        // } else {
-                        this.queryParameters.employeeObject =
-                            this.employees?.find(
-                                (o) => o.id == this.queryParameters.employeeId
-                            );
-                        // }
-                    }
                     this.getProfile(request);
                 });
             });
@@ -362,44 +330,25 @@ export class ShowComponent implements OnInit, OnDestroy {
     }
 
     public handleSearchProfile() {
-        // Reset về trang đầu tiên khi search
-        // Ưu tiên lấy keyword từ text đang gõ trong autocomplete (nếu có)
-        let resolvedKeyWord: string | null = this.queryParameters.keyWord
-            ? this.queryParameters.keyWord
-            : null;
-
-        // Nếu employeeObject đang là string (chỉ gõ, chưa chọn) thì dùng luôn làm keyWord
-        if (typeof this.queryParameters.employeeObject === 'string') {
-            const typed = this.queryParameters.employeeObject.trim();
-            resolvedKeyWord = typed.length > 0 ? typed : null;
-        }
-
+        const keyWord = this.queryParameters.keyWord?.trim() || null;
         const request = {
             pageIndex: this.config.paging.pageIndex,
             pageSize: this.config.paging.pageSize,
             workingStatus: this.queryParameters.workingStatus
                 ? this.queryParameters.workingStatus
                 : null,
-            keyWord: resolvedKeyWord,
-            employeeId: this.queryParameters.employeeObject
-                ? (typeof this.queryParameters.employeeObject === 'object'
-                      ? (this.queryParameters.employeeObject as any)?.id
-                      : null)
-                : null,
+            keyWord,
+            employeeId: null,
             organizationId: this.queryParameters.organizationObject
                 ? (this.queryParameters.organizationObject as any)?.data
                 : null,
         };
-        
-        console.log('Search request:', request);
-        
-        // Navigate với queryParams mới
+
         this.router.navigate([], {
             relativeTo: this.route,
             queryParams: request,
             queryParamsHandling: 'merge',
         }).then(() => {
-            // Gọi API trực tiếp sau khi navigate
             this.getProfile(request);
         });
     }
@@ -541,85 +490,8 @@ export class ShowComponent implements OnInit, OnDestroy {
         };
     }
 
-    // Load danh sách employees để hiển thị trong autocomplete (chỉ load một lần với giới hạn)
-    loadEmployeesForAutocomplete(): void {
-        // Giới hạn số lượng để tránh load quá nhiều dữ liệu
-        this.objectService.getAllEmployee({ pageSize: 100, pageIndex: 1 }).subscribe({
-            next: (res: any) => {
-                console.log('API Response for employees:', res);
-                // Kiểm tra cấu trúc response - PagingResult có items property
-                if (res && res.items && Array.isArray(res.items)) {
-                    this.employees = res.items.map((employee: any) => ({
-                        ...employee,
-                        name: `${employee?.lastName || ''} ${employee?.firstName || ''}`.trim(),
-                    }));
-                    console.log('Employees assigned:', this.employees.length, 'items');
-                } else if (res && Array.isArray(res)) {
-                    // Nếu response là mảng trực tiếp
-                    this.employees = res.map((employee: any) => ({
-                        ...employee,
-                        name: `${employee?.lastName || ''} ${employee?.firstName || ''}`.trim(),
-                    }));
-                    console.log('Employees assigned (array):', this.employees.length, 'items');
-                } else {
-                    console.warn('Unexpected response structure:', res);
-                    this.employees = [];
-                }
-            },
-            error: (error) => {
-                console.error('Error fetching employees:', error);
-                this.employees = [];
-            }
-        });
-    }
-
-    filterEmployeeSuggestions(event: any): void {
-        // Không gọi API khi gõ, chỉ filter từ danh sách đã có
-        // PrimeNG AutoComplete sẽ tự động filter từ mảng employees dựa trên field="name"
-        // Nếu chưa có dữ liệu, load một lần
-        if (this.employees.length === 0) {
-            this.loadEmployeesForAutocomplete();
-        }
-    }
-
     ngOnDestroy(): void {
         // Cleanup nếu cần
-    }
-
-    onEmployeeSelected(value: any) {
-        // p-autoComplete:
-        // - Khi GÕ: value là string
-        // - Khi CHỌN: value là object (hoặc { item: object } tùy version)
-
-        if (value === null || value === undefined || value === '') {
-            this.queryParameters.employeeId = null;
-            this.queryParameters.employeeObject = null;
-            this.queryParameters.keyWord = '';
-            return;
-        }
-
-        // Trường hợp gõ text nhưng không chọn item
-        if (typeof value === 'string') {
-            const keyword = value.trim();
-            this.queryParameters.employeeId = null;
-            // giữ nguyên text trong input
-            this.queryParameters.employeeObject = value;
-            this.queryParameters.keyWord = keyword;
-            return;
-        }
-
-        // Trường hợp chọn item
-        const selected = (value && value.item) ? value.item : value;
-        this.queryParameters.employeeObject = selected;
-        this.queryParameters.employeeId = selected?.id ?? null;
-
-        const keyword =
-            (selected?.name ? selected.name.trim() : '') ||
-            (`${selected?.lastName ?? ''} ${selected?.firstName ?? ''}`.trim()) ||
-            (selected?.phoneNumber ?? '') ||
-            (selected?.employeeCode ?? '');
-
-        this.queryParameters.keyWord = keyword;
     }
 
     exportToExcel() {
@@ -632,11 +504,7 @@ export class ShowComponent implements OnInit, OnDestroy {
             keyWord: this.queryParameters.keyWord
                 ? this.queryParameters.keyWord
                 : null,
-            employeeId: this.queryParameters.employeeObject
-                ? (this.queryParameters.employeeObject as any)?.id
-                : this.queryParameters.employeeId
-                ? this.queryParameters.employeeId
-                : null,
+            employeeId: null,
             organizationId: this.queryParameters.organizationObject
                 ? (this.queryParameters.organizationObject as any)?.data
                 : this.queryParameters.organizationId
