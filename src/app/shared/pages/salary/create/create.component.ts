@@ -47,7 +47,7 @@ export class CreateComponent implements OnInit {
         totalPages: 0,
     };
     staffPosition: any = [];
-    staffPositionIds: any = [];
+    staffPositionIds: number[] = [];
     summaryTimesheets: any[] = [];
     selectedSummaryTimesheets: any[] = [];
 
@@ -89,11 +89,9 @@ export class CreateComponent implements OnInit {
     }
 
     loadTimesheetDetail(): void {
-        this.summaryTimesheetService
-            .getSelectSummaryTimeSheetForPayroll({})
-            .subscribe((results) => {
-                this.summaryTimesheets = results.data;
-            });
+        // Load mặc định theo OrganizationId trong token.
+        // Khi user chọn Đơn vị/Vị trí thì sẽ reload theo filter ở getPagingSummaryTimesheet().
+        this.getPagingSummaryTimesheet();
     }
 
     showDialogAdd() {
@@ -140,22 +138,38 @@ export class CreateComponent implements OnInit {
     }
     //#endregion
     onOrganizationChange(event: any) {
-        const organizationId = event.value ? event.value.id : null;
+        // PrimeNG TreeSelect (onNodeSelect) trả về event.node
+        const organizationId = event?.node?.data?.id ?? null;
         this.organizationId = organizationId;
+        // Reset chọn bảng công khi đổi đơn vị
+        this.selectedSummaryTimesheets = [];
         this.getPagingSummaryTimesheet();
     }
 
     getPagingSummaryTimesheet(): void {
         const formValue = this.salaryForm.value;
         const request: any = {
-            pageSize: this.paging.pageSize,
-            pageIndex: this.paging.pageIndex,
-            organizationId: formValue.organizationId?.data?.id,
-            staffPositionId: this.staffPositionIds.join(','), // Chuyển thành chuỗi ID
+            organizationId: formValue.organizationId?.data?.id ?? null,
+            staffPositionIds:
+                this.staffPositionIds.length > 0
+                    ? this.staffPositionIds.join(',')
+                    : null,
         };
+
+        this.summaryTimesheetService
+            .getSelectSummaryTimeSheetForPayroll(request)
+            .subscribe((results) => {
+                this.summaryTimesheets = results?.data ?? [];
+            });
     }
 
-    onStaffPositionChange(event: any) {}
+    onStaffPositionChange(event: any) {
+        const selected = (event?.value ?? []) as Array<{ id: number }>;
+        this.staffPositionIds = selected.map((x) => x.id).filter((x) => !!x);
+        // Reset chọn bảng công khi đổi vị trí
+        this.selectedSummaryTimesheets = [];
+        this.getPagingSummaryTimesheet();
+    }
 
     // validate
     leaveApplicationForm: FormGroup;
