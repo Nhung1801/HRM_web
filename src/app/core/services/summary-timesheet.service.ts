@@ -36,4 +36,11 @@ export class SummaryTimesheetService {
             request
         );
     }
+
+    exportSummaryTimeSheetWithEmployeeToExcel(request: any = null): Observable<Blob> {
+        return this.http.getBlob(
+            'summary-time-sheet/export-summary-time-sheet-with-employee',
+            request
+        );
+    }
 }

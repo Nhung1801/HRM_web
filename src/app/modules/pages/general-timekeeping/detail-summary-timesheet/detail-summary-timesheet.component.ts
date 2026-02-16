@@ -191,6 +191,47 @@ export class DetailSummaryTimesheetComponent implements OnInit {
         );
     }
 
+    exportOrganizationsToExcel(): void {
+        const keyword =
+            this.selectedEmployee && typeof this.selectedEmployee === 'string'
+                ? this.selectedEmployee.trim()
+                : '';
+
+        const request: any = {
+            Id: this.detailSummaryById,
+            KeyWord: keyword,
+            OrganizationId: this.selectedNode?.data?.id
+                ? this.selectedNode?.data?.id
+                : this.user.organization.id,
+            StaffPositionId:
+                this.staffPositionIds && this.staffPositionIds.length > 0
+                    ? this.staffPositionIds[0]
+                    : null,
+            // Lưu ý: backend đang dùng ApplySorting(sortBy, orderBy) (bị đảo tham số),
+            // nên ở FE đang truyền SortBy = tên cột, OrderBy = asc/desc
+            SortBy: 'LastName',
+            OrderBy: 'asc',
+        };
+
+        const sheetName =
+            this.summarysheet?.timekeepingSheetName ||
+            this.detailForm.value.timekeepingSheetName ||
+            'Bang_cham_cong';
+
+        const safeName = sheetName.replace(/[\\/:*?"<>|]/g, '_');
+
+        this.summaryTimeKeepService
+            .exportSummaryTimeSheetWithEmployeeToExcel(request)
+            .subscribe((blob: Blob) => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${safeName}_${new Date().getTime()}.xlsx`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+            });
+    }
+
     fetchData(): void {
         const keyword =
             this.selectedEmployee && typeof this.selectedEmployee === 'string'

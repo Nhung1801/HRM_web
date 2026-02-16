@@ -44,6 +44,27 @@ export class HttpLoadingService {
             );
     }
 
+    getBlob(endpoint: string, data: any): Observable<Blob> {
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${this.getToken()}`,
+        });
+        const queryParams = this.buildQueryParams(data);
+        return this.http
+            .get(`/${endpoint}${queryParams ? `?${queryParams}` : ''}`, {
+                headers,
+                responseType: 'blob',
+            })
+            .pipe(
+                catchError((error: HttpErrorResponse) => {
+                    this.handleErrorResponse(error);
+                    return throwError(error);
+                }),
+                finalize(() => {
+                    // this.loadingUi.hide();
+                })
+            );
+    }
+
     deleteSoft(endpoint: string, data: any): Observable<any> {
         const headers = this.createHeaders();
         const queryParams = this.buildQueryParams(data);
