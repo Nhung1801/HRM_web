@@ -54,8 +54,8 @@
                             severity="secondary"
                         ></p-button>
                         <p-button
-                            label="Chưa khóa"
-                            icon="pi pi-unlock"
+                            [label]="isPayrollLocked ? 'Đã khóa' : 'Chưa khóa'"
+                            [icon]="isPayrollLocked ? 'pi pi-lock' : 'pi pi-unlock'"
                             (click)="clockWorkDialog = true"
                             [outlined]="true"
                             severity="secondary"
@@ -67,6 +67,7 @@
                             [outlined]="true"
                             severity="secondary"
                             (click)="reCalculatePayroll()"
+                            [disabled]="isPayrollLocked"
                         ></p-button>
                         <p-button
                             label="Gửi xác nhận"
@@ -333,8 +334,11 @@
 >
     <div class="card p-0" style="position: sticky; top: 97px">
         <p>
-            Thao tác này sẽ giúp bạn khóa bảng lại để không thể sửa, xóa dữ
-            liệu. Bạn có chắc chắn muốn thực hiện chức năng này không?
+            {{
+                isPayrollLocked
+                    ? "Thao tác này sẽ giúp bạn mở khóa bảng lương để có thể cập nhật dữ liệu. Bạn có chắc chắn muốn thực hiện không?"
+                    : "Thao tác này sẽ giúp bạn khóa bảng lại để không thể sửa, xóa dữ liệu. Bạn có chắc chắn muốn thực hiện không?"
+            }}
         </p>
     </div>
     <div
@@ -350,7 +354,8 @@
         <button
             pButton
             type="button"
-            label="Chắc chắn"
+            [label]="isPayrollLocked ? 'Mở khóa' : 'Khóa'"
+            (click)="togglePayrollLock()"
             severity="danger"
         ></button>
     </div>

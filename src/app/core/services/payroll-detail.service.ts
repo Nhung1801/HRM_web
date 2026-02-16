@@ -19,7 +19,8 @@ export class PayrollDetailService {
     }
 
     sendPayrollDetailConfirm(request: any): Observable<any> {
-        return this.http.postFormData(
+        // Backend nhận JSON [FromBody]
+        return this.http.post(
             'payroll-detail/send-payroll-detail-confirmation',
             request
         );

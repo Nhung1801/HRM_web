@@ -49,6 +49,7 @@ export class ShowComponent implements OnInit {
     id: any;
     organizations: any[] = [];
     payrollName: any;
+    isPayrollLocked = false;
     responseEmployeeVisiable: boolean = false;
     user: any;
     payRollUpdate: any;
@@ -72,6 +73,7 @@ export class ShowComponent implements OnInit {
             this.id = id;
             if (id) {
                 this.isLoading = true;
+                this.loadPayrollLockState();
                 this.payrollDetailService
                     .fetchData({ payrollId: id })
                     .subscribe((result: any) => {
@@ -118,6 +120,16 @@ export class ShowComponent implements OnInit {
         this.authService.userCurrent.subscribe((user) => {
             this.user = user;
         });
+    }
+
+    loadPayrollLockState() {
+        if (!this.id) return;
+        this.payrollService
+            .isPayrollLocked(Number(this.id))
+            .subscribe((res: any) => {
+                // API trả { isLocked: boolean }
+                this.isPayrollLocked = !!res?.isLocked;
+            });
     }
 
     public config: any = {
@@ -802,6 +814,14 @@ export class ShowComponent implements OnInit {
     }
     isLoading = false;
     reCalculatePayroll() {
+        if (this.isPayrollLocked) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Thông báo',
+                detail: 'Bảng lương đã khóa, không thể cập nhật phiếu lương.',
+            });
+            return;
+        }
         this.isLoading = true;
         this.route.paramMap.subscribe((params) => {
             const id = params.get('id');
@@ -845,10 +865,36 @@ export class ShowComponent implements OnInit {
                                 summary: 'Thành công',
                                 detail: 'Cập nhật tính toán bảng lương thành công ',
                             });
+                            this.loadPayrollLockState();
                         });
                     });
             }
         });
         this.isLoading = false;
+    }
+
+    togglePayrollLock() {
+        if (!this.id) return;
+        this.payrollService
+            .togglePayrollStatus(Number(this.id))
+            .subscribe((res: any) => {
+                if (res?.status) {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Thành công',
+                        detail: 'Cập nhật trạng thái khóa bảng lương thành công',
+                    });
+                    this.clockWorkDialog = false;
+                    this.loadPayrollLockState();
+                } else {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Lỗi',
+                        detail:
+                            res?.message ||
+                            'Cập nhật trạng thái khóa bảng lương thất bại',
+                    });
+                }
+            });
     }
 }

@@ -66,4 +66,16 @@ export class PayrollService {
     deleteRange(request: any): Observable<any> {
         return this.http.put('payroll/delete-range', request);
     }
+
+    togglePayrollStatus(payrollId: number): Observable<any> {
+        return this.http.postBodyAndQueryParams(
+            'payroll/toggle-payroll-status',
+            { payrollId },
+            null
+        );
+    }
+
+    isPayrollLocked(payrollId: number): Observable<any> {
+        return this.http.get('payroll/is-payroll-locked', { payrollId });
+    }
 }
