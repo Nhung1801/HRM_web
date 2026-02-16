@@ -78,19 +78,17 @@
                         </header>
 
                         <div class="sheet-key">
-                            <p-autoComplete
-                                [style]="{ height: '43px', width: '100%' }"
-                                [(ngModel)]="selectedEmployee"
-                                [suggestions]="filteredEmployees"
-                                (completeMethod)="searchEmployee($event)"
-                                [field]="'displayName'"
-                                [forceSelection]="true"
-                                [showClear]="true"
-                                placeholder="Tìm kiếm nhân viên"
-                                (onSelect)="fetchData()"
-                                (onClear)="fetchData()"
-                            >
-                            </p-autoComplete>
+                            <span class="p-input-icon-left" style="width: 100%">
+                                <i class="pi pi-search"></i>
+                                <input
+                                    pInputText
+                                    type="text"
+                                    [style]="{ height: '43px', width: '100%' }"
+                                    [(ngModel)]="selectedEmployee"
+                                    placeholder="Tìm kiếm nhân viên"
+                                    (keyup.enter)="fetchData()"
+                                />
+                            </span>
 
                             <div style="display: flex">
                                 <p-treeSelect
@@ -111,6 +109,7 @@
                                         label=""
                                         severity="secondary"
                                         icon="pi pi-filter"
+                                        (click)="fetchData()"
                                     ></button>
 
                                     <p-button

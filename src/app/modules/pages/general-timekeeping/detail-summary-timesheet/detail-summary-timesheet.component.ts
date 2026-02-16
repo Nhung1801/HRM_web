@@ -192,13 +192,16 @@ export class DetailSummaryTimesheetComponent implements OnInit {
     }
 
     fetchData(): void {
+        const keyword =
+            this.selectedEmployee && typeof this.selectedEmployee === 'string'
+                ? this.selectedEmployee.trim()
+                : '';
+
         const request: any = {
             id: this.detailSummaryById,
             pageSize: this.pageSize,
             pageIndex: this.pageIndex,
-            KeyWord: this.selectedEmployee
-                ? this.selectedEmployee.displayName.replace('+', ' ')
-                : '',
+            KeyWord: keyword,
             OrganizationId: this.selectedNode?.data?.id
                 ? this.selectedNode?.data?.id
                 : this.user.organization.id,
