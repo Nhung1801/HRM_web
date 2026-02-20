@@ -25,6 +25,7 @@ import { ConfirmDialogComponent } from 'src/app/core/modules/confirm-dialog/conf
 import { CalendarModule } from 'primeng/calendar';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { PermissionService } from 'src/app/core/services/decentralization/permission.service';
+import { Section, SectionLabel } from 'src/app/core/enums/section.enum';
 
 @Component({
 	selector: 'app-show-permission',
@@ -57,7 +58,25 @@ export class ShowPermissionComponent implements OnInit {
 	breadcrumbs: any[];
 	user: any;
 	permissions: any[] = [];
+	permissionsTree: any[] = [];
 	selectedPermissions: any[] = [];
+	parentPermissionOptions: Array<{ label: string; value: number }> = [];
+
+	// dialog CRUD
+	displayPermissionDialog = false;
+	permissionDialogMode: 'create' | 'edit' | 'view' = 'create';
+	permissionForm: any = {
+		id: null,
+		name: null,
+		displayName: null,
+		description: null,
+		section: Section.Privilege,
+		parentPermissionId: null,
+	};
+	sectionLabel = SectionLabel;
+	section = Section;
+	confirmMessage = 'Bạn có chắc chắn muốn xóa quyền này không?';
+	@ViewChild(ConfirmDialogComponent) confirmDialogComponent!: ConfirmDialogComponent;
 	//search
 	paging: any = {
 		pageIndex: DEFAULT_PAGE_INDEX,
@@ -127,12 +146,34 @@ export class ShowPermissionComponent implements OnInit {
 		});
 	}
 
+	private flattenPermissions(nodes: any[], level: number = 0): any[] {
+		const result: any[] = [];
+		(nodes || []).forEach((node) => {
+			result.push({ ...node, _level: level });
+			if (node?.childrens?.length) {
+				result.push(...this.flattenPermissions(node.childrens, level + 1));
+			}
+		});
+		return result;
+	}
+
+	private rebuildParentOptions() {
+		this.parentPermissionOptions = (this.permissions || [])
+			.filter((p) => p?.id != null)
+			.map((p) => {
+				const prefix = p?._level ? `${'— '.repeat(p._level)}` : '';
+				const label = `${prefix}${p.displayName || p.name || ''}`.trim();
+				return { label: label || `#${p.id}`, value: p.id };
+			});
+	}
+
 
 	//get data
 	getPermissions(request: any) {
 		this.permissionService.paging(request).subscribe(res => {
 			if (res.status == true) {
-				this.permissions = res.data.items;
+				this.permissionsTree = res.data.items;
+				this.permissions = this.flattenPermissions(res.data.items);
 				if (this.permissions.length === 0) {
 					this.paging.pageIndex = 1;
 				}
@@ -141,27 +182,28 @@ export class ShowPermissionComponent implements OnInit {
 				this.paging = paging;
 
 				this.selectedPermissions = [];
+				this.rebuildParentOptions();
 			}
 		})
 	}
 	//search data
 	onSearch() {
-		this.route.queryParams.subscribe(params => {
-			const request = {
-				...params,
-				organizationId: this.queryParameters.organization?.data || null,
-				name: this.queryParameters.name ? this.queryParameters.name.trim() : null,
-				description: this.queryParameters.description ? this.queryParameters.description : null,
-				displayName: this.queryParameters.displayName || null,
-				sortBy: this.queryParameters.sortBy || null,
-				orderBy: this.queryParameters.orderBy || null
-			};
+		const params = this.route.snapshot.queryParams;
+		const request = {
+			...params,
+			pageIndex: 1,
+			organizationId: this.queryParameters.organization?.data || null,
+			name: this.queryParameters.name ? this.queryParameters.name.trim() : null,
+			description: this.queryParameters.description ? this.queryParameters.description : null,
+			displayName: this.queryParameters.displayName ? this.queryParameters.displayName.trim() : null,
+			sortBy: this.queryParameters.sortBy || null,
+			orderBy: this.queryParameters.orderBy || null
+		};
 
-			this.router.navigate([], {
-				relativeTo: this.route,
-				queryParams: request,
-				queryParamsHandling: 'merge',
-			});
+		this.router.navigate([], {
+			relativeTo: this.route,
+			queryParams: request,
+			queryParamsHandling: 'merge',
 		});
 	}
 
@@ -201,6 +243,132 @@ export class ShowPermissionComponent implements OnInit {
 				queryParamsHandling: 'merge',
 			});
 		});
+	}
+
+	openCreateDialog() {
+		this.permissionDialogMode = 'create';
+		this.permissionForm = {
+			id: null,
+			name: null,
+			displayName: null,
+			description: null,
+			section: Section.Privilege,
+			parentPermissionId: null,
+		};
+		this.displayPermissionDialog = true;
+	}
+
+	openEditDialog(permission: any, mode: 'edit' | 'view' = 'edit') {
+		this.permissionDialogMode = mode;
+		this.permissionForm = {
+			id: permission?.id ?? null,
+			name: permission?.name ?? null,
+			displayName: permission?.displayName ?? null,
+			description: permission?.description ?? null,
+			section: permission?.section ?? Section.Privilege,
+			parentPermissionId: permission?.parentPermissionId ?? null,
+		};
+		this.displayPermissionDialog = true;
+	}
+
+	savePermission() {
+		if (this.permissionDialogMode === 'view') return;
+
+		const payload = {
+			name: this.permissionForm.name?.trim(),
+			displayName: this.permissionForm.displayName?.trim(),
+			description: this.permissionForm.description ?? null,
+			section: this.permissionForm.section,
+			parentPermissionId: this.permissionForm.parentPermissionId ?? null,
+		};
+
+		if (!payload.name || !payload.displayName) {
+			this.messageService.add({
+				severity: 'warn',
+				summary: 'Thiếu thông tin',
+				detail: 'Vui lòng nhập Tên quyền hạn và Tên hiển thị.',
+			});
+			return;
+		}
+
+		if (this.permissionDialogMode === 'create') {
+			this.permissionService.create(payload).subscribe((res: any) => {
+				if (res?.status === false) {
+					this.messageService.add({
+						severity: 'error',
+						summary: 'Thất bại',
+						detail: res?.message || 'Thêm quyền thất bại',
+					});
+					return;
+				}
+				this.messageService.add({
+					severity: 'success',
+					summary: 'Thành công',
+					detail: res?.message || 'Thêm quyền hạn thành công',
+				});
+				this.displayPermissionDialog = false;
+				this.reloadData();
+			});
+			return;
+		}
+
+		const id = this.permissionForm.id;
+		this.permissionService.update({ id }, payload).subscribe((res: any) => {
+			if (res?.status) {
+				this.messageService.add({
+					severity: 'success',
+					summary: 'Thành công',
+					detail: res?.message || 'Cập nhật quyền hạn thành công',
+				});
+				this.displayPermissionDialog = false;
+				this.reloadData();
+			} else {
+				this.messageService.add({
+					severity: 'error',
+					summary: 'Thất bại',
+					detail: res?.message || 'Cập nhật quyền hạn thất bại',
+				});
+			}
+		});
+	}
+
+	requestDelete(permission: any) {
+		const id = permission?.id;
+		if (!id) return;
+
+		this.confirmMessage = `Bạn có chắc chắn muốn xóa quyền "${permission?.displayName || permission?.name}" không?`;
+		this.confirmDialogComponent.showDialog(() => {
+			this.permissionService.delete({ id }).subscribe((res: any) => {
+				if (res?.status) {
+					this.messageService.add({
+						severity: 'success',
+						summary: 'Thành công',
+						detail: res?.message || 'Xóa quyền hạn thành công',
+					});
+					this.reloadData();
+				} else {
+					this.messageService.add({
+						severity: 'error',
+						summary: 'Thất bại',
+						detail: res?.message || 'Xóa quyền hạn thất bại',
+					});
+				}
+			});
+		});
+	}
+
+	private reloadData() {
+		const params = this.route.snapshot.queryParams;
+		const request = {
+			...params,
+			pageIndex: params['pageIndex']
+				? params['pageIndex']
+				: this.config.paging.pageIndex,
+			pageSize: params['pageSize']
+				? params['pageSize']
+				: this.config.paging.pageSize,
+		};
+		this.getPermissions(request);
 	}
 
 

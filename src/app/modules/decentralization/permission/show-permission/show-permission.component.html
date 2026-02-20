@@ -19,6 +19,14 @@
             <p-button class="ml-2" (click)="onRefreshSearch()" icon="pi pi-sync" />
         </div>
     </div>
+    <div class="flex align-items-center">
+        <p-button
+            class="ml-2"
+            (click)="openCreateDialog()"
+            icon="pi pi-plus-circle"
+            label="Thêm"
+        />
+    </div>
 </div>
 
 <p-table [value]="permissions" [(selection)]="selectedPermissions" [paginator]="false" [rows]="10"
@@ -38,22 +46,39 @@
         <tr>
             <td class="text-center"><p-tableCheckbox [value]="permission"></p-tableCheckbox></td>
             <td *ngFor="let col of columns">
-                <span>
-                    {{ permission[col.field] }}
-                </span>
-                <span *ngIf="col.field.includes('action')">
-                    <div class="" style="display: flex; align-items: center;">
-                        <div class="font-size-16 ml-2" style="padding: 3px; border-radius: 50%">
-                            <i class="pi pi-file-edit"></i>
+                <ng-container [ngSwitch]="col.field">
+                    <span *ngSwitchCase="'displayName'">
+                        {{ permission?._level ? "— ".repeat(permission._level) : "" }}{{ permission.displayName }}
+                    </span>
+                    <span *ngSwitchCase="'action'">
+                        <div class="" style="display: flex; align-items: center;">
+                            <div
+                                class="font-size-16 ml-2"
+                                style="padding: 3px; border-radius: 50%"
+                                (click)="openEditDialog(permission, 'edit')"
+                            >
+                                <i class="pi pi-file-edit"></i>
+                            </div>
+                            <div
+                                class="font-size-16 ml-2"
+                                style="padding: 3px; border-radius: 50%"
+                                (click)="openEditDialog(permission, 'view')"
+                            >
+                                <i class="pi pi-eye"></i>
+                            </div>
+                            <div
+                                class="font-size-16 ml-2"
+                                style="padding: 3px; border-radius: 50%"
+                                (click)="requestDelete(permission)"
+                            >
+                                <i class="pi pi-trash"></i>
+                            </div>
                         </div>
-                        <div class="font-size-16 ml-2" style="padding: 3px; border-radius: 50%">
-                            <i class="pi pi-eye"></i>
-                        </div>
-                        <div class="font-size-16 ml-2" style="padding: 3px; border-radius: 50%">
-                            <i class="pi pi-trash"></i>
-                        </div>
-                    </div>
-                </span>
+                    </span>
+                    <span *ngSwitchDefault>
+                        {{ permission[col.field] }}
+                    </span>
+                </ng-container>
             </td>
         </tr>
     </ng-template>
@@ -81,3 +106,89 @@
             [totalRecords]="paging.totalRecords" [rowsPerPageOptions]="config.pageSizeOptions" />
     </div>
 </div>
+
+<p-dialog
+    [header]="
+        permissionDialogMode === 'create'
+            ? 'Thêm quyền hạn'
+            : permissionDialogMode === 'edit'
+            ? 'Cập nhật quyền hạn'
+            : 'Chi tiết quyền hạn'
+    "
+    [(visible)]="displayPermissionDialog"
+    [modal]="true"
+    [style]="{ width: '520px' }"
+>
+    <div class="p-fluid">
+        <div class="field">
+            <label>Tên quyền hạn</label>
+            <input
+                pInputText
+                [(ngModel)]="permissionForm.name"
+                [disabled]="permissionDialogMode === 'view'"
+                placeholder="VD: ManagePermissionView"
+            />
+        </div>
+        <div class="field">
+            <label>Tên hiển thị</label>
+            <input
+                pInputText
+                [(ngModel)]="permissionForm.displayName"
+                [disabled]="permissionDialogMode === 'view'"
+                placeholder="VD: Xem quản lý quyền"
+            />
+        </div>
+        <div class="field">
+            <label>Phân hệ</label>
+            <p-dropdown
+                [options]="sectionLabel.data"
+                optionLabel="label"
+                optionValue="key"
+                [(ngModel)]="permissionForm.section"
+                [disabled]="permissionDialogMode === 'view'"
+                placeholder="Chọn phân hệ"
+            ></p-dropdown>
+        </div>
+        <div class="field">
+            <label>Quyền cha</label>
+            <p-dropdown
+                [options]="parentPermissionOptions"
+                optionLabel="label"
+                optionValue="value"
+                [(ngModel)]="permissionForm.parentPermissionId"
+                [disabled]="permissionDialogMode === 'view'"
+                [showClear]="true"
+                placeholder="(Không chọn nếu là quyền cha)"
+            ></p-dropdown>
+        </div>
+        <div class="field">
+            <label>Mô tả</label>
+            <textarea
+                pInputTextarea
+                rows="4"
+                [(ngModel)]="permissionForm.description"
+                [disabled]="permissionDialogMode === 'view'"
+                placeholder="Nhập mô tả"
+            ></textarea>
+        </div>
+    </div>
+    <p-footer>
+        <button
+            pButton
+            type="button"
+            label="Đóng"
+            class="p-button-secondary"
+            (click)="displayPermissionDialog = false"
+        ></button>
+        <button
+            *ngIf="permissionDialogMode !== 'view'"
+            pButton
+            type="button"
+            label="Lưu"
+            class="ml-2"
+            (click)="savePermission()"
+        ></button>
+    </p-footer>
+</p-dialog>
+
+<app-confirm-dialog [message]="confirmMessage"></app-confirm-dialog>

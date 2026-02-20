@@ -25,4 +25,20 @@ export class PermissionService {
         return this.http.post('permission/create', request);
     }
 
+    update(dataQueryParams: any, dataBody: any): Observable<any> {
+        return this.http.putBodyAndQueryParams(
+            'permission/update',
+            dataQueryParams,
+            dataBody
+        );
+    }
+
+    delete(dataQueryParams: any): Observable<any> {
+        return this.http.putBodyAndQueryParams(
+            'permission/delete',
+            dataQueryParams,
+            null
+        );
+    }
+
 }
