@@ -8,6 +8,7 @@ import { SplitButtonModule } from 'primeng/splitbutton';
 import { TableModule } from 'primeng/table';
 import { SharedModule } from 'src/app/shared/modules/shared.module';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 // import { SharedModule } from 'src/app/shared/modules/shared.module';
 
@@ -21,6 +22,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
         SplitButtonModule,
         TableModule,
         ProgressSpinnerModule,
+        MultiSelectModule,
     ],
     declarations: [ShowComponent],
 })

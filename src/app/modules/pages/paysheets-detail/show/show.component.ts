@@ -50,6 +50,39 @@ export class ShowComponent implements OnInit {
     organizations: any[] = [];
     payrollName: any;
     isPayrollLocked = false;
+    displayEditPayrollDetailDialog = false;
+    payrollDetailEditing: any = null;
+    payrollDetailEditModel: any = {
+        baseSalary: null,
+        standardWorkDays: null,
+        actualWorkDays: null,
+        kpi: null,
+        kpiPercentage: null,
+        bonus: null,
+        salaryRate: null,
+    };
+    displayColumnDialog = false;
+    allColumns: Array<{ key: string; label: string }> = [
+        { key: 'department', label: 'Bộ phận' },
+        { key: 'contract', label: 'Hợp đồng' },
+        { key: 'baseSalary', label: 'Lương cơ bản' },
+        { key: 'standardWorkDays', label: 'Ngày công chuẩn' },
+        { key: 'actualWorkDays', label: 'Ngày công thực tế' },
+        { key: 'receivedSalary', label: 'Lương cơ bản thực nhận' },
+        { key: 'kpi', label: 'KPI thực nhận' },
+        { key: 'kpiPercentage', label: '% KPI đạt' },
+        { key: 'kpiSalary', label: 'Lương KPI' },
+        { key: 'bonus', label: 'Thưởng' },
+        { key: 'socialInsurance', label: 'BHXH' },
+        { key: 'unionFee', label: 'Quỹ công đoàn' },
+        { key: 'salaryRate', label: 'Tỉ lệ hưởng lương' },
+        { key: 'totalDeduction', label: 'Khấu trừ' },
+        { key: 'totalAllowance', label: 'Phụ cấp' },
+        { key: 'totalSalary', label: 'Tổng lương' },
+        { key: 'totalReceivedSalary', label: 'Tổng lương thực nhận' },
+        { key: 'status', label: 'Trạng thái' },
+    ];
+    selectedColumnKeys: string[] = this.allColumns.map((c) => c.key);
     responseEmployeeVisiable: boolean = false;
     user: any;
     payRollUpdate: any;
@@ -80,12 +113,14 @@ export class ShowComponent implements OnInit {
                         this.route.queryParams.subscribe((params) => {
                             const request = {
                                 ...params,
-                                pageIndex: params['pageIndex']
-                                    ? params['pageIndex']
-                                    : this.config.paging.pageIndex,
-                                pageSize: params['pageSize']
-                                    ? params['pageSize']
-                                    : this.config.paging.pageSize,
+                                pageIndex: this.coerceNumber(
+                                    params['pageIndex'],
+                                    this.config.paging.pageIndex
+                                ),
+                                pageSize: this.coerceNumber(
+                                    params['pageSize'],
+                                    this.config.paging.pageSize
+                                ),
 
                                 payrollId: this.id,
                             };
@@ -177,6 +212,15 @@ export class ShowComponent implements OnInit {
         this.getOrganizations();
         this.getContractType();
     }
+
+    private coerceNumber(value: any, fallback: number) {
+        const n = Number(value);
+        return Number.isFinite(n) && n > 0 ? n : fallback;
+    }
+
+    isColumnVisible(key: string) {
+        return this.selectedColumnKeys.includes(key);
+    }
     contractTypes: any = null;
     getContractType() {
         this.contractService.getPagingAll().subscribe((result) => {
@@ -195,20 +239,6 @@ export class ShowComponent implements OnInit {
         this.payrollDetailService
             .getPaging(request)
             .subscribe((result: any) => {
-                if (request.pageIndex !== 1 && result.items.length === 0) {
-                    this.route.queryParams.subscribe((params) => {
-                        const request = {
-                            ...params,
-                            pageIndex: 1,
-                        };
-
-                        this.router.navigate([], {
-                            relativeTo: this.route,
-                            queryParams: request,
-                            queryParamsHandling: 'merge',
-                        });
-                    });
-                }
                 this.payrollDetails = result.items;
                 console.log('this.payrollDetails', result.items);
                 this.payrollDetails = this.payrollDetails.map((shift: any) => {
@@ -232,12 +262,30 @@ export class ShowComponent implements OnInit {
                             )?.label ?? '',
                     };
                 });
-                if (this.payrollDetails.length === 0) {
-                    this.paging.pageIndex = 1;
-                }
 
                 const { items, ...paging } = result;
                 this.paging = paging;
+
+                // Nếu user đang ở page vượt quá totalPages (thường xảy ra sau khi xóa),
+                // thì điều hướng về trang cuối cùng thay vì luôn quay về trang 1.
+                const currentPageIndex = this.coerceNumber(request?.pageIndex, 1);
+                const totalPages = this.coerceNumber(this.paging?.totalPages, 1);
+                if (
+                    currentPageIndex > 1 &&
+                    totalPages > 0 &&
+                    currentPageIndex > totalPages
+                ) {
+                    const currentParams = this.route.snapshot.queryParams;
+                    this.router.navigate([], {
+                        relativeTo: this.route,
+                        queryParams: {
+                            ...currentParams,
+                            pageIndex: totalPages,
+                        },
+                        queryParamsHandling: 'merge',
+                    });
+                    return;
+                }
 
                 this.selectedShift = [];
             });
@@ -430,20 +478,21 @@ export class ShowComponent implements OnInit {
         //     });
         // });
 
-        this.route.queryParams.subscribe((params) => {
-            const request = {
-                ...params,
-                organizationId: this.queryParameters.organization?.data || null,
-                name: this.queryParameters.name || null,
-                sortBy: this.queryParameters.sortBy || null,
-                orderBy: this.queryParameters.orderBy || null,
-            };
+        const params = this.route.snapshot.queryParams;
+        const request = {
+            ...params,
+            pageIndex: 1,
+            organizationId: this.queryParameters.organization?.data || null,
+            name: this.queryParameters.name?.trim() || null,
+            sortBy: this.queryParameters.sortBy || null,
+            orderBy: this.queryParameters.orderBy || null,
+            payrollId: this.id,
+        };
 
-            this.router.navigate([], {
-                relativeTo: this.route,
-                queryParams: request,
-                queryParamsHandling: 'merge',
-            });
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: request,
+            queryParamsHandling: 'merge',
         });
     }
 
@@ -477,6 +526,7 @@ export class ShowComponent implements OnInit {
                 ...params,
                 orderBy: this.paging.orderBy,
                 sortBy: this.paging.sortBy,
+                payrollId: this.id,
             };
 
             this.router.navigate([], {
@@ -539,9 +589,17 @@ export class ShowComponent implements OnInit {
     }
 
     public handleDeleteItem(event: any, data: any) {
+        if (this.isPayrollLocked) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Thông báo',
+                detail: 'Bảng lương đã khóa, không thể xóa phiếu lương.',
+            });
+            return;
+        }
         this.confirmationService.confirm({
             target: event.target as EventTarget,
-            message: `Bạn có chắc chắn muốn xóa "${data.positionName}" ?`,
+            message: `Bạn có chắc chắn muốn xóa phiếu lương của "${data.fullName}" ?`,
             icon: 'pi pi-exclamation-triangle',
             acceptLabel: 'Có',
             rejectLabel: 'Không',
@@ -558,12 +616,13 @@ export class ShowComponent implements OnInit {
                                 pageSize: params['pageSize']
                                     ? params['pageSize']
                                     : this.config.paging.pageSize,
+                                payrollId: this.id,
                             };
                             this.getPayrollDetails(request);
                         });
                         this.toastService.showSuccess(
                             'Thành công',
-                            'Xóa vị trí thành công!'
+                            'Xóa phiếu lương thành công!'
                         );
                     });
             },
@@ -598,6 +657,66 @@ export class ShowComponent implements OnInit {
     navigateToEdit(id: number): void {
         this.router.navigate(['/staff-position/edit/', id]);
     }
+
+    openEditPayrollDetail(rowData: any) {
+        if (this.isPayrollLocked) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Thông báo',
+                detail: 'Bảng lương đã khóa, không thể sửa phiếu lương.',
+            });
+            return;
+        }
+
+        this.payrollDetailEditing = rowData;
+        this.payrollDetailEditModel = {
+            baseSalary: rowData?.baseSalary ?? null,
+            standardWorkDays: rowData?.standardWorkDays ?? null,
+            actualWorkDays: rowData?.actualWorkDays ?? null,
+            kpi: rowData?.kpi ?? null,
+            kpiPercentage: rowData?.kpiPercentage ?? null,
+            bonus: rowData?.bonus ?? null,
+            salaryRate: rowData?.salaryRate ?? null,
+        };
+        this.displayEditPayrollDetailDialog = true;
+    }
+
+    saveEditPayrollDetail() {
+        if (!this.payrollDetailEditing?.id) return;
+
+        const dataQueryParams = { id: this.payrollDetailEditing.id };
+        const dataBody = {
+            baseSalary: this.payrollDetailEditModel.baseSalary,
+            standardWorkDays: this.payrollDetailEditModel.standardWorkDays,
+            actualWorkDays: this.payrollDetailEditModel.actualWorkDays,
+            kpi: this.payrollDetailEditModel.kpi,
+            kpiPercentage: this.payrollDetailEditModel.kpiPercentage,
+            bonus: this.payrollDetailEditModel.bonus,
+            salaryRate: this.payrollDetailEditModel.salaryRate,
+        };
+
+        this.payrollDetailService
+            .updateBodyAndQueryParams(dataQueryParams, dataBody)
+            .subscribe((res: any) => {
+                if (res?.status) {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Thành công',
+                        detail: 'Cập nhật phiếu lương thành công',
+                    });
+                    this.displayEditPayrollDetailDialog = false;
+                    this.payrollDetailEditing = null;
+                    this.reloadData();
+                } else {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Lỗi',
+                        detail:
+                            res?.message || 'Cập nhật phiếu lương thất bại',
+                    });
+                }
+            });
+    }
     public handleOnDeleteMultiple(event: any) {
         const selectedIds = this.selectedShift.map((item) => item.id);
         if (selectedIds.length > 0) {
@@ -621,6 +740,7 @@ export class ShowComponent implements OnInit {
                                         pageSize: params['pageSize']
                                             ? params['pageSize']
                                             : this.config.paging.pageSize,
+                                        payrollId: this.id,
                                     };
                                     this.getPayrollDetails(request);
                                 });
@@ -675,17 +795,17 @@ export class ShowComponent implements OnInit {
     onPageChange(event: any) {
         this.paging.pageIndex = event.page + 1;
         this.paging.pageSize = event.rows;
-        this.route.queryParams.subscribe((params) => {
-            const request = {
-                ...params,
-                pageIndex: event.page + 1,
-                pageSize: event.rows,
-            };
-            this.router.navigate([], {
-                relativeTo: this.route,
-                queryParams: request,
-                queryParamsHandling: 'merge',
-            });
+        const params = this.route.snapshot.queryParams;
+        const request = {
+            ...params,
+            pageIndex: event.page + 1,
+            pageSize: event.rows,
+            payrollId: this.id,
+        };
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: request,
+            queryParamsHandling: 'merge',
         });
     }
 

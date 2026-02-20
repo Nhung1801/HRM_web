@@ -16,8 +16,9 @@
             class="ml-3"
             [(ngModel)]="queryParameters.keyWord"
             id="employeeName"
-            placeholder="Nhập từ khóa tìm kiếm"
+            placeholder="Tìm theo vị trí công việc / chức vụ / SĐT"
             pInputText
+            (keydown.enter)="onSearch()"
         />
         <div class="flex justify-content-center">
             <p-button class="ml-4" (click)="onSearch()" label="Lọc" />

@@ -100,8 +100,9 @@
                             <input
                                 pInputText
                                 type="text"
-                                placeholder="Tìm theo tên ca"
+                                placeholder="Tìm theo vị trí công việc / chức vụ / SĐT"
                                 [(ngModel)]="queryParameters.name"
+                                (keydown.enter)="handleSearchPayrollDetails()"
                                 style="width: 300px"
                             />
                         </span>

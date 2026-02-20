@@ -422,20 +422,21 @@ export class ShowComponent implements OnInit {
         //     });
         // });
 
-        this.route.queryParams.subscribe((params) => {
-            const request = {
-                ...params,
-                organizationId: this.queryParameters.organization?.data || null,
-                name: this.queryParameters.name || null,
-                sortBy: this.queryParameters.sortBy || null,
-                orderBy: this.queryParameters.orderBy || null,
-            };
+        const params = this.route.snapshot.queryParams;
+        const request = {
+            ...params,
+            pageIndex: 1,
+            organizationId: this.queryParameters.organization?.data || null,
+            name: this.queryParameters.name?.trim() || null,
+            sortBy: this.queryParameters.sortBy || null,
+            orderBy: this.queryParameters.orderBy || null,
+            payrollId: this.id,
+        };
 
-            this.router.navigate([], {
-                relativeTo: this.route,
-                queryParams: request,
-                queryParamsHandling: 'merge',
-            });
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: request,
+            queryParamsHandling: 'merge',
         });
     }
 
@@ -469,6 +470,7 @@ export class ShowComponent implements OnInit {
                 ...params,
                 orderBy: this.paging.orderBy,
                 sortBy: this.paging.sortBy,
+                payrollId: this.id,
             };
 
             this.router.navigate([], {
@@ -550,6 +552,7 @@ export class ShowComponent implements OnInit {
                                 pageSize: params['pageSize']
                                     ? params['pageSize']
                                     : this.config.paging.pageSize,
+                                payrollId: this.id,
                             };
                             this.getPayrollDetails(request);
                         });
@@ -613,6 +616,7 @@ export class ShowComponent implements OnInit {
                                         pageSize: params['pageSize']
                                             ? params['pageSize']
                                             : this.config.paging.pageSize,
+                                        payrollId: this.id,
                                     };
                                     this.getPayrollDetails(request);
                                 });
@@ -667,17 +671,17 @@ export class ShowComponent implements OnInit {
     onPageChange(event: any) {
         this.paging.pageIndex = event.page + 1;
         this.paging.pageSize = event.rows;
-        this.route.queryParams.subscribe((params) => {
-            const request = {
-                ...params,
-                pageIndex: event.page + 1,
-                pageSize: event.rows,
-            };
-            this.router.navigate([], {
-                relativeTo: this.route,
-                queryParams: request,
-                queryParamsHandling: 'merge',
-            });
+        const params = this.route.snapshot.queryParams;
+        const request = {
+            ...params,
+            pageIndex: event.page + 1,
+            pageSize: event.rows,
+            payrollId: this.id,
+        };
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: request,
+            queryParamsHandling: 'merge',
         });
     }
 

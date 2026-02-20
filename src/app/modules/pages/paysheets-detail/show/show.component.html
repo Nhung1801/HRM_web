@@ -100,15 +100,15 @@
                             <input
                                 pInputText
                                 type="text"
-                                placeholder="Tìm theo tên ca"
+                                placeholder="Tìm theo vị trí công việc / chức vụ / SĐT"
                                 [(ngModel)]="queryParameters.name"
+                                (keydown.enter)="handleSearchPayrollDetails()"
                                 style="width: 300px"
                             />
                         </span>
                     </div>
                     <div class="flex flex-column">
                         <button
-                            [routerLink]="['/shift/create']"
                             pButton
                             pRipple
                             (click)="handleSearchPayrollDetails()"
@@ -133,12 +133,14 @@
                         icon="pi pi-filter"
                         [outlined]="true"
                         severity="secondary"
+                        (click)="handleSearchPayrollDetails()"
                     ></p-button>
                     <p-button
                         label=""
                         icon="pi pi-cog"
                         [outlined]="true"
                         severity="secondary"
+                        (click)="displayColumnDialog = true"
                     ></p-button>
                 </div>
             </div>
@@ -169,28 +171,108 @@
                                 </th>
                                 <th class="sticky-column">Mã nhân viên</th>
                                 <th class="sticky-column">Họ và tên</th>
-                                <th>Bộ phận</th>
-                                <th>Hợp đồng</th>
-                                <th class="text-center">Lương cơ bản</th>
-                                <th class="text-center">Ngày công chuẩn</th>
-                                <th class="text-center">Ngày công thực tế</th>
-                                <th class="text-center">
+                                <th *ngIf="isColumnVisible('department')">
+                                    Bộ phận
+                                </th>
+                                <th *ngIf="isColumnVisible('contract')">
+                                    Hợp đồng
+                                </th>
+                                <th
+                                    *ngIf="isColumnVisible('baseSalary')"
+                                    class="text-center"
+                                >
+                                    Lương cơ bản
+                                </th>
+                                <th
+                                    *ngIf="isColumnVisible('standardWorkDays')"
+                                    class="text-center"
+                                >
+                                    Ngày công chuẩn
+                                </th>
+                                <th
+                                    *ngIf="isColumnVisible('actualWorkDays')"
+                                    class="text-center"
+                                >
+                                    Ngày công thực tế
+                                </th>
+                                <th
+                                    *ngIf="isColumnVisible('receivedSalary')"
+                                    class="text-center"
+                                >
                                     Lương cơ bản thực nhận
                                 </th>
-                                <th class="text-center">KPI thực nhận</th>
-                                <th class="text-center">% KPI đạt</th>
-                                <th class="text-center">Lương KPI</th>
-                                <th class="text-center">Thưởng</th>
-                                <th class="text-center">BHXH</th>
-                                <th class="text-center">Quỹ công đoàn</th>
-                                <th class="text-center">Tỉ lệ hưởng lương</th>
-                                <th class="text-center">Khấu trừ</th>
-                                <th class="text-center">Phụ cấp</th>
-                                <th class="text-center">Tổng lương</th>
-                                <th class="text-center">
+                                <th
+                                    *ngIf="isColumnVisible('kpi')"
+                                    class="text-center"
+                                >
+                                    KPI thực nhận
+                                </th>
+                                <th
+                                    *ngIf="isColumnVisible('kpiPercentage')"
+                                    class="text-center"
+                                >
+                                    % KPI đạt
+                                </th>
+                                <th
+                                    *ngIf="isColumnVisible('kpiSalary')"
+                                    class="text-center"
+                                >
+                                    Lương KPI
+                                </th>
+                                <th
+                                    *ngIf="isColumnVisible('bonus')"
+                                    class="text-center"
+                                >
+                                    Thưởng
+                                </th>
+                                <th
+                                    *ngIf="isColumnVisible('socialInsurance')"
+                                    class="text-center"
+                                >
+                                    BHXH
+                                </th>
+                                <th
+                                    *ngIf="isColumnVisible('unionFee')"
+                                    class="text-center"
+                                >
+                                    Quỹ công đoàn
+                                </th>
+                                <th
+                                    *ngIf="isColumnVisible('salaryRate')"
+                                    class="text-center"
+                                >
+                                    Tỉ lệ hưởng lương
+                                </th>
+                                <th
+                                    *ngIf="isColumnVisible('totalDeduction')"
+                                    class="text-center"
+                                >
+                                    Khấu trừ
+                                </th>
+                                <th
+                                    *ngIf="isColumnVisible('totalAllowance')"
+                                    class="text-center"
+                                >
+                                    Phụ cấp
+                                </th>
+                                <th
+                                    *ngIf="isColumnVisible('totalSalary')"
+                                    class="text-center"
+                                >
+                                    Tổng lương
+                                </th>
+                                <th
+                                    *ngIf="isColumnVisible('totalReceivedSalary')"
+                                    class="text-center"
+                                >
                                     Tổng lương thực nhận
                                 </th>
-                                <th class="text-center">Trạng thái</th>
+                                <th
+                                    *ngIf="isColumnVisible('status')"
+                                    class="text-center"
+                                >
+                                    Trạng thái
+                                </th>
                                 <th class="text-center">Hành động</th>
                             </tr>
                         </ng-template>
@@ -213,74 +295,124 @@
                                 <td class="sticky-column">
                                     {{ rowData.fullName }}
                                 </td>
-                                <td>{{ rowData.organizationName }}</td>
-                                <td>
+                                <td *ngIf="isColumnVisible('department')">
+                                    {{ rowData.organizationName }}
+                                </td>
+                                <td *ngIf="isColumnVisible('contract')">
                                     {{ rowData.contractTypeName }}
                                 </td>
-                                <td class="text-center">
+                                <td
+                                    *ngIf="isColumnVisible('baseSalary')"
+                                    class="text-center"
+                                >
                                     {{ rowData.baseSalary | number : "1.0-0" }}
                                 </td>
-                                <td class="text-center">
+                                <td
+                                    *ngIf="isColumnVisible('standardWorkDays')"
+                                    class="text-center"
+                                >
                                     {{ rowData.standardWorkDays }}
                                 </td>
-                                <td class="text-center">
+                                <td
+                                    *ngIf="isColumnVisible('actualWorkDays')"
+                                    class="text-center"
+                                >
                                     {{
                                         rowData.actualWorkDays
                                             | number : "1.0-0"
                                     }}
                                 </td>
-                                <td class="text-center">
+                                <td
+                                    *ngIf="isColumnVisible('receivedSalary')"
+                                    class="text-center"
+                                >
                                     {{
                                         rowData.receivedSalary
                                             | number : "1.0-0"
                                     }}
                                 </td>
-                                <td class="text-center">
+                                <td
+                                    *ngIf="isColumnVisible('kpi')"
+                                    class="text-center"
+                                >
                                     {{ rowData.kpi | number : "1.0-0" }}
                                 </td>
-                                <td class="text-center">
+                                <td
+                                    *ngIf="isColumnVisible('kpiPercentage')"
+                                    class="text-center"
+                                >
                                     {{ rowData.kpiPercentage }}
                                 </td>
-                                <td class="text-center">
+                                <td
+                                    *ngIf="isColumnVisible('kpiSalary')"
+                                    class="text-center"
+                                >
                                     {{ rowData.kpiSalary | number : "1.0-0" }}
                                 </td>
-                                <td class="text-center">
+                                <td
+                                    *ngIf="isColumnVisible('bonus')"
+                                    class="text-center"
+                                >
                                     {{ rowData.bonus | number : "1.0-0" }}
                                 </td>
-                                <td class="text-center">
+                                <td
+                                    *ngIf="isColumnVisible('socialInsurance')"
+                                    class="text-center"
+                                >
                                     {{
                                         rowData.socialInsurance
                                             | number : "1.0-0"
                                     }}
                                 </td>
-                                <td class="text-center">
+                                <td
+                                    *ngIf="isColumnVisible('unionFee')"
+                                    class="text-center"
+                                >
                                     {{ rowData.unionFee | number : "1.0-0" }}
                                 </td>
-                                <td class="text-center">
+                                <td
+                                    *ngIf="isColumnVisible('salaryRate')"
+                                    class="text-center"
+                                >
                                     {{ rowData.salaryRate }}
                                 </td>
-                                <td class="text-center">
+                                <td
+                                    *ngIf="isColumnVisible('totalDeduction')"
+                                    class="text-center"
+                                >
                                     {{
                                         rowData.totalDeduction
                                             | number : "1.0-0"
                                     }}
                                 </td>
-                                <td class="text-center">
+                                <td
+                                    *ngIf="isColumnVisible('totalAllowance')"
+                                    class="text-center"
+                                >
                                     {{
                                         rowData.totalAllowance
                                             | number : "1.0-0"
                                     }}
                                 </td>
-                                <td class="text-center">
+                                <td
+                                    *ngIf="isColumnVisible('totalSalary')"
+                                    class="text-center"
+                                >
                                     {{ rowData.totalSalary | number : "1.0-0" }}
                                 </td>
-                                <td class="text-center">
+                                <td
+                                    *ngIf="isColumnVisible('totalReceivedSalary')"
+                                    class="text-center"
+                                >
                                     {{
                                         rowData.totalReceivedSalary
                                             | number : "1.0-0"
                                     }}
                                 </td>
-                                <td class="text-center">
+                                <td
+                                    *ngIf="isColumnVisible('status')"
+                                    class="text-center"
+                                >
                                     <span>{{ rowData.statusName }}</span>
                                 </td>
                                 <td>
@@ -460,3 +592,35 @@
     <p-progressSpinner></p-progressSpinner>
     <p class="loading-text">Đang tính toán bảng lương...</p>
 </div>
+
+<p-dialog
+    header="Ẩn/hiện cột"
+    [modal]="true"
+    [(visible)]="displayColumnDialog"
+    [style]="{ width: '420px' }"
+>
+    <div class="p-fluid">
+        <p-multiSelect
+            [options]="allColumns"
+            optionLabel="label"
+            optionValue="key"
+            [(ngModel)]="selectedColumnKeys"
+            display="chip"
+            [filter]="true"
+            filterPlaceholder="Tìm cột"
+            placeholder="Chọn cột hiển thị"
+            [showClear]="true"
+        ></p-multiSelect>
+        <small class="text-muted">
+            Gợi ý: luôn giữ “Mã nhân viên”, “Họ và tên”, “Hành động”.
+        </small>
+    </div>
+    <p-footer>
+        <button
+            pButton
+            label="Đóng"
+            class="p-button-secondary"
+            (click)="displayColumnDialog = false"
+        ></button>
+    </p-footer>
+</p-dialog>
