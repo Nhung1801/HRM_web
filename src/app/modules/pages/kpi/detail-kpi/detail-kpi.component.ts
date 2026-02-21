@@ -34,6 +34,8 @@ export class DetailKpiComponent implements OnInit {
   user: any;
   editingRowIndex: number | null = null;
   editingRowIndex2: number | null = null;
+  editingRowIndex3: number | null = null; // revenue
+  editingRowIndex4: number | null = null; // commissionManualAmount
 
   constructor(
     private employeesService: EmployeeService,
@@ -166,22 +168,73 @@ export class DetailKpiComponent implements OnInit {
     this.editingRowIndex2 = rowIndex;
   }
 
+  startEditing3(rowIndex: number): void {
+    this.editingRowIndex3 = rowIndex;
+  }
+
+  startEditing4(rowIndex: number): void {
+    this.editingRowIndex4 = rowIndex;
+  }
+
   stopEditing(): void {
     this.editingRowIndex = null;
   }
   stopEditing2(): void {
     this.editingRowIndex2 = null;
   }
+  stopEditing3(): void {
+    this.editingRowIndex3 = null;
+  }
+  stopEditing4(): void {
+    this.editingRowIndex4 = null;
+  }
 
   stopEditingAndSave(rowData: any) {
-    this.stopEditing();
+    this.saveRow(rowData, 'completionRate');
+  }
+
+  stopEditingAndSave2(rowData: any) {
+    this.saveRow(rowData, 'bonus');
+  }
+
+  stopEditingAndSave3(rowData: any) {
+    this.saveRow(rowData, 'revenue');
+  }
+
+  stopEditingAndSave4(rowData: any) {
+    this.saveRow(rowData, 'commissionManualAmount');
+  }
+
+  onToggleCommissionManual(rowData: any) {
+    if (!rowData.isCommissionManual) {
+      rowData.commissionManualAmount = null;
+    }
+    this.saveRow(rowData);
+  }
+
+  private saveRow(rowData: any, field?: 'completionRate' | 'bonus' | 'revenue' | 'commissionManualAmount') {
+    if (field === 'completionRate') this.stopEditing();
+    if (field === 'bonus') this.stopEditing2();
+    if (field === 'revenue') this.stopEditing3();
+    if (field === 'commissionManualAmount') this.stopEditing4();
+
+    const completionRate = this.toNumberOrZero(rowData.completionRate);
+    const bonus = this.toNumberOrZero(rowData.bonus);
+    const revenue = this.toNumberOrZero(rowData.revenue);
+    const isCommissionManual = !!rowData.isCommissionManual;
+    const commissionManualAmount = isCommissionManual
+      ? this.toNumberOrZero(rowData.commissionManualAmount)
+      : null;
 
     const payload = {
       employeeId: rowData.employeeId,
       employeeCode: rowData.employeeCode,
       employeeName: rowData.employeeName,
-      completionRate: rowData.completionRate || 0,
-      bonus: rowData.bonus || 0
+      completionRate,
+      bonus,
+      revenue,
+      isCommissionManual,
+      commissionManualAmount,
     };
 
     this.kpiService.updateRateKpi(rowData.id, payload).subscribe(
@@ -210,42 +263,11 @@ export class DetailKpiComponent implements OnInit {
       }
     );
   }
-  stopEditingAndSave2(rowData: any) {
-    this.stopEditing2();
 
-    const payload = {
-      employeeId: rowData.employeeId,
-      employeeCode: rowData.employeeCode,
-      employeeName: rowData.employeeName,
-      completionRate: rowData.completionRate || 0,
-      bonus: rowData.bonus || 0
-    };
-
-    this.kpiService.updateRateKpi(rowData.id, payload).subscribe(
-      (response) => {
-        console.log('Cập nhật thành công:', response);
-        this.messages = [
-          {
-            severity: 'success',
-            summary: 'Thành công',
-            detail: 'Cập nhật thành công',
-            life: 3000,
-          },
-        ];
-        this.fetchData();
-      },
-      (error) => {
-        console.error('Lỗi khi cập nhật:', error);
-        this.messages = [
-          {
-            severity: 'error',
-            summary: 'Không thể lưu vì:',
-            detail: 'Đang có lỗi cần được chỉnh sửa',
-            life: 3000,
-          },
-        ];
-      }
-    );
+  private toNumberOrZero(value: any): number {
+    if (value === null || value === undefined || value === '') return 0;
+    const n = Number(value);
+    return Number.isFinite(n) ? n : 0;
   }
 
   onPageChange(event: any): void {
